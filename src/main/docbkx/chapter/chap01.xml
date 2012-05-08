@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+        "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"
+        [
+                <!ENTITY BASEID "erlangbook.chap01">
+                ]>
+
+<chapter lang="ru" id="&BASEID;">
+
+    <title id="&BASEID;.title">
+        Test
+    </title>
+</chapter>
