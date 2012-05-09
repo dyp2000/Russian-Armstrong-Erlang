@@ -1,0 +1,11 @@
+*.swp
+latex/*
+book
+!latex/makepdf
+!latex/README
+!latex/template.tex
+!latex/config.yml
+epub/temp
+*~
+.#*
+figures/*
