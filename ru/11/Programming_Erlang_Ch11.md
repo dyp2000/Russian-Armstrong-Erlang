@@ -123,10 +123,10 @@ MSD даёт хорошее представление того, что прои
 достаточно длинный и в основном касается доступа к оконной системе
 посредством стандартной библиотеки gs. Т. к. мы пока не хотим прыгать в
 эту кроличью нору, то мы не покажем здесь соответствующий код (хотя вы
-найдёте этот код, начиная со страницы \_17\_). Интерфейс у виджета
+найдёте этот код, начиная со страницы _17_). Интерфейс у виджета
 ввода-вывода следующий:
 
-@spec io\_widget:start(Pid) -\> Widget
+@spec io_widget:start(Pid) -> Widget
 
 Создаёт новый виджет ввода-вывода. Возвращает Widget, который является
 PID, который может использоваться для общения с виджетом. Когда
@@ -136,25 +136,25 @@ State — это переменная состояния, сохранённая
 устанавливаться пользователем. Parse — это результат разбора строки
 ввода пользовательским парсером.
 
-@spec io\_widget:set\_title(Widget, Str)
+@spec io_widget:set_title(Widget, Str)
 
 Устанавливает заголовок в виджете.
 
 
 
-@spec io\_widget:set\_state(Widget, State)
+@spec io_widget:set_state(Widget, State)
 
 Устанавливает состояние виджета.
 
 
 
-@spec io\_widget:insert\_str(Widget, Str)
+@spec io_widget:insert_str(Widget, Str)
 
 Вставляет строку в основную область виджета.
 
 
 
-@spec io\_widget:set\_handler(Widget, Fun)
+@spec io_widget:set_handler(Widget, Fun)
 
 Устанавливает парсер виджета в Fun (см. далее).
 
@@ -179,11 +179,11 @@ State — это переменная состояния, сохранённая
 связать парсер, который будет использоваться для разбора всех сообщений,
 которые вводятся в поле ввода виджета. Разбор делается вызовом функции
 Parse(Str). Эта функция может быть установлена вызовом
-set\_handler(Widget, Parse).
+set_handler(Widget, Parse).
 
 Парсер по-умолчанию — это такая функция:
 
-Parse(Str) -\> Str end.
+Parse(Str) -> Str end.
 
 **11.3 Клиентская часть**
 
@@ -197,20 +197,20 @@ Parse(Str) -\> Str end.
 Мы запускаем чат-клиент вызовом start/0:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"clientHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"clientHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"erl
 
-start() -\>
+start() ->
 
 connect("localhost" , 2223, "AsDT67aQ" , "general" , "joe" ).
 
@@ -219,53 +219,53 @@ connect("localhost" , 2223, "AsDT67aQ" , "general" , "joe" ).
 процесс, вызывая hander/5. А вот обработчику приходится выполнять
 несколько задач:
 
-● он делает себя системным процессом, так что теперь он может
+* он делает себя системным процессом, так что теперь он может
 перехватывать сигналы выхода
 
-● он создаёт виджет ввода-вывода и устанавливает подсказку и заголовок
+* он создаёт виджет ввода-вывода и устанавливает подсказку и заголовок
 этого виджета
 
-● он порождает процесс соединения (который пытается соединиться с
+* он порождает процесс соединения (который пытается соединиться с
 сервером)
 
-● в конце он ждёт события соединения в disconnected/2 (прим. перев.:
+* в конце он ждёт события соединения в disconnected/2 (прим. перев.:
 «Синее, а не бурое! А по описанию -- бурое, а не синее!..» (С) АБС)
 
 Код для него:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"clientHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"clientHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"erl
 
-connect(Host, Port, HostPsw, Group, Nick) -\>
+connect(Host, Port, HostPsw, Group, Nick) ->
 
-spawn(fun() -\> handler(Host, Port, HostPsw, Group, Nick) end).
+spawn(fun() -> handler(Host, Port, HostPsw, Group, Nick) end).
 
-handler(Host, Port, HostPsw, Group, Nick) -\>
+handler(Host, Port, HostPsw, Group, Nick) ->
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
-Widget = io\_widget:start(self()),
+Widget = io_widget:start(self()),
 
-set\_title(Widget, Nick),
+set_title(Widget, Nick),
 
-set\_state(Widget, Nick),
+set_state(Widget, Nick),
 
-set\_prompt(Widget, [Nick, " \> " ]),
+set_prompt(Widget, [Nick, " > " ]),
 
-set\_handler(Widget, fun parse\_command/1),
+set_handler(Widget, fun parse_command/1),
 
-start\_connector(Host, Port, HostPsw),
+start_connector(Host, Port, HostPsw),
 
 disconnected(Widget, Group, Nick).
 
@@ -278,91 +278,91 @@ MM}HYPERLINK \\l "id.826360296f2c"[2]HYPERLINK \\l "id.826360296f2c",
 для показа.
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"clientHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"clientHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"erl
 
-disconnected(Widget, Group, Nick) -\>
+disconnected(Widget, Group, Nick) ->
 
 receive
 
-{connected, MM} -\>
+{connected, MM} ->
 
-insert\_str(Widget, "connected to server\\nsending data\\n" ),
+insert_str(Widget, "connected to server\\nsending data\\n" ),
 
 MM ! {login, Group, Nick},
 
-wait\_login\_response(Widget, MM);
+wait_login_response(Widget, MM);
 
-{Widget, destroyed} -\>
+{Widget, destroyed} ->
 
 exit(died);
 
-{status, S} -\>
+{status, S} ->
 
-insert\_str(Widget, to\_str(S)),
+insert_str(Widget, to_str(S)),
 
 disconnected(Widget, Group, Nick);
 
-Other -\>
+Other ->
 
-io:format("chat\_client disconnected unexpected:\~p\~n" ,[Other]),
+io:format("chat_client disconnected unexpected:\~p\~n" ,[Other]),
 
 disconnected(Widget, Group, Nick)
 
 end.
 
 Сообщение {connected, MM} очевидно должно придти от соединяющегося
-процесса, который был создан вызовом start\_connection(Host, Port,
+процесса, который был создан вызовом start_connection(Host, Port,
 HostPsw). Этот вызов создаёт параллельный процесс, который в свою
 очередь периодически пытается соединиться с IRC сервером.
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"clientHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"clientHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"erl
 
-start\_connector(Host, Port, Pwd) -\>
+start_connector(Host, Port, Pwd) ->
 
 S = self(),
 
-spawn\_link(fun() -\> try\_to\_connect(S, Host, Port, Pwd) end).
+spawn_link(fun() -> try_to_connect(S, Host, Port, Pwd) end).
 
-try\_to\_connect(Parent, Host, Port, Pwd) -\>
+try_to_connect(Parent, Host, Port, Pwd) ->
 
 %% Parent is the Pid of the process that spawned this process
 
-case lib\_chan:connect(Host, Port, chat, Pwd, []) of
+case lib_chan:connect(Host, Port, chat, Pwd, []) of
 
-{error, \_Why} -\>
+{error, _Why} ->
 
 Parent ! {status, {cannot, connect, Host, Port}},
 
 sleep(2000),
 
-try\_to\_connect(Parent, Host, Port, Pwd);
+try_to_connect(Parent, Host, Port, Pwd);
 
-{ok, MM} -\>
+{ok, MM} ->
 
-lib\_chan\_mm:controller(MM, Parent),
+lib_chan_mm:controller(MM, Parent),
 
 Parent ! {connected, MM},
 
@@ -370,21 +370,21 @@ exit(connectorFinished)
 
 end.
 
-try\_to\_connect зацикливается навечно, пытаясь каждые две секунды
+try_to_connect зацикливается навечно, пытаясь каждые две секунды
 подключиться к серверу. Если подключиться не удаётся, то он посылает
 сообщение о состоянии к чат-клиенту.
 
-*Замечание:* в start\_connection мы написали следующее:
+*Замечание:* в start_connection мы написали следующее:
 
 S = self(),
 
-spawn\_link(fun() -\> try\_to\_connect(S, ...) end)
+spawn_link(fun() -> try_to_connect(S, ...) end)
 
 *Это не то же самое, что и здесь:*
 
 **
 
-spawn\_link(fun() -\> try\_to\_connect(self(), ...) end)
+spawn_link(fun() -> try_to_connect(self(), ...) end)
 
 Причина в том, что в первом фрагменте кода self() выполняется внутри
 родительского процесса. Во втором куске кода self() выполняется внутри
@@ -395,35 +395,35 @@ spawn\_link(fun() -\> try\_to\_connect(self(), ...) end)
 Если соединение установлено, то он посылает сообщение {connected, MM} к
 чат-клиенту. По прибытии этого сообщения чат-клиент посылает сообщение
 для логина к серверу (оба этих события происходят в disconnected/2) и
-ждёт ответа в wait\_login\_response/2:
+ждёт ответа в wait_login_response/2:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"clientHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"clientHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"erl
 
-wait\_login\_response(Widget, MM) -\>
+wait_login_response(Widget, MM) ->
 
 receive
 
-{MM, ack} -\>
+{MM, ack} ->
 
 active(Widget, MM);
 
-Other -\>
+Other ->
 
-io:format("chat\_client login unexpected:\~p\~n" ,[Other]),
+io:format("chat_client login unexpected:\~p\~n" ,[Other]),
 
-wait\_login\_response(Widget, MM)
+wait_login_response(Widget, MM)
 
 end.
 
@@ -433,46 +433,46 @@ end.
 вызывает active/2:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"clientHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"clientHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"erl
 
-active(Widget, MM) -\>
+active(Widget, MM) ->
 
 receive
 
-{Widget, Nick, Str} -\>
+{Widget, Nick, Str} ->
 
 MM ! {relay, Nick, Str},
 
 active(Widget, MM);
 
-{MM,{msg,From,Pid,Str}} -\>
+{MM,{msg,From,Pid,Str}} ->
 
-insert\_str(Widget, [From,"@" ,pid\_to\_list(Pid)," " , Str, "\\n" ]),
+insert_str(Widget, [From,"@" ,pid_to_list(Pid)," " , Str, "\\n" ]),
 
 active(Widget, MM);
 
-{'EXIT',Widget,windowDestroyed} -\>
+{'EXIT',Widget,windowDestroyed} ->
 
 MM ! close;
 
-{close, MM} -\>
+{close, MM} ->
 
 exit(serverDied);
 
-Other -\>
+Other ->
 
-io:format("chat\_client active unexpected:\~p\~n" ,[Other]),
+io:format("chat_client active unexpected:\~p\~n" ,[Other]),
 
 active(Widget, MM)
 
@@ -484,7 +484,7 @@ active/2 просто шлёт сообщения от виджета к гру�
 За исключением некоторых объявлений модулей и простейших процедур
 форматирования и разбора это завершает чат-клиент.
 
-Полный код чат-клиента приведён на стр. \_\_\_\_
+Полный код чат-клиента приведён на стр. ____
 
 **11.4 Серверная часть**
 
@@ -497,83 +497,83 @@ active/2 просто шлёт сообщения от виджета к гру�
 
 **Чат-контроллер**
 
-Чат-контроллер — это дополнение (plug-in) для lib\_chan, дистрибутивному
+Чат-контроллер — это дополнение (plug-in) для lib_chan, дистрибутивному
 набору, основанному на сокетах. Мы встречали его в главе 10.5,
-lib\_chan, на стр. \_\_\_\_. lib\_chan нуждается в конфигурационном
+lib_chan, на стр. ____. lib_chan нуждается в конфигурационном
 файле и модуле дополнении.
 
 Конфигурационный файл для системы чата следующий:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"conf
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"conf
 
 {port, 2223}.
 
 {service, chat, password,"AsDT67aQ"
-,mfa,mod\_chat\_controller,start,[]}.
+,mfa,mod_chat_controller,start,[]}.
 
-Если вы посмотрите назад на код chat\_client.erl, вы увидите, что номер
+Если вы посмотрите назад на код chat_client.erl, вы увидите, что номер
 порта, имя сервиса и пароль согласуются с информацией из
 конфигурационного файла.
 
 Модуль чат-контроллера очень прост:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"modHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"controllerHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"modHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"controllerHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"erl
 
--module(mod\_chat\_controller).
+-module(mod_chat_controller).
 
 -export([start/3]).
 
--import(lib\_chan\_mm, [send/2]).
+-import(lib_chan_mm, [send/2]).
 
-start(MM, \_, \_) -\>
+start(MM, _, _) ->
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
-io:format("mod\_chat\_controller off we go ...\~p\~n" ,[MM]),
+io:format("mod_chat_controller off we go ...\~p\~n" ,[MM]),
 
 loop(MM).
 
-loop(MM) -\>
+loop(MM) ->
 
 receive
 
-{chan, MM, Msg} -\>
+{chan, MM, Msg} ->
 
-chat\_server ! {mm, MM, Msg},
+chat_server ! {mm, MM, Msg},
 
 loop(MM);
 
-{'EXIT', MM, \_Why} -\>
+{'EXIT', MM, _Why} ->
 
-chat\_server ! {mm\_closed, MM};
+chat_server ! {mm_closed, MM};
 
-Other -\>
+Other ->
 
-io:format("mod\_chat\_controller unexpected message =\~p (MM=\~p)\~n" ,
+io:format("mod_chat_controller unexpected message =\~p (MM=\~p)\~n" ,
 
 [Other, MM]),
 
@@ -589,38 +589,38 @@ end.
 **Чат-сервер**
 
 Чат-сервер — это зарегистрированный процесс, называемый (что
-неудивительно) chat\_server. Вызов chat\_server:start/0 запускает и
-регистрирует сервер, а он запускает lib\_chan.
+неудивительно) chat_server. Вызов chat_server:start/0 запускает и
+регистрирует сервер, а он запускает lib_chan.
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"erl
 
-start() -\>
+start() ->
 
-start\_server(),
+start_server(),
 
-lib\_chan:start\_server("chat.conf" ).
+lib_chan:start_server("chat.conf" ).
 
-start\_server() -\>
+start_server() ->
 
-register(chat\_server,
+register(chat_server,
 
-spawn(fun() -\>
+spawn(fun() ->
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
-Val= (catch server\_loop([])),
+Val= (catch server_loop([])),
 
 io:format("Server terminated with:\~p\~n" ,[Val])
 
@@ -640,62 +640,62 @@ PID, равным Channel. Если есть контроллер чат-гру�
 Сам по себе сервер прост:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"erl
 
-server\_loop(L) -\>
+server_loop(L) ->
 
 receive
 
-{mm, Channel, {login, Group, Nick}} -\>
+{mm, Channel, {login, Group, Nick}} ->
 
 case lookup(Group, L) of
 
-{ok, Pid} -\>
+{ok, Pid} ->
 
 Pid ! {login, Channel, Nick},
 
-server\_loop(L);
+server_loop(L);
 
-error -\>
+error ->
 
-Pid = spawn\_link(fun() -\>
+Pid = spawn_link(fun() ->
 
-chat\_group:start(Channel, Nick)
+chat_group:start(Channel, Nick)
 
 end),
 
-server\_loop([{Group,Pid}|L])
+server_loop([{Group,Pid}|L])
 
 end;
 
-{mm\_closed, \_} -\>
+{mm_closed, _} ->
 
-server\_loop(L);
+server_loop(L);
 
-{'EXIT', Pid, allGone} -\>
+{'EXIT', Pid, allGone} ->
 
-L1 = remove\_group(Pid, L),
+L1 = remove_group(Pid, L),
 
-server\_loop(L1);
+server_loop(L1);
 
-Msg -\>
+Msg ->
 
 io:format("Server received Msg=\~p\~n" ,
 
 [Msg]),
 
-server\_loop(L)
+server_loop(L)
 
 end.
 
@@ -703,38 +703,38 @@ end.
 подпрограмм для обработки списков:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"erl
 
-lookup(G, [{G,Pid}|\_]) -\> {ok, Pid};
+lookup(G, [{G,Pid}|_]) -> {ok, Pid};
 
-lookup(G, [\_|T])
+lookup(G, [_|T])
 
--\> lookup(G, T);
+-> lookup(G, T);
 
-lookup(\_,[])
+lookup(_,[])
 
--\> error.
+-> error.
 
-remove\_group(Pid, [{G,Pid}|T]) -\> io:format("\~p removed\~n" ,[G]), T;
+remove_group(Pid, [{G,Pid}|T]) -> io:format("\~p removed\~n" ,[G]), T;
 
-remove\_group(Pid, [H|T])
+remove_group(Pid, [H|T])
 
--\> [H|remove\_group(Pid, T)];
+-> [H|remove_group(Pid, T)];
 
-remove\_group(\_, [])
+remove_group(_, [])
 
--\> [].
+-> [].
 
 **Менеджер группы**
 
@@ -742,34 +742,34 @@ remove\_group(\_, [])
 часть этого — диспетчер.
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"groupHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"groupHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"erl
 
-group\_controller([]) -\>
+group_controller([]) ->
 
 exit(allGone);
 
-group\_controller(L) -\>
+group_controller(L) ->
 
 receive
 
-{C, {relay, Nick, Str}} -\>
+{C, {relay, Nick, Str}} ->
 
-foreach(fun({Pid,\_}) -\> Pid ! {msg, Nick, C, Str} end, L),
+foreach(fun({Pid,_}) -> Pid ! {msg, Nick, C, Str} end, L),
 
-group\_controller(L);
+group_controller(L);
 
-{login, C, Nick} -\>
+{login, C, Nick} ->
 
 controller(C, self()),
 
@@ -777,31 +777,31 @@ C ! ack,
 
 self() ! {C, {relay, Nick, "I'm joining the group" }},
 
-group\_controller([{C,Nick}|L]);
+group_controller([{C,Nick}|L]);
 
-{close,C} -\>
+{close,C} ->
 
 {Nick, L1} = delete(C, L, []),
 
 self() ! {C, {relay, Nick, "I'm leaving the group" }},
 
-group\_controller(L1);
+group_controller(L1);
 
-Any -\>
+Any ->
 
 io:format("group controller received Msg=\~p\~n" , [Any]),
 
-group\_controller(L)
+group_controller(L)
 
 end.
 
-Аргумент L в group\_controller(L) — это список имён и идентификаторов
+Аргумент L в group_controller(L) — это список имён и идентификаторов
 процессов посредников {Pid, Nick}.
 
 Когда менеджер группы получает сообщение {relay, Nick, Str}, он просто
 рассылает его всем процессам в группе. Если приходит сообщение {login,
 C, Nick}, он добавляет кортеж {C, Nick} в список рассылки. *Важно*
-упомянуть вызов lib\_chan\_mm:controller/2. Этот вызов устанавливает
+упомянуть вызов lib_chan_mm:controller/2. Этот вызов устанавливает
 управляющий процесс посредника в контроллер группы, что означает, что
 *все сообщения к сокету, управляемому посредником, будут посланы к
 контроллеру группы* — это, вероятно, главная часть для понимания — как
@@ -810,30 +810,30 @@ C, Nick}, он добавляет кортеж {C, Nick} в список рас�
 Всё, что остаётся — это код, который запускает сервер группы:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"groupHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"groupHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"erl
 
--module(chat\_group).
+-module(chat_group).
 
--import(lib\_chan\_mm, [send/2, controller/2]).
+-import(lib_chan_mm, [send/2, controller/2]).
 
 -import(lists, [foreach/2, reverse/2]).
 
 -export([start/2]).
 
-start(C, Nick) -\>
+start(C, Nick) ->
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
 controller(C, self()),
 
@@ -841,37 +841,37 @@ C ! ack,
 
 self() ! {C, {relay, Nick, "I'm starting the group" }},
 
-group\_controller([{C,Nick}]).
+group_controller([{C,Nick}]).
 
 и функция delete/3, вызываемая из цикла диспетчера процесса
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"groupHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"groupHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"erl
 
-delete(Pid, [{Pid,Nick}|T], L) -\> {Nick, reverse(T, L)};
+delete(Pid, [{Pid,Nick}|T], L) -> {Nick, reverse(T, L)};
 
 delete(Pid, [H|T], L)
 
--\> delete(Pid, T, [H|L]);
+-> delete(Pid, T, [H|L]);
 
-delete(\_, [], L)
+delete(_, [], L)
 
--\> {"????" , L}.
+-> {"????" , L}.
 
 **11.5 Запуск приложения**
 
-Приложение целиком располагается в каталоге pathto/code/socket\_dist.
+Приложение целиком располагается в каталоге pathto/code/socket_dist.
 Оно также использует некоторые библиотечные модули из каталога
 pathto/code.
 
@@ -886,22 +886,22 @@ $ cd /home/joe/erlbook/code
 
 ...
 
-/home/joe/erlbook/code $ cd socket\_dist
+/home/joe/erlbook/code $ cd socket_dist
 
-/home/joe/erlbook/code/socket\_dist $ make chat\_server
+/home/joe/erlbook/code/socket_dist $ make chat_server
 
 ...
 
 Это запустит чат-сервер. А теперь нам надо открыть другое терминальное
 окно и запустить тест клиента:
 
-$ cd /home/joe/erlbook/code/socket\_dist
+$ cd /home/joe/erlbook/code/socket_dist
 
-/home/joe/erlbook/code/socket\_dist $ make chat\_client
+/home/joe/erlbook/code/socket_dist $ make chat_client
 
 ...
 
-Запуск make chat\_client выполняет функцию chat\_client:test(). Это на
+Запуск make chat_client выполняет функцию chat_client:test(). Это на
 самом деле создаёт четыре окна, которые подключаются к тестовой группе,
 названной «general». На Рис.11. 4 мы можем увидеть снимок экрана,
 показывающий как выглядит система после выдачи этих команд.
@@ -928,34 +928,34 @@ $ cd /home/joe/erlbook/code/socket\_dist
 **Чат-клиент**
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"clientHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_client.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"clientHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_client.erl"erl
 
--module(chat\_client).
+-module(chat_client).
 
--import(io\_widget,
+-import(io_widget,
 
-[get\_state/1, insert\_str/2, set\_prompt/2, set\_state/2,
+[get_state/1, insert_str/2, set_prompt/2, set_state/2,
 
-set\_title/2, set\_handler/2, update\_state/3]).
+set_title/2, set_handler/2, update_state/3]).
 
 -export([start/0, test/0, connect/5]).
 
-start() -\>
+start() ->
 
 connect("localhost" , 2223, "AsDT67aQ" , "general" , "joe" ).
 
-test() -\>
+test() ->
 
 connect("localhost" , 2223, "AsDT67aQ" , "general" , "joe" ),
 
@@ -965,129 +965,129 @@ connect("localhost" , 2223, "AsDT67aQ" , "general" , "jim" ),
 
 connect("localhost" , 2223, "AsDT67aQ" , "general" , "sue" ).
 
-connect(Host, Port, HostPsw, Group, Nick) -\>
+connect(Host, Port, HostPsw, Group, Nick) ->
 
-spawn(fun() -\> handler(Host, Port, HostPsw, Group, Nick) end).
+spawn(fun() -> handler(Host, Port, HostPsw, Group, Nick) end).
 
-handler(Host, Port, HostPsw, Group, Nick) -\>
+handler(Host, Port, HostPsw, Group, Nick) ->
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
-Widget = io\_widget:start(self()),
+Widget = io_widget:start(self()),
 
-set\_title(Widget, Nick),
+set_title(Widget, Nick),
 
-set\_state(Widget, Nick),
+set_state(Widget, Nick),
 
-set\_prompt(Widget, [Nick, " \> " ]),
+set_prompt(Widget, [Nick, " > " ]),
 
-set\_handler(Widget, fun parse\_command/1),
+set_handler(Widget, fun parse_command/1),
 
-start\_connector(Host, Port, HostPsw),
+start_connector(Host, Port, HostPsw),
 
 disconnected(Widget, Group, Nick).
 
-disconnected(Widget, Group, Nick) -\>
+disconnected(Widget, Group, Nick) ->
 
 receive
 
-{connected, MM} -\>
+{connected, MM} ->
 
-insert\_str(Widget, "connected to server\\nsending data\\n" ),
+insert_str(Widget, "connected to server\\nsending data\\n" ),
 
 MM ! {login, Group, Nick},
 
-wait\_login\_response(Widget, MM);
+wait_login_response(Widget, MM);
 
-{Widget, destroyed} -\>
+{Widget, destroyed} ->
 
 exit(died);
 
-{status, S} -\>
+{status, S} ->
 
-insert\_str(Widget, to\_str(S)),
+insert_str(Widget, to_str(S)),
 
 disconnected(Widget, Group, Nick);
 
-Other -\>
+Other ->
 
-io:format("chat\_client disconnected unexpected:\~p\~n" ,[Other]),
+io:format("chat_client disconnected unexpected:\~p\~n" ,[Other]),
 
 disconnected(Widget, Group, Nick)
 
 end.
 
-wait\_login\_response(Widget, MM) -\>
+wait_login_response(Widget, MM) ->
 
 receive
 
-{MM, ack} -\>
+{MM, ack} ->
 
 active(Widget, MM);
 
-Other -\>
+Other ->
 
-io:format("chat\_client login unexpected:\~p\~n" ,[Other]),
+io:format("chat_client login unexpected:\~p\~n" ,[Other]),
 
-wait\_login\_response(Widget, MM)
+wait_login_response(Widget, MM)
 
 end.
 
-active(Widget, MM) -\>
+active(Widget, MM) ->
 
 receive
 
-{Widget, Nick, Str} -\>
+{Widget, Nick, Str} ->
 
 MM ! {relay, Nick, Str},
 
 active(Widget, MM);
 
-{MM,{msg,From,Pid,Str}} -\>
+{MM,{msg,From,Pid,Str}} ->
 
-insert\_str(Widget, [From,"@" ,pid\_to\_list(Pid)," " , Str, "\\n" ]),
+insert_str(Widget, [From,"@" ,pid_to_list(Pid)," " , Str, "\\n" ]),
 
 active(Widget, MM);
 
-{'EXIT',Widget,windowDestroyed} -\>
+{'EXIT',Widget,windowDestroyed} ->
 
 MM ! close;
 
-{close, MM} -\>
+{close, MM} ->
 
 exit(serverDied);
 
-Other -\>
+Other ->
 
-io:format("chat\_client active unexpected:\~p\~n" ,[Other]),
+io:format("chat_client active unexpected:\~p\~n" ,[Other]),
 
 active(Widget, MM)
 
 end.
 
-start\_connector(Host, Port, Pwd) -\>
+start_connector(Host, Port, Pwd) ->
 
 S = self(),
 
-spawn\_link(fun() -\> try\_to\_connect(S, Host, Port, Pwd) end).
+spawn_link(fun() -> try_to_connect(S, Host, Port, Pwd) end).
 
-try\_to\_connect(Parent, Host, Port, Pwd) -\>
+try_to_connect(Parent, Host, Port, Pwd) ->
 
 %% Parent is the Pid of the process that spawned this process
 
-case lib\_chan:connect(Host, Port, chat, Pwd, []) of
+case lib_chan:connect(Host, Port, chat, Pwd, []) of
 
-{error, \_Why} -\>
+{error, _Why} ->
 
 Parent ! {status, {cannot, connect, Host, Port}},
 
 sleep(2000),
 
-try\_to\_connect(Parent, Host, Port, Pwd);
+try_to_connect(Parent, Host, Port, Pwd);
 
-{ok, MM} -\>
+{ok, MM} ->
 
-lib\_chan\_mm:controller(MM, Parent),
+lib_chan_mm:controller(MM, Parent),
 
 Parent ! {connected, MM},
 
@@ -1095,98 +1095,98 @@ exit(connectorFinished)
 
 end.
 
-sleep(T) -\>
+sleep(T) ->
 
 receive
 
-after T -\> true
+after T -> true
 
 end.
 
-to\_str(Term) -\>
+to_str(Term) ->
 
-io\_lib:format("\~p\~n" ,[Term]).
+io_lib:format("\~p\~n" ,[Term]).
 
-parse\_command(Str) -\> skip\_to\_gt(Str).
+parse_command(Str) -> skip_to_gt(Str).
 
-skip\_to\_gt("\>" ++ T) -\> T;
+skip_to_gt(">" ++ T) -> T;
 
-skip\_to\_gt([\_|T])
+skip_to_gt([_|T])
 
--\> skip\_to\_gt(T);
+-> skip_to_gt(T);
 
-skip\_to\_gt([])
+skip_to_gt([])
 
--\> exit("no \>" ).
+-> exit("no >" ).
 
-**Конфигурация lib\_chan**
+**Конфигурация lib_chan**
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat.conf"conf
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat.conf"conf
 
 {port, 2223}.
 
 {service, chat, password,"AsDT67aQ"
-,mfa,mod\_chat\_controller,start,[]}.
+,mfa,mod_chat_controller,start,[]}.
 
 **Чат-контроллер**
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"modHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"controllerHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_chat\_controller.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"modHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"controllerHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_chat_controller.erl"erl
 
--module(mod\_chat\_controller).
+-module(mod_chat_controller).
 
 -export([start/3]).
 
--import(lib\_chan\_mm, [send/2]).
+-import(lib_chan_mm, [send/2]).
 
-start(MM, \_, \_) -\>
+start(MM, _, _) ->
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
-io:format("mod\_chat\_controller off we go ...\~p\~n" ,[MM]),
+io:format("mod_chat_controller off we go ...\~p\~n" ,[MM]),
 
 loop(MM).
 
-loop(MM) -\>
+loop(MM) ->
 
 receive
 
-{chan, MM, Msg} -\>
+{chan, MM, Msg} ->
 
-chat\_server ! {mm, MM, Msg},
+chat_server ! {mm, MM, Msg},
 
 loop(MM);
 
-{'EXIT', MM, \_Why} -\>
+{'EXIT', MM, _Why} ->
 
-chat\_server ! {mm\_closed, MM};
+chat_server ! {mm_closed, MM};
 
-Other -\>
+Other ->
 
-io:format("mod\_chat\_controller unexpected message =\~p (MM=\~p)\~n" ,
+io:format("mod_chat_controller unexpected message =\~p (MM=\~p)\~n" ,
 
 [Other, MM]),
 
@@ -1197,140 +1197,140 @@ end.
 **Чат-сервер**
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_server.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_server.erl"erl
 
--module(chat\_server).
+-module(chat_server).
 
--import(lib\_chan\_mm, [send/2, controller/2]).
+-import(lib_chan_mm, [send/2, controller/2]).
 
 -import(lists, [delete/2, foreach/2, map/2, member/2,reverse/2]).
 
--compile(export\_all).
+-compile(export_all).
 
-start() -\>
+start() ->
 
-start\_server(),
+start_server(),
 
-lib\_chan:start\_server("chat.conf" ).
+lib_chan:start_server("chat.conf" ).
 
-start\_server() -\>
+start_server() ->
 
-register(chat\_server,
+register(chat_server,
 
-spawn(fun() -\>
+spawn(fun() ->
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
-Val= (catch server\_loop([])),
+Val= (catch server_loop([])),
 
 io:format("Server terminated with:\~p\~n" ,[Val])
 
 end)).
 
-server\_loop(L) -\>
+server_loop(L) ->
 
 receive
 
-{mm, Channel, {login, Group, Nick}} -\>
+{mm, Channel, {login, Group, Nick}} ->
 
 case lookup(Group, L) of
 
-{ok, Pid} -\>
+{ok, Pid} ->
 
 Pid ! {login, Channel, Nick},
 
-server\_loop(L);
+server_loop(L);
 
-error -\>
+error ->
 
-Pid = spawn\_link(fun() -\>
+Pid = spawn_link(fun() ->
 
-chat\_group:start(Channel, Nick)
+chat_group:start(Channel, Nick)
 
 end),
 
-server\_loop([{Group,Pid}|L])
+server_loop([{Group,Pid}|L])
 
 end;
 
-{mm\_closed, \_} -\>
+{mm_closed, _} ->
 
-server\_loop(L);
+server_loop(L);
 
-{'EXIT', Pid, allGone} -\>
+{'EXIT', Pid, allGone} ->
 
-L1 = remove\_group(Pid, L),
+L1 = remove_group(Pid, L),
 
-server\_loop(L1);
+server_loop(L1);
 
-Msg -\>
+Msg ->
 
 io:format("Server received Msg=\~p\~n" ,
 
 [Msg]),
 
-server\_loop(L)
+server_loop(L)
 
 end.
 
-lookup(G, [{G,Pid}|\_]) -\> {ok, Pid};
+lookup(G, [{G,Pid}|_]) -> {ok, Pid};
 
-lookup(G, [\_|T])
+lookup(G, [_|T])
 
--\> lookup(G, T);
+-> lookup(G, T);
 
-lookup(\_,[])
+lookup(_,[])
 
--\> error.
+-> error.
 
-remove\_group(Pid, [{G,Pid}|T]) -\> io:format("\~p removed\~n" ,[G]), T;
+remove_group(Pid, [{G,Pid}|T]) -> io:format("\~p removed\~n" ,[G]), T;
 
-remove\_group(Pid, [H|T])
+remove_group(Pid, [H|T])
 
--\> [H|remove\_group(Pid, T)];
+-> [H|remove_group(Pid, T)];
 
-remove\_group(\_, [])
+remove_group(_, [])
 
--\> [].
+-> [].
 
 **Чат-группы**
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"chatHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"groupHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/chat\_group.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"chatHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"groupHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/chat_group.erl"erl
 
--module(chat\_group).
+-module(chat_group).
 
--import(lib\_chan\_mm, [send/2, controller/2]).
+-import(lib_chan_mm, [send/2, controller/2]).
 
 -import(lists, [foreach/2, reverse/2]).
 
 -export([start/2]).
 
-start(C, Nick) -\>
+start(C, Nick) ->
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
 controller(C, self()),
 
@@ -1338,33 +1338,33 @@ C ! ack,
 
 self() ! {C, {relay, Nick, "I'm starting the group" }},
 
-group\_controller([{C,Nick}]).
+group_controller([{C,Nick}]).
 
-delete(Pid, [{Pid,Nick}|T], L) -\> {Nick, reverse(T, L)};
+delete(Pid, [{Pid,Nick}|T], L) -> {Nick, reverse(T, L)};
 
 delete(Pid, [H|T], L)
 
--\> delete(Pid, T, [H|L]);
+-> delete(Pid, T, [H|L]);
 
-delete(\_, [], L)
+delete(_, [], L)
 
--\> {"????" , L}.
+-> {"????" , L}.
 
-group\_controller([]) -\>
+group_controller([]) ->
 
 exit(allGone);
 
-group\_controller(L) -\>
+group_controller(L) ->
 
 receive
 
-{C, {relay, Nick, Str}} -\>
+{C, {relay, Nick, Str}} ->
 
-foreach(fun({Pid,\_}) -\> Pid ! {msg, Nick, C, Str} end, L),
+foreach(fun({Pid,_}) -> Pid ! {msg, Nick, C, Str} end, L),
 
-group\_controller(L);
+group_controller(L);
 
-{login, C, Nick} -\>
+{login, C, Nick} ->
 
 controller(C, self()),
 
@@ -1372,99 +1372,99 @@ C ! ack,
 
 self() ! {C, {relay, Nick, "I'm joining the group" }},
 
-group\_controller([{C,Nick}|L]);
+group_controller([{C,Nick}|L]);
 
-{close,C} -\>
+{close,C} ->
 
 {Nick, L1} = delete(C, L, []),
 
 self() ! {C, {relay, Nick, "I'm leaving the group" }},
 
-group\_controller(L1);
+group_controller(L1);
 
-Any -\>
+Any ->
 
 io:format("group controller received Msg=\~p\~n" , [Any]),
 
-group\_controller(L)
+group_controller(L)
 
 end.
 
 **Виджет ввода-вывода**
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/io\_widget.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/io\_widget.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/io_widget.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/io_widget.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/io\_widget.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/io\_widget.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/io\_widget.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/io\_widget.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/io\_widget.erl"ioHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/io\_widget.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/io\_widget.erl"widgetHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/io\_widget.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/io\_widget.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/io_widget.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/io_widget.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/io_widget.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/io_widget.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/io_widget.erl"ioHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/io_widget.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/io_widget.erl"widgetHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/io_widget.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/io_widget.erl"erl
 
--module(io\_widget).
+-module(io_widget).
 
--export([get\_state/1,
+-export([get_state/1,
 
 start/1, test/0,
 
-set\_handler/2,
+set_handler/2,
 
-set\_prompt/2,
+set_prompt/2,
 
-set\_state/2,
+set_state/2,
 
-set\_title/2, insert\_str/2, update\_state/3]).
+set_title/2, insert_str/2, update_state/3]).
 
-start(Pid) -\>
+start(Pid) ->
 
 gs:start(),
 
-spawn\_link(fun() -\> widget(Pid) end).
+spawn_link(fun() -> widget(Pid) end).
 
-get\_state(Pid)
+get_state(Pid)
 
--\> rpc(Pid, get\_state).
+-> rpc(Pid, get_state).
 
-set\_title(Pid, Str)
+set_title(Pid, Str)
 
--\> Pid ! {title, Str}.
+-> Pid ! {title, Str}.
 
-set\_handler(Pid, Fun)
+set_handler(Pid, Fun)
 
--\> Pid ! {handler, Fun}.
+-> Pid ! {handler, Fun}.
 
-set\_prompt(Pid, Str)
+set_prompt(Pid, Str)
 
--\> Pid ! {prompt, Str}.
+-> Pid ! {prompt, Str}.
 
-set\_state(Pid, State)
+set_state(Pid, State)
 
--\> Pid ! {state, State}.
+-> Pid ! {state, State}.
 
-insert\_str(Pid, Str)
+insert_str(Pid, Str)
 
--\> Pid ! {insert, Str}.
+-> Pid ! {insert, Str}.
 
-update\_state(Pid, N, X) -\> Pid ! {updateState, N, X}.
+update_state(Pid, N, X) -> Pid ! {updateState, N, X}.
 
-rpc(Pid, Q) -\>
+rpc(Pid, Q) ->
 
 Pid ! {self(), Q},
 
 receive
 
-{Pid, R} -\>
+{Pid, R} ->
 
 R
 
 end.
 
-widget(Pid) -\>
+widget(Pid) ->
 
 Size = [{width,500},{height,200}],
 
@@ -1472,21 +1472,21 @@ Win = gs:window(gs:start(),
 
 [{map,true},{configure,true},{title,"window" }|Size]),
 
-gs:frame(packer, Win,[{packer\_x, [{stretch,1,500}]},
+gs:frame(packer, Win,[{packer_x, [{stretch,1,500}]},
 
-{packer\_y, [{stretch,10,120,100},
+{packer_y, [{stretch,10,120,100},
 
 {stretch,1,15,15}]}]),
 
 gs:create(editor,editor,packer,
-[{pack\_x,1},{pack\_y,1},{vscroll,right}]),
+[{pack_x,1},{pack_y,1},{vscroll,right}]),
 
 gs:create(entry, entry, packer,
-[{pack\_x,1},{pack\_y,2},{keypress,true}]),
+[{pack_x,1},{pack_y,2},{keypress,true}]),
 
 gs:config(packer, Size),
 
-Prompt = " \> " ,
+Prompt = " > " ,
 
 State = nil,
 
@@ -1494,21 +1494,21 @@ gs:config(entry, {insert,{0,Prompt}}),
 
 loop(Win, Pid, Prompt, State, fun parse/1).
 
-loop(Win, Pid, Prompt, State, Parse) -\>
+loop(Win, Pid, Prompt, State, Parse) ->
 
 receive
 
-{From, get\_state} -\>
+{From, get_state} ->
 
 From ! {self(), State},
 
 loop(Win, Pid, Prompt, State, Parse);
 
-{handler, Fun} -\>
+{handler, Fun} ->
 
 loop(Win, Pid, Prompt, State, Fun);
 
-{prompt, Str} -\>
+{prompt, Str} ->
 
 %% this clobbers the line being input ...
 
@@ -1520,25 +1520,25 @@ gs:config(entry, {insert,{0,Str}}),
 
 loop(Win, Pid, Str, State, Parse);
 
-{state, S} -\>
+{state, S} ->
 
 loop(Win, Pid, Prompt, S, Parse);
 
-{title, Str} -\>
+{title, Str} ->
 
 gs:config(Win, [{title, Str}]),
 
 loop(Win, Pid, Prompt, State, Parse);
 
-{insert, Str} -\>
+{insert, Str} ->
 
 gs:config(editor, {insert,{'end',Str}}),
 
-scroll\_to\_show\_last\_line(),
+scroll_to_show_last_line(),
 
 loop(Win, Pid, Prompt, State, Parse);
 
-{updateState, N, X} -\>
+{updateState, N, X} ->
 
 io:format("setelemtn N=\~p X=\~p Satte=\~p\~n" ,[N,X,State]),
 
@@ -1546,13 +1546,13 @@ State1 = setelement(N, State, X),
 
 loop(Win, Pid, Prompt, State1, Parse);
 
-{gs,\_,destroy,\_,\_} -\>
+{gs,_,destroy,_,_} ->
 
 io:format("Destroyed\~n" ,[]),
 
 exit(windowDestroyed);
 
-{gs, entry,keypress,\_,['Return'|\_]} -\>
+{gs, entry,keypress,_,['Return'|_]} ->
 
 Text = gs:read(entry, text),
 
@@ -1564,13 +1564,13 @@ gs:config(entry, {insert,{0,Prompt}}),
 
 try Parse(Text) of
 
-Term -\>
+Term ->
 
 Pid ! {self(), State, Term}
 
 catch
 
-\_:\_ -\>
+_:_ ->
 
 self() ! {insert, "\*\* bad input\*\*\\n\*\* /h for help\\n" }
 
@@ -1578,17 +1578,17 @@ end,
 
 loop(Win, Pid, Prompt, State, Parse);
 
-{gs,\_,configure,[],[W,H,\_,\_]} -\>
+{gs,_,configure,[],[W,H,_,_]} ->
 
 gs:config(packer, [{width,W},{height,H}]),
 
 loop(Win, Pid, Prompt, State, Parse);
 
-{gs, entry,keypress,\_,\_} -\>
+{gs, entry,keypress,_,_} ->
 
 loop(Win, Pid, Prompt, State, Parse);
 
-Any -\>
+Any ->
 
 io:format("Discarded:\~p\~n" ,[Any]),
 
@@ -1596,7 +1596,7 @@ loop(Win, Pid, Prompt, State, Parse)
 
 end.
 
-scroll\_to\_show\_last\_line() -\>
+scroll_to_show_last_line() ->
 
 Size
 
@@ -1606,7 +1606,7 @@ Height
 
 = gs:read(editor, height),
 
-CharHeight = gs:read(editor, char\_height),
+CharHeight = gs:read(editor, char_height),
 
 TopRow
 
@@ -1614,64 +1614,64 @@ TopRow
 
 if
 
-TopRow \> 0 -\> gs:config(editor, {vscrollpos, TopRow});
+TopRow > 0 -> gs:config(editor, {vscrollpos, TopRow});
 
 true
 
--\> gs:config(editor, {vscrollpos, 0})
+-> gs:config(editor, {vscrollpos, 0})
 
 end.
 
-test() -\>
+test() ->
 
-spawn(fun() -\> test1() end).
+spawn(fun() -> test1() end).
 
-test1() -\>
+test1() ->
 
-W = io\_widget:start(self()),
+W = io_widget:start(self()),
 
-io\_widget:set\_title(W, "Test window" ),
+io_widget:set_title(W, "Test window" ),
 
 loop(W).
 
-loop(W) -\>
+loop(W) ->
 
 receive
 
-{W, {str, Str}} -\>
+{W, {str, Str}} ->
 
 Str1 = Str ++ "\\n" ,
 
-io\_widget:insert\_str(W, Str1),
+io_widget:insert_str(W, Str1),
 
 loop(W)
 
 end.
 
-parse(Str) -\>
+parse(Str) ->
 
 {str, Str}.
 
 **11.7 Упражнения**
 
-● улучшите графический виджет, добавив боковую панель для перечисления
+* улучшите графический виджет, добавив боковую панель для перечисления
 имён участников группы
 
-● добавьте код для показа имён всех участников группы
+* добавьте код для показа имён всех участников группы
 
-● добавьте код для перечисления всех групп
+* добавьте код для перечисления всех групп
 
-● добавьте личные сообщения
+* добавьте личные сообщения
 
-● добавьте такой код, чтобы контроллер группы работал не на серверной
+* добавьте такой код, чтобы контроллер группы работал не на серверной
 машине, а на машине первого пользователя, который подключился к данной
 группе
 
-● Посмотрите внимательно на диаграмму последовательности сообщений
+* Посмотрите внимательно на диаграмму последовательности сообщений
 (Рис.11. 2), чтобы убедиться, что вы понимаете её и проверьте, что вы
 можете указать все сообщения из диаграммы в программном коде
 
-● нарисуйте свою собственную диаграмму последовательности сообщений,
+* нарисуйте свою собственную диаграмму последовательности сообщений,
 чтобы показать, как решается проблема в фазе логина (в оригинале «фаза
 логина проблемы»)
 

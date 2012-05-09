@@ -57,7 +57,7 @@ signal)*. И наоборот — если умрёт B, то такой сиг�
 Механизмы, описанные в этой главе, совершенно общие. Они работают на и
 на одном-единственном узле системы и на нескольких узлах в
 распределенной эрланговой системе. Как мы увидим в Главе 10
-*«Распределённое программирование»* на стр. \_\_\_\_ мы можем порождать
+*«Распределённое программирование»* на стр. ____ мы можем порождать
 процессы на удалённых узлах так же легко, как и на текущем узле. Все
 механизмы для связи, которые мы обсуждаем в этой главе, работают так же
 хорошо и в распределённой системе.
@@ -82,35 +82,35 @@ signal)*. И наоборот — если умрёт B, то такой сиг�
 процесс завершается аварийно. Обработчик выхода — это полезный
 строительный блок для создания более развитых абстракций.
 
-**9.2 Обработчик on\_exit**
+**9.2 Обработчик on_exit**
 
 Мы хотим выполнить некое действие, когда процесс завершается. Можно
-написать функцию on\_exit(Pid,Fun), которая устанавливает связь с
+написать функцию on_exit(Pid,Fun), которая устанавливает связь с
 процессом Pid. Если Pid умирает с причиной Why, то вычисляется функция
 Fun(Why).
 
 Вот эта программа:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl" HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"libHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"miscHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl" HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"libHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"miscHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"erl
 
-Line 1 on\_exit(Pid, Fun) -\>
+Line 1 on_exit(Pid, Fun) ->
 
-- spawn(fun() -\>
+- spawn(fun() ->
 
-- process\_flag(trap\_exit, true),
+- process_flag(trap_exit, true),
 
 - link(Pid),
 
 5 receive
 
-- {'EXIT', Pid, Why} -\>
+- {'EXIT', Pid, Why} ->
 
 - Fun(Why)
 
@@ -118,7 +118,7 @@ Line 1 on\_exit(Pid, Fun) -\>
 
 - end).
 
-В строке 3 выражение process\_flag(trap\_exit, true) превращает
+В строке 3 выражение process_flag(trap_exit, true) превращает
 порождённый процесс в системный. link(Pid) в строке 4 связывает вновь
 созданный процесс с Pid. В конце, когда процесс умирает, принимается
 (строка 6) и обрабатывается (строка 7) сигнал выхода.
@@ -127,51 +127,51 @@ Line 1 on\_exit(Pid, Fun) -\>
 используем Pid повсеместно. Это Pid связанного процесса. Нежелательно
 использовать имя переменной вроде LinkedPid, т.к. до вызова link(Pid)
 связь с этим процессом ещё не установлена. Когда вы видите сообщение
-типа такого {'EXIT', Pid, \_} вы должны понять, что Pid — это связанный
+типа такого {'EXIT', Pid, _} вы должны понять, что Pid — это связанный
 процесс и он только что умер.
 
 Чтобы проверить всё это, определим функцию F, которая ждёт единственное
-сообщение X и затем вычисляет list\_to\_atom(X):
+сообщение X и затем вычисляет list_to_atom(X):
 
-1\> F = fun() -\>
+1> F = fun() ->
 
 receive
 
-X -\> list\_to\_atom(X)
+X -> list_to_atom(X)
 
 end
 
 end.
 
-\#Fun<erl\_eval.20.69967518\>
+\#Fun<erl_eval.20.69967518>
 
 Создадим процесс:
 
-2\> Pid = spawn(F).
+2> Pid = spawn(F).
 
-<0.61.0\>
+<0.61.0>
 
-И установим обработчик on\_exit для мониторинга этого процесса:
+И установим обработчик on_exit для мониторинга этого процесса:
 
-3\> lib\_misc:on\_exit(Pid,
+3> lib_misc:on_exit(Pid,
 
-fun(Why) -\>
+fun(Why) ->
 
 io:format(" \~p died with:\~p\~n",[Pid, Why])
 
 end).
 
-<0.63.0\>
+<0.63.0>
 
 Если теперь мы отправим атом к Pid, то процесс Pid умрёт (т.к. он
-попытается выполнить list\_to\_atom, а входные данные у него — не
-список) и тогда вызовется обработчик on\_exit:
+попытается выполнить list_to_atom, а входные данные у него — не
+список) и тогда вызовется обработчик on_exit:
 
-4\> Pid ! hello.
+4> Pid ! hello.
 
 hello
 
-<0.61.0\> died with:{badarg,[{erlang,list\_to\_atom,[hello]}]}
+<0.61.0> died with:{badarg,[{erlang,list_to_atom,[hello]}]}
 
 Функция, которая вызывается при умирании процесса может, разумеется,
 делать всё, что ей угодно — она может проигнорировать ошибку,
@@ -234,14 +234,14 @@ hello
 процесса Pid, этот сигнал преобразуется в сообщение {'EXIT', Pid, Why} и
 добавляется в почтовый ящик системного процесса.
 
-Вызов встроенной функции process\_flag(trap\_exit, true) превращает
+Вызов встроенной функции process_flag(trap_exit, true) превращает
 обычный процесс в системный, который может перехватывать сигналы выхода.
 
 Когда процесс получает *сигнал выхода* может произойти несколько вещей.
 Что именно произойдёт, зависит от состояния процесса и значения сигнала
 выхода и определяется следующей таблицей:
 
-*trap\_exit*
+*trap_exit*
 
 *Сигнал выхода*
 
@@ -299,7 +299,7 @@ X
 
 Процесс создаёт другой процесс, используя функцию spawn:
 
-Pid = spawn(fun() -\> ... end)
+Pid = spawn(fun() -> ... end)
 
 Ничего более. Если порождённый процесс падает, то текущий процесс
 продолжает работать.
@@ -308,10 +308,10 @@ Pid = spawn(fun() -\> ... end)
 
 Если быть точным, мы должны бы сказать «Если процесс, который я создал,
 падает по причине, отличной от normal». Чтобы достичь этого исходный
-процесс использует функцию spawn\_link и не должен заранее готовиться к
+процесс использует функцию spawn_link и не должен заранее готовиться к
 перехвату выхода. Можно просто написать так:
 
-Pid = spawn\_link(fun() -\> ... end)
+Pid = spawn_link(fun() -> ... end)
 
 Теперь, если порождённый процесс падает по причине, отличной от normal,
 текущий процесс также падает.
@@ -319,13 +319,13 @@ Pid = spawn\_link(fun() -\> ... end)
 **Подход 3: Я хочу обработать ошибки, если процесс, который я создал,
 падает**
 
-Здесь мы используем spawn\_link и trap\_exit. Код будет таким:
+Здесь мы используем spawn_link и trap_exit. Код будет таким:
 
 ...
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
-Pid = spawn\_link(fun() -\> ... end),
+Pid = spawn_link(fun() -> ... end),
 
 ...
 
@@ -333,11 +333,11 @@ loop(...).
 
 
 
-loop(State) -\>
+loop(State) ->
 
 receive
 
-{'EXIT', SomePid, Reason} -\>
+{'EXIT', SomePid, Reason} ->
 
 %% do something with the error
 
@@ -378,13 +378,13 @@ HYPERLINK
 
 -export([start/2]).
 
-start(Bool, M) -\>
+start(Bool, M) ->
 
-A = spawn(fun() -\> a() end),
+A = spawn(fun() -> a() end),
 
-B = spawn(fun() -\> b(A, Bool) end),
+B = spawn(fun() -> b(A, Bool) end),
 
-C = spawn(fun() -\> c(B, M) end),
+C = spawn(fun() -> c(B, M) end),
 
 sleep(1000),
 
@@ -410,37 +410,37 @@ HYPERLINK
 "http://media.pragprog.com/titles/jaerlang/code/edemo1.erl"1.HYPERLINK
 "http://media.pragprog.com/titles/jaerlang/code/edemo1.erl"erl
 
-a() -\>
+a() ->
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
 wait(a).
 
-b(A, Bool) -\>
+b(A, Bool) ->
 
-process\_flag(trap\_exit, Bool),
+process_flag(trap_exit, Bool),
 
 link(A),
 
 wait(b).
 
-c(B, M) -\>
+c(B, M) ->
 
 link(B),
 
 case M of
 
-{die, Reason} -\>
+{die, Reason} ->
 
 exit(Reason);
 
-{divide, N} -\>
+{divide, N} ->
 
 1/N,
 
 wait(c);
 
-normal -\>
+normal ->
 
 true
 
@@ -455,11 +455,11 @@ HYPERLINK
 "http://media.pragprog.com/titles/jaerlang/code/edemo1.erl"1.HYPERLINK
 "http://media.pragprog.com/titles/jaerlang/code/edemo1.erl"erl
 
-wait(Prog) -\>
+wait(Prog) ->
 
 receive
 
-Any -\>
+Any ->
 
 io:format("Process \~p received \~p\~n" ,[Prog, Any]),
 
@@ -476,23 +476,23 @@ HYPERLINK
 "http://media.pragprog.com/titles/jaerlang/code/edemo1.erl"1.HYPERLINK
 "http://media.pragprog.com/titles/jaerlang/code/edemo1.erl"erl
 
-sleep(T) -\>
+sleep(T) ->
 
 receive
 
-after T -\> true
+after T -> true
 
 end.
 
-status(Name, Pid) -\>
+status(Name, Pid) ->
 
-case erlang:is\_process\_alive(Pid) of
+case erlang:is_process_alive(Pid) of
 
-true -\>
+true ->
 
 io:format("process \~p (\~p) is alive\~n" , [Name, Pid]);
 
-false -\>
+false ->
 
 io:format("process \~p (\~p) is dead\~n" , [Name,Pid])
 
@@ -518,15 +518,15 @@ end.
 сигнал выхода.
 
 Сначала предположим, что B — это обычный процесс (т.е. который не делал
-process\_flag(trap\_exit, true)):
+process_flag(trap_exit, true)):
 
-1\> edemo1:start(false, {die, abc}).
+1> edemo1:start(false, {die, abc}).
 
-Process a received {'EXIT',<0.44.0\>,abc}
+Process a received {'EXIT',<0.44.0>,abc}
 
-process b (<0.44.0\>) is dead
+process b (<0.44.0>) is dead
 
-process c (<0.45.0\>) is dead
+process c (<0.45.0>) is dead
 
 ok
 
@@ -534,7 +534,7 @@ ok
 перехватывает выход). При выходе B рассылает полученный сигнал выхода по
 всем процессам, с которыми он связан. A (который перехватывает выход)
 получает сигнал выхода и превращает его в сообщение об ошибке
-{'EXIT',<0.44.0\>,abc}. (Заметьте, что процесс <0.44.0\> — это процесс
+{'EXIT',<0.44.0>,abc}. (Заметьте, что процесс <0.44.0> — это процесс
 B, который умирает).
 
 Теперь попробуем другой сценарий. Мы скажем процессу C умереть с
@@ -542,11 +542,11 @@ B, который умирает).
 
 
 
-2\> edemo1:start(false, {die, normal}).
+2> edemo1:start(false, {die, normal}).
 
-process b (<0.48.0\>) is alive
+process b (<0.48.0>) is alive
 
-process c (<0.49.0\>) is dead
+process c (<0.49.0>) is dead
 
 ok
 
@@ -554,17 +554,17 @@ ok
 
 Теперь пусть C выполнит арифметическую ошибку:
 
-3\> edemo1:start(false, {divide,0}).
+3> edemo1:start(false, {divide,0}).
 
 =ERROR REPORT==== 8-Dec-2006::11:12:47 ===
 
-Error in process <0.53.0\> with exit value: {badarith,[{edemo1,c,2}]}
+Error in process <0.53.0> with exit value: {badarith,[{edemo1,c,2}]}
 
-Process a received {'EXIT',<0.52.0\>,{badarith,[{edemo1,c,2}]}}
+Process a received {'EXIT',<0.52.0>,{badarith,[{edemo1,c,2}]}}
 
-process b (<0.52.0\>) is dead
+process b (<0.52.0>) is dead
 
-process c (<0.53.0\>) is dead
+process c (<0.53.0>) is dead
 
 ok
 
@@ -574,13 +574,13 @@ ok
 
 В конце мы заставляем C завершиться по причине kill:
 
-4\> edemo1:start(false, {die,kill}).
+4> edemo1:start(false, {die,kill}).
 
-Process a received {'EXIT',<0.56.0\>,killed} <-- \*\* замена killed \*\*
+Process a received {'EXIT',<0.56.0>,killed} <-- \*\* замена killed \*\*
 
-process b (<0.56.0\>) is dead
+process b (<0.56.0>) is dead
 
-process c (<0.57.0\>) is dead
+process c (<0.57.0>) is dead
 
 ok
 
@@ -591,41 +591,41 @@ ok
 Мы можем повторить эти тесты для случая, когда B перехватывает выход.
 Эта ситуация показана на рисунке в части (c).
 
-5\> edemo1:start(true, {die, abc}).
+5> edemo1:start(true, {die, abc}).
 
-Process b received {'EXIT',<0.61.0\>,abc}
+Process b received {'EXIT',<0.61.0>,abc}
 
-process b (<0.60.0\>) is alive
+process b (<0.60.0>) is alive
 
-process c (<0.61.0\>) is dead
-
-ok
-
-6\> edemo1:start(true, {die, normal}).
-
-Process b received {'EXIT',<0.65.0\>,normal}
-
-process b (<0.64.0\>) is alive
-
-process c (<0.65.0\>) is dead
+process c (<0.61.0>) is dead
 
 ok
 
-7\> edemo1:start(true, normal).
+6> edemo1:start(true, {die, normal}).
 
-Process b received {'EXIT',<0.69.0\>,normal}
+Process b received {'EXIT',<0.65.0>,normal}
 
-process b (<0.68.0\>) is alive
+process b (<0.64.0>) is alive
 
-process c (<0.69.0\>) is dead
+process c (<0.65.0>) is dead
 
-8\> edemo1:start(true, {die,kill}).
+ok
 
-Process b received {'EXIT',<0.73.0\>,kill}
+7> edemo1:start(true, normal).
 
-process b (<0.72.0\>) is alive
+Process b received {'EXIT',<0.69.0>,normal}
 
-process c (<0.73.0\>) is dead
+process b (<0.68.0>) is alive
+
+process c (<0.69.0>) is dead
+
+8> edemo1:start(true, {die,kill}).
+
+Process b received {'EXIT',<0.73.0>,kill}
+
+process b (<0.72.0>) is alive
+
+process c (<0.73.0>) is dead
 
 ok
 
@@ -642,9 +642,9 @@ HYPERLINK
 "http://media.pragprog.com/titles/jaerlang/code/edemo2.erl"2.HYPERLINK
 "http://media.pragprog.com/titles/jaerlang/code/edemo2.erl"erl
 
-c(B, M) -\>
+c(B, M) ->
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
 link(B),
 
@@ -654,67 +654,67 @@ wait(c).
 
 Запустив edemo2, мы увидим следующее:
 
-1\> edemo2:start(false, abc).
+1> edemo2:start(false, abc).
 
-Process c received {'EXIT',<0.81.0\>,abc}
+Process c received {'EXIT',<0.81.0>,abc}
 
-Process a received {'EXIT',<0.81.0\>,abc}
+Process a received {'EXIT',<0.81.0>,abc}
 
-process b (<0.81.0\>) is dead
+process b (<0.81.0>) is dead
 
-process c (<0.82.0\>) is alive
-
-ok
-
-2\> edemo2:start(false, normal).
-
-process b (<0.85.0\>) is alive
-
-process c (<0.86.0\>) is alive
+process c (<0.82.0>) is alive
 
 ok
 
-3\> edemo2:start(false, kill).
+2> edemo2:start(false, normal).
 
-Process c received {'EXIT',<0.97.0\>,killed}
+process b (<0.85.0>) is alive
 
-Process a received {'EXIT',<0.97.0\>,killed}
-
-process b (<0.97.0\>) is dead
-
-process c (<0.98.0\>) is alive
+process c (<0.86.0>) is alive
 
 ok
 
-4\> edemo2:start(true, abc).
+3> edemo2:start(false, kill).
 
-Process b received {'EXIT',<0.102.0\>,abc}
+Process c received {'EXIT',<0.97.0>,killed}
 
-process b (<0.101.0\>) is alive
+Process a received {'EXIT',<0.97.0>,killed}
 
-process c (<0.102.0\>) is alive
+process b (<0.97.0>) is dead
 
-ok
-
-5\> edemo2:start(true, normal).
-
-Process b received {'EXIT',<0.106.0\>,normal}
-
-process b (<0.105.0\>) is alive
-
-process c (<0.106.0\>) is alive
+process c (<0.98.0>) is alive
 
 ok
 
-6\> edemo2:start(true, kill).
+4> edemo2:start(true, abc).
 
-Process c received {'EXIT',<0.109.0\>,killed}
+Process b received {'EXIT',<0.102.0>,abc}
 
-Process a received {'EXIT',<0.109.0\>,killed}
+process b (<0.101.0>) is alive
 
-process b (<0.109.0\>) is dead
+process c (<0.102.0>) is alive
 
-process c (<0.110.0\>) is alive
+ok
+
+5> edemo2:start(true, normal).
+
+Process b received {'EXIT',<0.106.0>,normal}
+
+process b (<0.105.0>) is alive
+
+process c (<0.106.0>) is alive
+
+ok
+
+6> edemo2:start(true, kill).
+
+Process c received {'EXIT',<0.109.0>,killed}
+
+Process a received {'EXIT',<0.109.0>,killed}
+
+process b (<0.109.0>) is dead
+
+process c (<0.110.0>) is alive
 
 ok
 
@@ -723,26 +723,26 @@ ok
 Вот наиболее распространённые примитивы для управления связями и для
 перехвата и отправки сигналов выхода:
 
-@spec spawn\_link(Fun) -\> Pid
+@spec spawn_link(Fun) -> Pid
 
 Это в точности как spawn(Fun), но дополнительно создаёт связь между
-процессами родителя и потомка. (spawn\_link — это атомарная операция.
+процессами родителя и потомка. (spawn_link — это атомарная операция.
 Она не эквивалентна последовательным вызовам spawn и link, т.к. в
 промежутке между этими двумя вызовами процесс может умереть)
 
-@spec process\_flag(trap\_exit, true)
+@spec process_flag(trap_exit, true)
 
 Превращает текущий процесс в системный процесс. Системный процесс — это
 процесс, который может принимать и обрабатывать сигналы об ошибках.
 
-Замечание: признак trap\_exit можно установить в false после того, как
+Замечание: признак trap_exit можно установить в false после того, как
 он был установлен в true. Этот примитив должен использоваться *только*
 для превращения обычного процесса в системный и больше ни для каких
 других целей.
 
 
 
-@spec link(Pid) -\> true
+@spec link(Pid) -> true
 
 Связывает текущий процесс с процессом Pid, если такой связи ещё нет.
 Связь симметрична. Если процесс А выполняет link(B), то он связывается с
@@ -755,13 +755,13 @@ exception) noproc.
 
 
 
-@spec unlink(Pid) -\> true
+@spec unlink(Pid) -> true
 
 Удаляет любую связь между текущим процессом и процессом Pid.
 
 
 
-@spec exit(Why) -\> none()
+@spec exit(Why) -> none()
 
 Завершает текущий процесс с причиной Why. Если выполнение exit
 происходит вне пределов **catch**, то текущий процесс рассылает сигнал
@@ -810,11 +810,11 @@ exception) noproc.
 
 
 
-@spec exit(Pid, Why) -\> true
+@spec exit(Pid, Why) -> true
 
 Посылает сигнал выхода с причиной Why к процессу Pid.
 
-@spec erlang:monitor(process, Item) -\> MonitorRef
+@spec erlang:monitor(process, Item) -> MonitorRef
 
 Устанавливает монитор. Item — это PID или зарегистрированное имя
 процесса. За подробностями обращайтесь к руководству по Эрлангу.
@@ -849,7 +849,7 @@ exception) noproc.
 Наборы связанных процессов используются для структурирования программ
 при создании устойчивых к сбоям систем. Вы можете сделать это сами, либо
 вы можете воспользоваться библиотечными функциями, описанными в Главе
-18.5 *Дерево наблюдения (Supervision Tree)* на стр. \_\_\_
+18.5 *Дерево наблюдения (Supervision Tree)* на стр. ___
 
 **9.7 Мониторы**
 
@@ -870,46 +870,46 @@ B, и процесс B умирает, то к А будет послан сиг
 чтобы создать зарегистрированный процесс, который будет жив всегда —
 если он по какой-либо причине умирает, то тут же перезапускается.
 
-Мы можем использовать on\_exit, чтобы достичь этого:
+Мы можем использовать on_exit, чтобы достичь этого:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl" HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"libHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"miscHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl" HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"libHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"miscHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"erl
 
-keep\_alive(Name, Fun) -\>
+keep_alive(Name, Fun) ->
 
 register(Name, Pid = spawn(Fun)),
 
-on\_exit(Pid, fun(\_Why) -\> keep\_alive(Name, Fun) end).
+on_exit(Pid, fun(_Why) -> keep_alive(Name, Fun) end).
 
 Здесь создаётся зарегистрированный под именем Name процесс, который
 вычисляет spawn(Fun). Если процесс по какой-то причине умирает, то он
 сразу запускается заново.
 
-В on\_exit и keep\_alive есть достаточно тонкая ошибка. Хотелось бы
+В on_exit и keep_alive есть достаточно тонкая ошибка. Хотелось бы
 знать — заметили ли вы её? Когда мы делаем что-то вроде такого:
 
 Pid = register(...),
 
-on\_exit(Pid, fun(X) -\> ..),
+on_exit(Pid, fun(X) -> ..),
 
 есть возможность, что процесс умрёт в промежутке *между* этими двумя
-вызовами. Если процесс умирает перед тем, как выполнится on\_exit, то
-связь не будет создана и on\_exit не сработает так, как ожидается. Это
+вызовами. Если процесс умирает перед тем, как выполнится on_exit, то
+связь не будет создана и on_exit не сработает так, как ожидается. Это
 может произойти в том случае, если две программы пытаются выполнить
-keep\_alive одновременно с одним и тем же значением Name. Это называется
+keep_alive одновременно с одним и тем же значением Name. Это называется
 *race conditions*. Два кусочка кода — этот и часть, которая
-устанавливает связь внутри on\_exit, пытаются обогнать друг дружку. Если
+устанавливает связь внутри on_exit, пытаются обогнать друг дружку. Если
 здесь что-нибудь пойдёт не так, то ваша программа может повести себя
 непредсказуемо.
 
 Я не буду решать эту проблему здесь — подумайте над этим сами. Когда вы
-объединяете примитивы spawn, spawn\_link, register и т.п., вы должны
+объединяете примитивы spawn, spawn_link, register и т.п., вы должны
 хорошенько подумать о возможных race conditions. Пишите ваш код так,
 чтобы race conditions никогда не возникали.
 

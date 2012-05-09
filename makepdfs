@@ -3,7 +3,7 @@
 baseDir=`dirname $0`
 outputDir=${baseDir}/pdf
 
-exclude=('figures' 'figures-dia' 'figures-source' 'latex' 'makepdfs' 'pdf' 'README.md' 'AUTHORS.md' 'Rakefile' 'couchapp' 'epub' 'makeebooks' 'summary.rb' 'book' 'doc')
+exclude=('figures' 'figures-dia' 'figures-source' 'latex' 'makepdfs' 'pdf' 'README.md' 'AUTHORS.md' 'Rakefile' 'couchapp' 'epub' 'makeebooks' 'summary.rb' 'book' 'doc' 'main.pyg')
 dirContent=`ls $baseDir`
 argString=""
 

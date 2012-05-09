@@ -51,7 +51,7 @@ ETS таблицы не обрабатываются сборщиком мусо
 
 Создание новой таблицы или открытие существующей.
 
-Это производится с помощью ets:new или dets:open\_file.
+Это производится с помощью ets:new или dets:open_file.
 
 
  Вставка одного или нескольких кортежей в таблицу.
@@ -105,23 +105,23 @@ ETS и DETS функция insert принимает одинаковые арг
  Мы можем показать как это работает с помощью следующей маленькой
 программы:
 
- Скачать ets\_test.erl
+ Скачать ets_test.erl
 
--module(ets\_test).
+-module(ets_test).
  -export([start/0]).
 
- start() -\>
- lists:foreach(fun test\_ets/1,
- [set, ordered\_set, bag, duplicate\_bag]).
+ start() ->
+ lists:foreach(fun test_ets/1,
+ [set, ordered_set, bag, duplicate_bag]).
 
- test\_ets(Mode) -\>
+ test_ets(Mode) ->
  TableId = ets:new(test, [Mode]),
  ets:insert(TableId, {a,1}),
  ets:insert(TableId, {b,2}),
  ets:insert(TableId, {a,1}),
  ets:insert(TableId, {a,3}),
  List = ets:tab2list(TableId),
- io:format("\~-13w =\> \~p\~n", [Mode, List]),
+ io:format("\~-13w => \~p\~n", [Mode, List]),
  ets:delete(TableId).
 
 
@@ -131,11 +131,11 @@ tab2list, которая преобразует таблицу целиком в
 
  Когда мы запустим программу, получим:
 
- 1\> ets\_test:start().
- set =\> [{b,2},{a,3}]
- ordered\_set =\> [{a,3},{b,2}]
- bag =\> [{b,2},{a,1},{a,3}]
- duplicate\_bag =\> [{b,2},{a,1},{a,1},{a,3}]
+ 1> ets_test:start().
+ set => [{b,2},{a,3}]
+ ordered_set => [{a,3},{b,2}]
+ bag => [{b,2},{a,1},{a,3}]
+ duplicate_bag => [{b,2},{a,1},{a,1},{a,3}]
 
  Для множества (set) каждый ключ встречается только один раз. Если мы
 вставили кортеж {a,1}, а вслед за ним {a,3}, тогда итоговое значение
@@ -209,13 +209,13 @@ tab2list, которая преобразует таблицу целиком в
 
  ets:new принимает следующие аргументы:
 
- @spec ets:new(Name, [Opt]) -\> TableId
+ @spec ets:new(Name, [Opt]) -> TableId
 
 Name - атом.
 
  [Opt] - список параметров из следующего перечня:
 
-set | ordered\_set | bag | duplicate\_bag
+set | ordered_set | bag | duplicate_bag
 
 Создать ETS таблицу указанного типа (мы говорили о них ранее).
 
@@ -237,7 +237,7 @@ public
 
 
 
-named\_table
+named_table
 
 Если указан, то Name может быть использован для последовательных
 операций с таблицами.
@@ -320,15 +320,15 @@ ETS таблицы как аудиторные доски
  5. Основываясь на измерениях, выберем наилучший тип и напишем функции
 доступа для этого типа.
 
- Весь код находится в lib\_trigrams. Мы собираемся представить его
+ Весь код находится в lib_trigrams. Мы собираемся представить его
 упустив некоторые детали. Но не беспокойтесь, вы найдёте полный листинг
 программы в конце главы. Таков наш план. Итак, приступим.
 
  Итератор триграмм
 
- Мы определим функцию for\_each\_trigram\_in\_the\_english\_language(F, A).
+ Мы определим функцию for_each_trigram_in_the_english_language(F, A).
  Эта функция применяет fun F к каждой триграмме в английском языке. F
-- это fun типа fun(Str, A) -\> A, а Str пробегает все значения триграмм
+- это fun типа fun(Str, A) -> A, а Str пробегает все значения триграмм
 в языке и A - это аккумулятор.
 
  Чтобы написать наш итератор HYPERLINK\\ \\l\\ "FOOTNOTE-1"\\  ,
@@ -337,29 +337,29 @@ ETS таблицы как аудиторные доски
 формирования триграмм. Используя этот список слов, мы можем определить
 итератор триграмм следующим способом:
 
- Скачать lib\_trigrams.erl
- for\_each\_trigram\_in\_the\_english\_language(F, A0) -\>
- {ok, Bin0} = file:read\_file("354984si.ngl.gz" ),
+ Скачать lib_trigrams.erl
+ for_each_trigram_in_the_english_language(F, A0) ->
+ {ok, Bin0} = file:read_file("354984si.ngl.gz" ),
  Bin = zlib:gunzip(Bin0),
- scan\_word\_list(binary\_to\_list(Bin), F, A0).
- scan\_word\_list([], \_, A) -\>
+ scan_word_list(binary_to_list(Bin), F, A0).
+ scan_word_list([], _, A) ->
  A;
- scan\_word\_list(L, F, A) -\>
- {Word, L1} = get\_next\_word(L, []),
- A1 = scan\_trigrams([\$\\s|Word], F, A),
- scan\_word\_list(L1, F, A1).
+ scan_word_list(L, F, A) ->
+ {Word, L1} = get_next_word(L, []),
+ A1 = scan_trigrams([\$\\s|Word], F, A),
+ scan_word_list(L1, F, A1).
  %% scan the word looking for \\r\\n
  %% the second argument is the word (reversed) so it
  %% has to be reversed when we find \\r\\n or run out of characters
- get\_next\_word([\$\\r,\$\\n|T], L) -\> {reverse([\$\\s|L]), T};
- get\_next\_word([H|T], L) -\> get\_next\_word(T, [H|L]);
- get\_next\_word([], L) -\> {reverse([\$\\s|L]), []}.
- scan\_trigrams([X,Y,Z], F, A) -\>
+ get_next_word([\$\\r,\$\\n|T], L) -> {reverse([\$\\s|L]), T};
+ get_next_word([H|T], L) -> get_next_word(T, [H|L]);
+ get_next_word([], L) -> {reverse([\$\\s|L]), []}.
+ scan_trigrams([X,Y,Z], F, A) ->
  F([X,Y,Z], A);
- scan\_trigrams([X,Y,Z|T], F, A) -\>
+ scan_trigrams([X,Y,Z|T], F, A) ->
  A1 = F([X,Y,Z], A),
- scan\_trigrams([Y,Z|T], F, A1);
- scan\_trigrams(\_, \_, A) -\>
+ scan_trigrams([Y,Z|T], F, A1);
+ scan_trigrams(_, _, A) ->
  A.
 
  Здесь следует отметить два момента. Во-первых, мы использовали
@@ -373,21 +373,21 @@ zlib:gunzip(Bin) чтобы разархивировать zip-архив. Сп�
 
  Мы строим наши ETS таблицы так:
 
- Скачать lib\_trigrams.erl
- make\_ets\_ordered\_set() -\> make\_a\_set(ordered\_set,
+ Скачать lib_trigrams.erl
+ make_ets_ordered_set() -> make_a_set(ordered_set,
 "trigramsOS.tab" ).
- make\_ets\_set() -\> make\_a\_set(set, "trigramsS.tab" ).
- make\_a\_set(Type, FileName) -\>
+ make_ets_set() -> make_a_set(set, "trigramsS.tab" ).
+ make_a_set(Type, FileName) ->
  Tab = ets:new(table, [Type]),
- F = fun(Str, \_) -\> ets:insert(Tab, {list\_to\_binary(Str)}) end,
- for\_each\_trigram\_in\_the\_english\_language(F, 0),
+ F = fun(Str, _) -> ets:insert(Tab, {list_to_binary(Str)}) end,
+ for_each_trigram_in_the_english_language(F, 0),
  ets:tab2file(Tab, FileName),
  Size = ets:info(Tab, size),
  ets:delete(Tab),
  Size.
 
  Обратите внимание, как мы вставляли отдельные триграммы, например ABC.
-Мы на самом деле мы вставляли кортеж {<<"ABC"\>\>} в таблицу ETS. Это
+Мы на самом деле мы вставляли кортеж {<<"ABC">>} в таблицу ETS. Это
 выглядит забавно — кортеж только с одним элементом. Что это значит?
 Конечно, кортеж это контейнер для нескольких элементов, но это не
 запрещает иметь контейнер только с одним элементом. Но вспомните, что
@@ -398,21 +398,21 @@ zlib:gunzip(Bin) чтобы разархивировать zip-архив. Сп�
  Вот код, который строит множество всех триграмм (на сей раз с
 использованием Эрлангового модуля sets и без ETS):
 
- Скачать lib\_trigrams.erl
- make\_mod\_set() -\>
+ Скачать lib_trigrams.erl
+ make_mod_set() ->
  D = sets:new(),
- F = fun(Str, Set) -\> sets:add\_element(list\_to\_binary(Str),Set)
+ F = fun(Str, Set) -> sets:add_element(list_to_binary(Str),Set)
 end,
- D1 = for\_each\_trigram\_in\_the\_english\_language(F, D),
- file:write\_file("trigrams.set" , [term\_to\_binary(D1)]).
+ D1 = for_each_trigram_in_the_english_language(F, D),
+ file:write_file("trigrams.set" , [term_to_binary(D1)]).
 
  Сколько времени занимает построение таблиц?
 
- Функция lib\_trigrams:make\_tables(), показанная в листинге в конце
+ Функция lib_trigrams:make_tables(), показанная в листинге в конце
 главы, строит все таблицы. Она включает несколько инсрукций, которые
 помогут определить размер таблиц и время необходимое для их создания.
 
- 1\> lib\_trigrams:make\_tables().
+ 1> lib_trigrams:make_tables().
  Counting - No of trigrams=3357707 time/trigram=0.577938
  Ets ordered Set size=19.0200 time/trigram=2.98026
  Ets set size=19.0193 time/trigram=1.53711
@@ -436,32 +436,32 @@ end,
 таблице ровно один раз и определять среднее время на поиск. Вот код,
 который определяет время:
 
- Скачать lib\_trigrams.erl
- timer\_tests() -\>
- time\_lookup\_ets\_set("Ets ordered Set" , "trigramsOS.tab" ),
- time\_lookup\_ets\_set("Ets set" , "trigramsS.tab" ),
- time\_lookup\_module\_sets().
- time\_lookup\_ets\_set(Type, File) -\>
+ Скачать lib_trigrams.erl
+ timer_tests() ->
+ time_lookup_ets_set("Ets ordered Set" , "trigramsOS.tab" ),
+ time_lookup_ets_set("Ets set" , "trigramsS.tab" ),
+ time_lookup_module_sets().
+ time_lookup_ets_set(Type, File) ->
  {ok, Tab} = ets:file2tab(File),
  L = ets:tab2list(Tab),
  Size = length(L),
- {M, \_} = timer:tc(?MODULE, lookup\_all\_ets, [Tab, L]),
+ {M, _} = timer:tc(?MODULE, lookup_all_ets, [Tab, L]),
  io:format("\~s lookup=\~p micro seconds\~n" ,[Type, M/Size]),
  ets:delete(Tab).
- lookup\_all\_ets(Tab, L) -\>
- lists:foreach(fun({K}) -\> ets:lookup(Tab, K) end, L).
- time\_lookup\_module\_sets() -\>
- {ok, Bin} = file:read\_file("trigrams.set" ),
- Set = binary\_to\_term(Bin),
- Keys = sets:to\_list(Set),
+ lookup_all_ets(Tab, L) ->
+ lists:foreach(fun({K}) -> ets:lookup(Tab, K) end, L).
+ time_lookup_module_sets() ->
+ {ok, Bin} = file:read_file("trigrams.set" ),
+ Set = binary_to_term(Bin),
+ Keys = sets:to_list(Set),
  Size = length(Keys),
- {M, \_} = timer:tc(?MODULE, lookup\_all\_set, [Set, Keys]),
+ {M, _} = timer:tc(?MODULE, lookup_all_set, [Set, Keys]),
  io:format("Module set lookup=\~p micro seconds\~n" ,[M/Size]).
- lookup\_all\_set(Set, L) -\>
- lists:foreach(fun(Key) -\> sets:is\_element(Key, Set) end, L).
+ lookup_all_set(Set, L) ->
+ lists:foreach(fun(Key) -> sets:is_element(Key, Set) end, L).
 
  Вот что мы получим:
- 1\> lib\_trigrams:timer\_tests().
+ 1> lib_trigrams:timer_tests().
  Ets ordered Set lookup=1.79964 micro seconds
  Ets set lookup=0.719279 micro seconds
  Module sets lookup=1.35268 micro seconds
@@ -488,31 +488,31 @@ end,
 
  Чтобы определить является ли строка английским словом, мы просматриваем
 все триграммы в строке и проверяем каждую на наличие в вычисленном ранее
-в списке. Функция is\_word делает это.
+в списке. Функция is_word делает это.
 
- Скачать lib\_trigrams.erl
- is\_word(Tab, Str) -\> is\_word1(Tab, "\\s" ++ Str ++ "\\s" ).
- is\_word1(Tab, [\_,\_,\_]=X) -\> is\_this\_a\_trigram(Tab, X);
- is\_word1(Tab, [A,B,C|D]) -\>
- case is\_this\_a\_trigram(Tab, [A,B,C]) of
- true -\> is\_word1(Tab, [B,C|D]);
- false -\> false
+ Скачать lib_trigrams.erl
+ is_word(Tab, Str) -> is_word1(Tab, "\\s" ++ Str ++ "\\s" ).
+ is_word1(Tab, [_,_,_]=X) -> is_this_a_trigram(Tab, X);
+ is_word1(Tab, [A,B,C|D]) ->
+ case is_this_a_trigram(Tab, [A,B,C]) of
+ true -> is_word1(Tab, [B,C|D]);
+ false -> false
  end;
- is\_word1(\_, \_) -\>
+ is_word1(_, _) ->
  false.
- is\_this\_a\_trigram(Tab, X) -\>
- case ets:lookup(Tab, list\_to\_binary(X)) of
- [] -\> false;
- \_ -\> true
+ is_this_a_trigram(Tab, X) ->
+ case ets:lookup(Tab, list_to_binary(X)) of
+ [] -> false;
+ _ -> true
  end.
- open() -\>
+ open() ->
  {ok, I} = ets:file2tab(filename:dirname(code:which(?MODULE))
  ++ "/trigramsS.tab" ),
  I.
- close(Tab) -\> ets:delete(Tab).
+ close(Tab) -> ets:delete(Tab).
 
  Функции open и close открывают ETS таблицу и заполняют её. Всякий вызов
-is\_word должен "оборачиваться" в эти функции.
+is_word должен "оборачиваться" в эти функции.
 
  Другой трюк, который я использовал здесь — метод, которым я определяю
 внешний файл с таблицей триграмм. Я положил его в директорию из которой
@@ -566,7 +566,7 @@ K (целое) соответствует файлу FilenameBin.
 
 
 Заметьте как добавление каждого нового файла, добавляет две новые строки
-в таблицу: запись Файл → Индекс и запись Индекс → Файл. Это сделано из
+в таблицу: запись Файл -> Индекс и запись Индекс -> Файл. Это сделано из
 соображений эффективности. Когда ETS или DETS таблицы создаются, только
 один элемент кортежа может выступать в роли ключа. Поиск кортежа не по
 ключевому полю возможен, но он очень неэффективен, потому что он
@@ -576,35 +576,35 @@ K (целое) соответствует файлу FilenameBin.
  Сейчас давайте напишем программу. Начнём с функций открытия и закрытия
 DETS таблицы для хранения имён всех наших файлов.
 
- Скачать lib\_filenames\_dets.erl
- -module(lib\_filenames\_dets).
+ Скачать lib_filenames_dets.erl
+ -module(lib_filenames_dets).
  -export([open/1, close/0, test/0, filename2index/1,
 index2filename/1]).
- open(File) -\>
+ open(File) ->
  io:format("dets opened:\~p\~n" , [File]),
- Bool = filelib:is\_file(File),
- case dets:open\_file(?MODULE, [{file, File}]) of
- {ok, ?MODULE} -\>
+ Bool = filelib:is_file(File),
+ case dets:open_file(?MODULE, [{file, File}]) of
+ {ok, ?MODULE} ->
  case Bool of
- true -\> void;
- false -\> ok = dets:insert(?MODULE, {free,1})
+ true -> void;
+ false -> ok = dets:insert(?MODULE, {free,1})
  end,
  true;
- {error,\_Reason} -\>
+ {error,_Reason} ->
  io:format("cannot open dets table\~n" ),
  exit(eDetsOpen)
  end.
- close() -\> dets:close(?MODULE).
+ close() -> dets:close(?MODULE).
 
  Код для открытия автоматически инициализирует DETS таблицу вставляя
 кортеж {free, 1}, если была создана новая таблица.
-filelib:is\_file(File) возвращает true, если файл File существует, в
-противном случае, она возвращает false. Заметьте, что dets:open\_file
+filelib:is_file(File) возвращает true, если файл File существует, в
+противном случае, она возвращает false. Заметьте, что dets:open_file
 создаёт новый файл, или открывает существующий, именно поэтому мы
-проверяем существовал ли файл до вызова dets:open\_file.
+проверяем существовал ли файл до вызова dets:open_file.
 
  В этом коде я использовал макрос ?MODULE много раз; ?MODULE
-преобразуется в имя текущего модуля (lib\_filenames\_dets). Многие
+преобразуется в имя текущего модуля (lib_filenames_dets). Многие
 вызовы DETS таблиц требуют уникальный атом — имя таблицы.
 
  Для генерации уникального имени таблицы нам достаточно имени модуля.
@@ -623,15 +623,15 @@ filelib:is\_file(File) возвращает true, если файл File сущ�
 рассчитывается новый индекс и таблица обновляется, на этот раз тремя
 кортежами:
 
- Скачать lib\_filenames\_dets.erl
- filename2index(FileName) when is\_binary(FileName) -\>
+ Скачать lib_filenames_dets.erl
+ filename2index(FileName) when is_binary(FileName) ->
  case dets:lookup(?MODULE, FileName) of
- [] -\>
- [{\_,Free}] = dets:lookup(?MODULE, free),
+ [] ->
+ [{_,Free}] = dets:lookup(?MODULE, free),
  ok = dets:insert(?MODULE,
  [{Free,FileName},{FileName,Free},{free,Free+1}]),
  Free;
- [{\_,N}] -\>
+ [{_,N}] ->
  N
  end.
 
@@ -650,11 +650,11 @@ dets:insert должен быть либо кортежем, либо списк
 
  Преобразовать индекс в имя файла просто:
 
- Скачать lib\_filenames\_dets.erl
- index2filename(Index) when is\_integer(Index) -\>
+ Скачать lib_filenames_dets.erl
+ index2filename(Index) when is_integer(Index) ->
  case dets:lookup(?MODULE, Index) of
- [] -\> error;
- [{\_,Bin}] -\> Bin
+ [] -> error;
+ [{_,Bin}] -> Bin
  end.
 
  Небольшое дизайнерское решение. Что будет произойдёт, если мы вызовем
@@ -713,7 +713,7 @@ filename2index. Mnesia на самом деле создаёт нескольк�
 
  15.8 Листинги кода
 
- Скачать lib\_trigrams\_complete.erl
+ Скачать lib_trigrams_complete.erl
 
 %% ---
  %% Excerpted from "Programming Erlang",
@@ -727,46 +727,46 @@ doubt.
 book information.
  %%---
 
- -module(lib\_trigrams).
- -export([for\_each\_trigram\_in\_the\_english\_language/2,
- make\_tables/0, timer\_tests/0,
- open/0, close/1, is\_word/2,
- how\_many\_trigrams/0,
- make\_ets\_set/0, make\_ets\_ordered\_set/0, make\_mod\_set/0,
- lookup\_all\_ets/2, lookup\_all\_set/2
+ -module(lib_trigrams).
+ -export([for_each_trigram_in_the_english_language/2,
+ make_tables/0, timer_tests/0,
+ open/0, close/1, is_word/2,
+ how_many_trigrams/0,
+ make_ets_set/0, make_ets_ordered_set/0, make_mod_set/0,
+ lookup_all_ets/2, lookup_all_set/2
  ]).
  -import(lists, [reverse/1]).
 
 
 
- make\_tables() -\>
- {Micro1, N} = timer:tc(?MODULE, how\_many\_trigrams, []),
+ make_tables() ->
+ {Micro1, N} = timer:tc(?MODULE, how_many_trigrams, []),
  io:format("Counting - No of trigrams=\~p
 time/trigram=\~p\~n",[N,Micro1/N]),
- {Micro2, Ntri} = timer:tc(?MODULE, make\_ets\_ordered\_set, []),
- FileSize1 = filelib:file\_size("trigramsOS.tab"),
+ {Micro2, Ntri} = timer:tc(?MODULE, make_ets_ordered_set, []),
+ FileSize1 = filelib:file_size("trigramsOS.tab"),
  io:format("Ets ordered Set size=\~p
 time/trigram=\~p\~n",[FileSize1/Ntri,
  Micro2/N]),
- {Micro3, \_} = timer:tc(?MODULE, make\_ets\_set, []),
- FileSize2 = filelib:file\_size("trigramsS.tab"),
+ {Micro3, _} = timer:tc(?MODULE, make_ets_set, []),
+ FileSize2 = filelib:file_size("trigramsS.tab"),
  io:format("Ets set size=\~p time/trigram=\~p\~n",[FileSize2/Ntri,
 Micro3/N]),
- {Micro4, \_} = timer:tc(?MODULE, make\_mod\_set, []),
- FileSize3 = filelib:file\_size("trigrams.set"),
+ {Micro4, _} = timer:tc(?MODULE, make_mod_set, []),
+ FileSize3 = filelib:file_size("trigrams.set"),
  io:format("Module sets size=\~p time/trigram=\~p\~n",[FileSize3/Ntri,
 Micro4/N]).
 
 
 
- make\_ets\_ordered\_set() -\> make\_a\_set(ordered\_set,
+ make_ets_ordered_set() -> make_a_set(ordered_set,
 "trigramsOS.tab").
- make\_ets\_set() -\> make\_a\_set(set, "trigramsS.tab").
+ make_ets_set() -> make_a_set(set, "trigramsS.tab").
 
- make\_a\_set(Type, FileName) -\>
+ make_a_set(Type, FileName) ->
  Tab = ets:new(table, [Type]),
- F = fun(Str, \_) -\> ets:insert(Tab, {list\_to\_binary(Str)}) end,
- for\_each\_trigram\_in\_the\_english\_language(F, 0),
+ F = fun(Str, _) -> ets:insert(Tab, {list_to_binary(Str)}) end,
+ for_each_trigram_in_the_english_language(F, 0),
  ets:tab2file(Tab, FileName),
  Size = ets:info(Tab, size),
  ets:delete(Tab),
@@ -774,110 +774,110 @@ Micro4/N]).
 
 
 
- make\_mod\_set() -\>
+ make_mod_set() ->
  D = sets:new(),
- F = fun(Str, Set) -\> sets:add\_element(list\_to\_binary(Str),Set)
+ F = fun(Str, Set) -> sets:add_element(list_to_binary(Str),Set)
 end,
- D1 = for\_each\_trigram\_in\_the\_english\_language(F, D),
- file:write\_file("trigrams.set", [term\_to\_binary(D1)]).
+ D1 = for_each_trigram_in_the_english_language(F, D),
+ file:write_file("trigrams.set", [term_to_binary(D1)]).
 
 
 
- timer\_tests() -\>
- time\_lookup\_ets\_set("Ets ordered Set", "trigramsOS.tab"),
- time\_lookup\_ets\_set("Ets set", "trigramsS.tab"),
- time\_lookup\_module\_sets().
+ timer_tests() ->
+ time_lookup_ets_set("Ets ordered Set", "trigramsOS.tab"),
+ time_lookup_ets_set("Ets set", "trigramsS.tab"),
+ time_lookup_module_sets().
 
 
- time\_lookup\_ets\_set(Type, File) -\>
+ time_lookup_ets_set(Type, File) ->
  {ok, Tab} = ets:file2tab(File),
  L = ets:tab2list(Tab),
  Size = length(L),
- {M, \_} = timer:tc(?MODULE, lookup\_all\_ets, [Tab, L]),
+ {M, _} = timer:tc(?MODULE, lookup_all_ets, [Tab, L]),
  io:format("\~s lookup=\~p micro seconds\~n",[Type, M/Size]),
  ets:delete(Tab).
 
- lookup\_all\_ets(Tab, L) -\>
- lists:foreach(fun({K}) -\> ets:lookup(Tab, K) end, L).
+ lookup_all_ets(Tab, L) ->
+ lists:foreach(fun({K}) -> ets:lookup(Tab, K) end, L).
 
- time\_lookup\_module\_sets() -\>
- {ok, Bin} = file:read\_file("trigrams.set"),
- Set = binary\_to\_term(Bin),
- Keys = sets:to\_list(Set),
+ time_lookup_module_sets() ->
+ {ok, Bin} = file:read_file("trigrams.set"),
+ Set = binary_to_term(Bin),
+ Keys = sets:to_list(Set),
  Size = length(Keys),
- {M, \_} = timer:tc(?MODULE, lookup\_all\_set, [Set, Keys]),
+ {M, _} = timer:tc(?MODULE, lookup_all_set, [Set, Keys]),
  io:format("Module set lookup=\~p micro seconds\~n",[M/Size]).
 
- lookup\_all\_set(Set, L) -\>
- lists:foreach(fun(Key) -\> sets:is\_element(Key, Set) end, L).
+ lookup_all_set(Set, L) ->
+ lists:foreach(fun(Key) -> sets:is_element(Key, Set) end, L).
 
 
- how\_many\_trigrams() -\>
- F = fun(\_, N) -\> 1 + N end,
- for\_each\_trigram\_in\_the\_english\_language(F, 0).
+ how_many_trigrams() ->
+ F = fun(_, N) -> 1 + N end,
+ for_each_trigram_in_the_english_language(F, 0).
 
  %% An iterator that iterates through all trigrams in the language
 
- for\_each\_trigram\_in\_the\_english\_language(F, A0) -\>
- {ok, Bin0} = file:read\_file("354984si.ngl.gz"),
+ for_each_trigram_in_the_english_language(F, A0) ->
+ {ok, Bin0} = file:read_file("354984si.ngl.gz"),
  Bin = zlib:gunzip(Bin0),
- scan\_word\_list(binary\_to\_list(Bin), F, A0).
+ scan_word_list(binary_to_list(Bin), F, A0).
 
- scan\_word\_list([], \_, A) -\>
+ scan_word_list([], _, A) ->
  A;
- scan\_word\_list(L, F, A) -\>
- {Word, L1} = get\_next\_word(L, []),
- A1 = scan\_trigrams([\$\\s|Word], F, A),
- scan\_word\_list(L1, F, A1).
+ scan_word_list(L, F, A) ->
+ {Word, L1} = get_next_word(L, []),
+ A1 = scan_trigrams([\$\\s|Word], F, A),
+ scan_word_list(L1, F, A1).
 
  %% scan the word looking for \\r\\n
  %% the second argument is the word (reversed) so it
  %% has to be reversed when we find \\r\\n or run out of characters
 
- get\_next\_word([\$\\r,\$\\n|T], L) -\> {reverse([\$\\s|L]), T};
- get\_next\_word([H|T], L) -\> get\_next\_word(T, [H|L]);
- get\_next\_word([], L) -\> {reverse([\$\\s|L]), []}.
+ get_next_word([\$\\r,\$\\n|T], L) -> {reverse([\$\\s|L]), T};
+ get_next_word([H|T], L) -> get_next_word(T, [H|L]);
+ get_next_word([], L) -> {reverse([\$\\s|L]), []}.
 
- scan\_trigrams([X,Y,Z], F, A) -\>
+ scan_trigrams([X,Y,Z], F, A) ->
  F([X,Y,Z], A);
 
 
- scan\_trigrams([X,Y,Z|T], F, A) -\>
+ scan_trigrams([X,Y,Z|T], F, A) ->
  A1 = F([X,Y,Z], A),
- scan\_trigrams([Y,Z|T], F, A1);
- scan\_trigrams(\_, \_, A) -\>
+ scan_trigrams([Y,Z|T], F, A1);
+ scan_trigrams(_, _, A) ->
  A.
 
 
  %% access routines
- %% open() -\> Table
+ %% open() -> Table
  %% close(Table)
- %% is\_word(Table, String) -\> Bool
+ %% is_word(Table, String) -> Bool
 
 
- is\_word(Tab, Str) -\> is\_word1(Tab, "\\s" ++ Str ++ "\\s").
+ is_word(Tab, Str) -> is_word1(Tab, "\\s" ++ Str ++ "\\s").
 
- is\_word1(Tab, [\_,\_,\_]=X) -\> is\_this\_a\_trigram(Tab, X);
- is\_word1(Tab, [A,B,C|D]) -\>
- case is\_this\_a\_trigram(Tab, [A,B,C]) of
- true -\> is\_word1(Tab, [B,C|D]);
- false -\> false
+ is_word1(Tab, [_,_,_]=X) -> is_this_a_trigram(Tab, X);
+ is_word1(Tab, [A,B,C|D]) ->
+ case is_this_a_trigram(Tab, [A,B,C]) of
+ true -> is_word1(Tab, [B,C|D]);
+ false -> false
  end;
- is\_word1(\_, \_) -\>
+ is_word1(_, _) ->
  false.
 
- is\_this\_a\_trigram(Tab, X) -\>
- case ets:lookup(Tab, list\_to\_binary(X)) of
- [] -\> false;
- \_ -\> true
+ is_this_a_trigram(Tab, X) ->
+ case ets:lookup(Tab, list_to_binary(X)) of
+ [] -> false;
+ _ -> true
  end.
 
- open() -\>
+ open() ->
  {ok, I} = ets:file2tab(filename:dirname(code:which(?MODULE))
  ++ "/trigramsS.tab"),
  I.
 
- close(Tab) -\> ets:delete(Tab).
+ close(Tab) -> ets:delete(Tab).
 
 
 

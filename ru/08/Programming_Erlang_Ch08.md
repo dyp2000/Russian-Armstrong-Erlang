@@ -88,11 +88,11 @@ receive ... end
 
 receive
 
-Pattern1 [when Guard1] -\>
+Pattern1 [when Guard1] ->
 
 Expressions1;
 
-Pattern2 [when Guard2] -\>
+Pattern2 [when Guard2] ->
 
 Expressions2;
 
@@ -115,7 +115,7 @@ end
 **8.2 Простой пример**
 
 Помните, как мы писали функцию area/1 в части 3.1* Модули* на стр.
-\_\_\_? Просто, чтобы напомнить вам, код, который определял функцию
+___? Просто, чтобы напомнить вам, код, который определял функцию
 выглядел вот так:
 
 HYPERLINK
@@ -125,43 +125,43 @@ HYPERLINK
 "http://media.pragprog.com/titles/jaerlang/code/geometry.erl".HYPERLINK
 "http://media.pragprog.com/titles/jaerlang/code/geometry.erl"erl
 
-area({rectangle, Width, Ht}) -\> Width \* Ht;
+area({rectangle, Width, Ht}) -> Width \* Ht;
 
-area({circle, R}) -\> 3.14159 \* R \* R.
+area({circle, R}) -> 3.14159 \* R \* R.
 
 Теперь перепишем эту же функцию как процесс:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server0.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server0.erl"
+"http://media.pragprog.com/titles/jaerlang/code/area_server0.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server0.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server0.erl"areaHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server0.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server0.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server0.erl"0.HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server0.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/area_server0.erl"areaHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server0.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server0.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server0.erl"0.HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server0.erl"erl
 
--module(area\_server0).
+-module(area_server0).
 
 -export([loop/0]).
 
-loop() -\>
+loop() ->
 
 receive
 
-{rectangle, Width, Ht} -\>
+{rectangle, Width, Ht} ->
 
 io:format("*Area of rectangle is \~p\~n*" ,[Width \* Ht]),
 
 loop();
 
-{circle, R} -\>
+{circle, R} ->
 
 io:format("*Area of circle is \~p\~n*" , [3.14159 \* R \* R]),
 
 loop();
 
-Other -\>
+Other ->
 
 io:format("*I don't know what the area of a \~p is \~n*" ,[Other]),
 
@@ -171,23 +171,23 @@ end.
 
 Мы можем создать процесс, который вычисляет loop/0 в шелле:
 
-1\> Pid = spawn(fun area\_server0:loop/0).
+1> Pid = spawn(fun area_server0:loop/0).
 
-<0.36.0\>
+<0.36.0>
 
-2\> Pid ! {rectangle, 6, 10}.
+2> Pid ! {rectangle, 6, 10}.
 
 Area of rectangle is 60
 
 {rectangle,6,10}
 
-3\> Pid ! {circle, 23}.
+3> Pid ! {circle, 23}.
 
 Area of circle is 1661.90
 
 {circle,23}
 
-4\> Pid ! {triangle,2,4,5}.
+4> Pid ! {triangle,2,4,5}.
 
 I don't know what the area of a {triangle,2,4,5} is
 
@@ -195,16 +195,16 @@ I don't know what the area of a {triangle,2,4,5} is
 
 Что здесь произошло? В строке 1 мы создали новый параллельный процесс.
 spawn(Fun) создаёт параллельный процесс, который вычисляет Fun. Он
-возвращает Pid, который печатается как <0.36.0\>.
+возвращает Pid, который печатается как <0.36.0>.
 
 В строке 2 мы посылаем сообщение процессу. Это сообщение совпадает с
 первым образцом в операторе приёма в loop/0.
 
-loop() -\>
+loop() ->
 
 receive
 
-{rectangle, Width, Ht} -\>
+{rectangle, Width, Ht} ->
 
 io:format("*Area of rectangle is \~p\~n*" ,[Width \* Ht]),
 
@@ -215,7 +215,7 @@ loop()
 По приёму сообщения, процесс печатает площадь прямоугольника. В конце
 шелл печатает {rectangle,6,10}. Это потому, что значением Pid ! Msg
 является Msg. Если мы отправляем процессу сообщение, которое он не
-понимает, он печатает предупреждение. Это выполняется кодом Other -\>
+понимает, он печатает предупреждение. Это выполняется кодом Other ->
 ... в операторе приёма **receive**.
 
 **8.3 Клиент-сервер - введение**
@@ -263,11 +263,11 @@ self() - это PID клиентского процесса.
 Для ответа на запрос нам придётся поменять код, принимающий запросы с
 такого:
 
-loop() -\>
+loop() ->
 
 receive
 
-{rectangle, Width, Ht} -\>
+{rectangle, Width, Ht} ->
 
 io:format("*Area of rectangle is \~p\~n*" ,[Width \* Ht]),
 
@@ -277,11 +277,11 @@ loop()
 
 на такой:
 
-loop() -\>
+loop() ->
 
 receive
 
-{From, {rectangle, Width, Ht}} -\>
+{From, {rectangle, Width, Ht}} ->
 
 From ! Width \* Ht,
 
@@ -303,22 +303,22 @@ loop();
 которая включает в себя посылку запроса на сервер и ожидание ответа:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server1.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server1.erl"
+"http://media.pragprog.com/titles/jaerlang/code/area_server1.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server1.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server1.erl"areaHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server1.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server1.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server1.erl"1.HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server1.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/area_server1.erl"areaHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server1.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server1.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server1.erl"1.HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server1.erl"erl
 
-rpc(Pid, Request) -\>
+rpc(Pid, Request) ->
 
 Pid ! {self(), Request},
 
 receive
 
-Response -\>
+Response ->
 
 Response
 
@@ -329,48 +329,48 @@ end.
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server1.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server1.erl"
+"http://media.pragprog.com/titles/jaerlang/code/area_server1.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server1.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server1.erl"areaHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server1.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server1.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server1.erl"1.HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server1.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/area_server1.erl"areaHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server1.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server1.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server1.erl"1.HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server1.erl"erl
 
--module(area\_server1).
+-module(area_server1).
 
 -export([loop/0, rpc/2]).
 
-rpc(Pid, Request) -\>
+rpc(Pid, Request) ->
 
 Pid ! {self(), Request},
 
 receive
 
-Response -\>
+Response ->
 
 Response
 
 end.
 
-loop() -\>
+loop() ->
 
 receive
 
-{From, {rectangle, Width, Ht}} -\>
+{From, {rectangle, Width, Ht}} ->
 
 From ! Width \* Ht,
 
 loop();
 
-{From, {circle, R}} -\>
+{From, {circle, R}} ->
 
 From ! 3.14159 \* R \* R,
 
 loop();
 
-{From, Other} -\>
+{From, Other} ->
 
 From ! {error,Other},
 
@@ -380,19 +380,19 @@ end.
 
 Мы можем поэкспериментировать с этим в шелле:
 
-1\> Pid = spawn(fun area\_server1:loop/0).
+1> Pid = spawn(fun area_server1:loop/0).
 
-<0.36.0\>
+<0.36.0>
 
-2\> area\_server1:rpc(Pid, {rectangle,6,8}).
+2> area_server1:rpc(Pid, {rectangle,6,8}).
 
 48
 
-3\> area\_server1:rpc(Pid, {circle,6}).
+3> area_server1:rpc(Pid, {circle,6}).
 
 113.097
 
-4\> area\_server1:rpc(Pid, socks).
+4> area_server1:rpc(Pid, socks).
 
 {error,socks}
 
@@ -403,11 +403,11 @@ end.
 ошибочно истолкует это сообщение как ответ от сервера. Мы можем
 исправить это, поменяв вид операторе приёма на такой:
 
-loop() -\>
+loop() ->
 
 receive
 
-{From, ...} -\>
+{From, ...} ->
 
 From ! {self(), ...}
 
@@ -417,13 +417,13 @@ loop()
 
 и поменяв rpc на следующее:
 
-rpc(Pid, Request) -\>
+rpc(Pid, Request) ->
 
 Pid ! {self(), Request},
 
 receive
 
-{Pid, Response} -\>
+{Pid, Response} ->
 
 Response
 
@@ -440,48 +440,48 @@ end.
 С этим изменением мы получим следующее:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server2.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server2.erl"
+"http://media.pragprog.com/titles/jaerlang/code/area_server2.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server2.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server2.erl"areaHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server2.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server2.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server2.erl"2.HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server2.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/area_server2.erl"areaHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server2.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server2.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server2.erl"2.HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server2.erl"erl
 
--module(area\_server2).
+-module(area_server2).
 
 -export([loop/0, rpc/2]).
 
-rpc(Pid, Request) -\>
+rpc(Pid, Request) ->
 
 Pid ! {self(), Request},
 
 receive
 
-{Pid, Response} -\>
+{Pid, Response} ->
 
 Response
 
 end.
 
-loop() -\>
+loop() ->
 
 receive
 
-{From, {rectangle, Width, Ht}} -\>
+{From, {rectangle, Width, Ht}} ->
 
 From ! {self(), Width \* Ht},
 
 loop();
 
-{From, {circle, R}} -\>
+{From, {circle, R}} ->
 
 From ! {self(), 3.14159 \* R \* R},
 
 loop();
 
-{From, Other} -\>
+{From, Other} ->
 
 From ! {self(), {error,Other}},
 
@@ -491,11 +491,11 @@ end.
 
 Это работает как и ожидается:
 
-1\> Pid = spawn(fun area\_server2:loop/0).
+1> Pid = spawn(fun area_server2:loop/0).
 
-<0.37.0\>
+<0.37.0>
 
-3\> area\_server2:rpc(Pid, {circle, 5}).
+3> area_server2:rpc(Pid, {circle, 5}).
 
 78.5397
 
@@ -505,56 +505,56 @@ end.
 конце мы получаем это:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"areaHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"finalHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"areaHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"finalHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"erl
 
--module(area\_server\_final).
+-module(area_server_final).
 
 -export([start/0, area/2]).
 
-start() -\> spawn(fun loop/0).
+start() -> spawn(fun loop/0).
 
-area(Pid, What) -\>
+area(Pid, What) ->
 
 rpc(Pid, What).
 
-rpc(Pid, Request) -\>
+rpc(Pid, Request) ->
 
 Pid ! {self(), Request},
 
 receive
 
-{Pid, Response} -\>
+{Pid, Response} ->
 
 Response
 
 end.
 
-loop() -\>
+loop() ->
 
 receive
 
-{From, {rectangle, Width, Ht}} -\>
+{From, {rectangle, Width, Ht}} ->
 
 From ! {self(), Width \* Ht},
 
 loop();
 
-{From, {circle, R}} -\>
+{From, {circle, R}} ->
 
 From ! {self(), 3.14159 \* R \* R},
 
 loop();
 
-{From, Other} -\>
+{From, Other} ->
 
 From ! {self(), {error,Other}},
 
@@ -566,15 +566,15 @@ end.
 вызывали spawn и rpc). Имена лучше те, которые более точно описывают то,
 что делает сервер:
 
-1\> Pid = area\_server\_final:start().
+1> Pid = area_server_final:start().
 
-<0.36.0\>
+<0.36.0>
 
-2\> area\_server\_final:area(Pid, {rectangle, 10, 8}).
+2> area_server_final:area(Pid, {rectangle, 10, 8}).
 
 80
 
-4\> area\_server\_final:area(Pid, {circle, 4}).
+4> area_server_final:area(Pid, {circle, 4}).
 
 50.2654
 
@@ -604,23 +604,23 @@ HYPERLINK
 
 %% See how much time this takes
 
-max(N) -\>
+max(N) ->
 
-Max = erlang:system\_info(process\_limit),
+Max = erlang:system_info(process_limit),
 
 io:format("*Maximum allowed processes:\~p\~n*" ,[Max]),
 
 statistics(runtime),
 
-statistics(wall\_clock),
+statistics(wall_clock),
 
-L = for(1, N, fun() -\> spawn(fun() -\> wait() end) end),
+L = for(1, N, fun() -> spawn(fun() -> wait() end) end),
 
-{\_, Time1} = statistics(runtime),
+{_, Time1} = statistics(runtime),
 
-{\_, Time2} = statistics(wall\_clock),
+{_, Time2} = statistics(wall_clock),
 
-lists:foreach(fun(Pid) -\> Pid ! die end, L),
+lists:foreach(fun(Pid) -> Pid ! die end, L),
 
 U1 = Time1 \* 1000 / N,
 
@@ -630,23 +630,23 @@ io:format("*Process spawn time=\~p (\~p) microseconds\~n*" ,
 
 [U1, U2]).
 
-wait() -\>
+wait() ->
 
 receive
 
-die -\> void
+die -> void
 
 end.
 
-for(N, N, F) -\> [F()];
+for(N, N, F) -> [F()];
 
-for(I, N, F) -\> [F()|for(I+1, N, F)].
+for(I, N, F) -> [F()|for(I+1, N, F)].
 
 Вот результаты, которые я получил на компьютере, который я использовал
 для написания этой книги - 2.40GHz Intel Celeron с 512 МБ ОЗУ под
 управлением Ubuntu Linux:
 
-1\> processes:max(20000).
+1> processes:max(20000).
 
 Maximum allowed processes:32768
 
@@ -654,7 +654,7 @@ Process spawn time=3.50000 (9.20000) microseconds
 
 ok
 
-2\> processes:max(40000).
+2> processes:max(40000).
 
 Maximum allowed processes:32768
 
@@ -668,7 +668,7 @@ Too many processes
 процессорного времени и 9,2 мкс прошедшего (по часам) времени.
 
 Заметьте, что я использовал встроенную функцию (BIF)
-erlang:system\_info(process\_limit) для нахождения максимального
+erlang:system_info(process_limit) для нахождения максимального
 разрешенного количества процессов. Заметьте, что некоторые из них
 зарезервированы, так что ваша программа не может на самом деле
 использовать это количество. Когда мы превышаем системный лимит система
@@ -679,7 +679,7 @@ erlang:system\_info(process\_limit) для нахождения максимал
 
 $ erl +P 500000
 
-1\> processes:max(50000).
+1> processes:max(50000).
 
 Maximum allowed processes:500000
 
@@ -687,13 +687,13 @@ Process spawn time=4.60000 (10.8200) microseconds
 
 ok
 
-2\> processes:max(200000).
+2> processes:max(200000).
 
 Maximum allowed processes:500000
 
 Process spawn time=4.10000 (10.2150) microseconds
 
-3\> processes:max(300000).
+3> processes:max(300000).
 
 Maximum allowed processes:500000
 
@@ -720,17 +720,17 @@ Process spawn time=4.13333 (73.6533) microseconds
 
 receive
 
-Pattern1 [when Guard1] -\>
+Pattern1 [when Guard1] ->
 
 Expressions1;
 
-Pattern2 [when Guard2] -\>
+Pattern2 [when Guard2] ->
 
 Expressions2;
 
 ...
 
-after Time -\>
+after Time ->
 
 Expressions
 
@@ -747,19 +747,19 @@ Expressions.
 процесс на время T миллисекунд.
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl" HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"libHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"miscHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl" HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"libHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"miscHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"erl
 
-sleep(T) -\>
+sleep(T) ->
 
 receive
 
-after T -\>
+after T ->
 
 true
 
@@ -770,61 +770,61 @@ end.
 Значение таймаута 0 приводит к немедленному срабатыванию таймаута, но
 перед тем, как это случится, система пытается сопоставить хоть
 какой-нибудь образец из почтового ящика. Мы можем использовать это для
-определения функции flush\_buffer, которая полностью опустошает почтовый
+определения функции flush_buffer, которая полностью опустошает почтовый
 ящик процесса:
 
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl" HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"libHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"miscHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl" HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"libHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"miscHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"erl
 
-flush\_buffer() -\>
+flush_buffer() ->
 
 receive
 
-\_Any -\>
+_Any ->
 
-flush\_buffer()
+flush_buffer()
 
-after 0 -\>
+after 0 ->
 
 true
 
 end.
 
-Без оператора таймаута функция flush\_buffer остановилась бы навечно и
+Без оператора таймаута функция flush_buffer остановилась бы навечно и
 не вернула бы ничего, если бы почтовый ящик был пуст. Мы также можем
 использовать нулевой таймаут для создания некоей формы «приоритетного
 приёма», как в следующем:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl" HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"libHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"miscHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl" HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"libHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"miscHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"erl
 
-priority\_receive() -\>
+priority_receive() ->
 
 receive
 
-{alarm, X} -\>
+{alarm, X} ->
 
 {alarm, X}
 
-after 0 -\>
+after 0 ->
 
 receive
 
-Any -\>
+Any ->
 
 Any
 
@@ -833,7 +833,7 @@ end
 end.
 
 Если в почтовом ящике есть сообщение, не соответствующее образцу {alarm,
-X}, то priority\_receive примет первое сообщение из почтового ящика.
+X}, то priority_receive примет первое сообщение из почтового ящика.
 Если же никаких сообщений нет, то приём приостановится на внутреннем
 операторе receive до прихода любого сообщения. Если есть сообщение,
 соответствующее {alarm, X}, то это сообщение будет немедленно возвращено
@@ -875,19 +875,19 @@ HYPERLINK
 
 -export([start/2, cancel/1]).
 
-start(Time, Fun) -\> spawn(fun() -\> timer(Time, Fun) end).
+start(Time, Fun) -> spawn(fun() -> timer(Time, Fun) end).
 
-cancel(Pid) -\> Pid ! cancel.
+cancel(Pid) -> Pid ! cancel.
 
-timer(Time, Fun) -\>
+timer(Time, Fun) ->
 
 receive
 
-cancel -\>
+cancel ->
 
 void
 
-after Time -\>
+after Time ->
 
 Fun()
 
@@ -895,21 +895,21 @@ end.
 
 Мы можем проверить это следующим образом:
 
-1\> Pid = stimer:start(5000, fun() -\> io:format("timer event\~n") end).
+1> Pid = stimer:start(5000, fun() -> io:format("timer event\~n") end).
 
-<0.42.0\>
+<0.42.0>
 
 timer event
 
 Здесь я ждал больше пяти секунд, чтобы сработал таймер. Сейчас я запущу
 таймер и отменю его до того, как выйдет таймерное время:
 
-2\> Pid1 = stimer:start(25000, fun() -\> io:format("timer event\~n")
+2> Pid1 = stimer:start(25000, fun() -> io:format("timer event\~n")
 end).
 
-<0.49.0\>
+<0.49.0>
 
-3\> stimer:cancel(Pid1).
+3> stimer:cancel(Pid1).
 
 cancel
 
@@ -927,17 +927,17 @@ cancel
 
 receive
 
-Pattern1 [when Guard1] -\>
+Pattern1 [when Guard1] ->
 
 Expressions1;
 
-Pattern2 [when Guard1] -\>
+Pattern2 [when Guard1] ->
 
 Expressions1;
 
 ...
 
-after Time -\>
+after Time ->
 
 ExpressionTimeout
 
@@ -1000,13 +1000,13 @@ unregister(AnAtom)
 *Замечание*: если зарегистрированный процесс умирает, он автоматически
 разрегистрируется
 
-whereis(AnAtom) -\> Pid | undefined
+whereis(AnAtom) -> Pid | undefined
 
 найти, где зарегистрирован AnAtom. Возвращает идентификатор процесса
 Pid, либо возвращает атом undefined, если никакой процесс не связан с
 AnAtom.
 
-registered() -\> [AnAtom::atom()]
+registered() -> [AnAtom::atom()]
 
 возвращает список зарегистрированных процессов в системе.
 
@@ -1014,18 +1014,18 @@ registered() -\> [AnAtom::atom()]
 пример на стр. 2 и можем попытаться зарегистрировать имя процесса,
 который мы создали:
 
-1\> Pid = spawn(fun area\_server0:loop/0).
+1> Pid = spawn(fun area_server0:loop/0).
 
-<0.51.0\>
+<0.51.0>
 
-2\> register(area, Pid).
+2> register(area, Pid).
 
 true
 
 Как только имя зарегистрировано, мы может отправить ему сообщение
 подобно этому:
 
-3\> area ! {rectangle, 4, 5}.
+3> area ! {rectangle, 4, 5}.
 
 Area of rectangle is 20
 
@@ -1047,21 +1047,21 @@ HYPERLINK
 
 -export([start/2, stop/0]).
 
-start(Time, Fun) -\>
+start(Time, Fun) ->
 
-register(clock, spawn(fun() -\> tick(Time, Fun) end)).
+register(clock, spawn(fun() -> tick(Time, Fun) end)).
 
-stop() -\> clock ! stop.
+stop() -> clock ! stop.
 
-tick(Time, Fun) -\>
+tick(Time, Fun) ->
 
 receive
 
-stop -\>
+stop ->
 
 void
 
-after Time -\>
+after Time ->
 
 Fun(),
 
@@ -1071,7 +1071,7 @@ end.
 
 Часы будут радостно отстукивать, пока вы не остановите их:
 
-3\> clock:start(5000, fun() -\> io:format("TICK \~p\~n",[erlang:now()])
+3> clock:start(5000, fun() -> io:format("TICK \~p\~n",[erlang:now()])
 end).
 
 true
@@ -1084,7 +1084,7 @@ TICK {1164,553548,394083}
 
 TICK {1164,553553,395064}
 
-4\> clock:stop().
+4> clock:stop().
 
 stop
 
@@ -1102,31 +1102,31 @@ HYPERLINK
 
 -module(ctemplate).
 
--compile(export\_all).
+-compile(export_all).
 
 
 
-start() -\>
+start() ->
 
-spawn(fun() -\> loop([]) end).
+spawn(fun() -> loop([]) end).
 
-rpc(Pid, Request) -\>
+rpc(Pid, Request) ->
 
 Pid ! {self(), Request},
 
 receive
 
-{Pid, Response} -\>
+{Pid, Response} ->
 
 Response
 
 end.
 
-loop(X) -\>
+loop(X) ->
 
 receive
 
-Any -\>
+Any ->
 
 io:format("Received:\~p\~n" ,[Any]),
 
@@ -1150,34 +1150,34 @@ end.
 ранее:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"areaHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"finalHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/area\_server\_final.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"areaHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"finalHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/area_server_final.erl"erl
 
-loop() -\>
+loop() ->
 
 receive
 
-{From, {rectangle, Width, Ht}} -\>
+{From, {rectangle, Width, Ht}} ->
 
 From ! {self(), Width \* Ht},
 
 loop();
 
-{From, {circle, R}} -\>
+{From, {circle, R}} ->
 
 From ! {self(), 3.14159 \* R \* R},
 
 loop();
 
-{From, Other} -\>
+{From, Other} ->
 
 From ! {self(), {error,Other}},
 
@@ -1196,9 +1196,9 @@ end.
 
 Допустим, мы написали следующий (неправильный) код:
 
-Line 1 loop() -\>
+Line 1 loop() ->
 
-- {From, {rectangle, Width, Ht}} -\>
+- {From, {rectangle, Width, Ht}} ->
 
 - From ! {self(), Width \* Ht},
 
@@ -1206,7 +1206,7 @@ Line 1 loop() -\>
 
 5 someOtherFunc();
 
-- {From, {circle, R}} -\>
+- {From, {circle, R}} ->
 
 - From ! {self(), 3.14159 \* R \* R},
 
@@ -1250,7 +1250,7 @@ Mod:FuncName(Arg1, Arg2, ..., ArgN).
 модуля, если он компилируется и в то же время используется. Механизм
 динамического обновления кода не работает с порождёнными функциями. Он
 работает только с явно указанными MFA. За дальнейшими деталями читайте
-приложение E.4 *Динамическая загрузка кода* на стр. \_435\_.
+приложение E.4 *Динамическая загрузка кода* на стр. _435_.
 
 **8.11 Проблемы**
 

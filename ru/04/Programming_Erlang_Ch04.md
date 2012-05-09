@@ -23,15 +23,15 @@
 
 
 
-cost(oranges) -\> 5;
+cost(oranges) -> 5;
 
-cost(newspaper) -\> 8;
+cost(newspaper) -> 8;
 
-cost(apples) -\> 2;
+cost(apples) -> 2;
 
-cost(pears) -\> 9;
+cost(pears) -> 9;
 
-cost(milk) -\> 7.
+cost(milk) -> 7.
 
 
 
@@ -39,23 +39,23 @@ cost(milk) -\> 7.
 
 
 
-1\> **shop:cost(apples).**
+1> **shop:cost(apples).**
 
 2
 
-2\> **shop:cost(socks).**
+2> **shop:cost(socks).**
 
 =ERROR REPORT==== 30-Oct-2006::20:45:10 ===
 
-Error in process <0.34.0\> with exit value:
+Error in process <0.34.0> with exit value:
 
-{function\_clause,[{shop,cost,[socks]},
+{function_clause,[{shop,cost,[socks]},
 
-{erl\_eval,do\_apply,5},
+{erl_eval,do_apply,5},
 
 {shell,exprs,6},
 
-{shell,eval\_loop,3}]}
+{shell,eval_loop,3}]}
 
 
 
@@ -101,7 +101,7 @@ erlang:error(Exception).
 какую-либо ошибку. Типичные ошибки - это не-соответствие образцу
 (включая отсутствие подходящих способов обработки аргументов функции),
 либо вызов стандартных BIF-функций с неправильным типом аргументов
-(например, вызов atom\_to\_list с целочисленным аргументом).
+(например, вызов atom_to_list с целочисленным аргументом).
 
 
 
@@ -183,17 +183,17 @@ block
 
 try FuncOrExpressionSequence of
 
-Pattern1 [when Guard1] -\> Expressions1;
+Pattern1 [when Guard1] -> Expressions1;
 
-Pattern2 [when Guard2] -\> Expressions2;
+Pattern2 [when Guard2] -> Expressions2;
 
 ...
 
 catch
 
-ExceptionType: ExPattern1 [when ExGuard1] -\> ExExpressions1;
+ExceptionType: ExPattern1 [when ExGuard1] -> ExExpressions1;
 
-ExceptionType: ExPattern2 [when ExGuard2] -\> ExExpressions2;
+ExceptionType: ExPattern2 [when ExGuard2] -> ExExpressions2;
 
 ...
 
@@ -211,9 +211,9 @@ end
 
 case Expression of
 
-Pattern1 [when Guard1] -\> Expressions1;
+Pattern1 [when Guard1] -> Expressions1;
 
-Pattern2 [when Guard2] -\> Expressions2;
+Pattern2 [when Guard2] -> Expressions2;
 
 ...
 
@@ -237,7 +237,7 @@ end
 значение. А значит и выражение try...catch тоже имеет свое значение. То
 есть мы можем написать что-то вроде:
 
-f(...) -\>
+f(...) ->
 
 ...
 
@@ -252,7 +252,7 @@ Y = g(X),
 
 
 
-f(...) -\>
+f(...) ->
 
 ...
 
@@ -349,7 +349,7 @@ end
 
 try F of
 
-Val -\> Val
+Val -> Val
 
 catch
 
@@ -378,19 +378,19 @@ end
 
 
 
-/файл try\_test.erl/
+/файл try_test.erl/
 
 
 
-generate\_exception(1) -\> a;
+generate_exception(1) -> a;
 
-generate\_exception(2) -\> throw(a);
+generate_exception(2) -> throw(a);
 
-generate\_exception(3) -\> exit(a);
+generate_exception(3) -> exit(a);
 
-generate\_exception(4) -\> {'EXIT', a};
+generate_exception(4) -> {'EXIT', a};
 
-generate\_exception(5) -\> erlang:error(a).
+generate_exception(5) -> erlang:error(a).
 
 
 
@@ -398,27 +398,27 @@ generate\_exception(5) -\> erlang:error(a).
 
 
 
-/файл try\_test.erl/
+/файл try_test.erl/
 
 
 
-demo1() -\>
+demo1() ->
 
 [catcher(I) || I <- [1,2,3,4,5]].
 
-catcher(N) -\>
+catcher(N) ->
 
-try generate\_exception(N) of
+try generate_exception(N) of
 
-Val -\> {N, normal, Val}
+Val -> {N, normal, Val}
 
 catch
 
-throw:X -\> {N, caught, thrown, X};
+throw:X -> {N, caught, thrown, X};
 
-exit:X -\> {N, caught, exited, X};
+exit:X -> {N, caught, exited, X};
 
-error:X -\> {N, caught, error, X}
+error:X -> {N, caught, error, X}
 
 end.
 
@@ -428,7 +428,7 @@ end.
 
 
 
-\> **try\_test:demo1().**
+> **try_test:demo1().**
 
 [{1,normal,a},
 
@@ -454,13 +454,13 @@ end.
 Другим способом перехватить исключение является использование примитива
 catch. Когда вы так перехватываете исключение, оно конвертируется в
 тьюпл, который описывает случившуюся ошибку. Чтобы продемонстрировать
-это, мы можем вызвать generate\_exception внутри catch выражения:
+это, мы можем вызвать generate_exception внутри catch выражения:
 
 
 
-demo2() -\>
+demo2() ->
 
-[{I, (catch generate\_exception(I))} || I <- [1,2,3,4,5]].
+[{I, (catch generate_exception(I))} || I <- [1,2,3,4,5]].
 
 
 
@@ -470,7 +470,7 @@ demo2() -\>
 
 
 
-2\> **try\_test:demo2().**
+2> **try_test:demo2().**
 
 [{1,a},
 
@@ -480,19 +480,19 @@ demo2() -\>
 
 {4,{'EXIT',a}},
 
-{5,{'EXIT',{a,[{try\_test,generate\_exception,1},
+{5,{'EXIT',{a,[{try_test,generate_exception,1},
 
-{try\_test,'-demo2/0-fun-0-',1},
-
-{lists,map,2},
+{try_test,'-demo2/0-fun-0-',1},
 
 {lists,map,2},
 
-{erl\_eval,do\_apply,5},
+{lists,map,2},
+
+{erl_eval,do_apply,5},
 
 {shell,exprs,6},
 
-{shell,eval\_loop,3}]}}}]
+{shell,eval_loop,3}]}}}]
 
 
 
@@ -513,15 +513,15 @@ math:sqrt(X) с отрицательным аргументом, то мы ув�
 
 
 
-1\> **math:sqrt(-1).**
+1> **math:sqrt(-1).**
 
 \*\* exited: {badarith,[{math,sqrt,[-1]},
 
-{erl\_eval,do\_apply,5},
+{erl_eval,do_apply,5},
 
 {shell,exprs,6},
 
-{shell,eval\_loop,3}]} \*\*
+{shell,eval_loop,3}]} \*\*
 
 
 
@@ -532,27 +532,27 @@ math:sqrt(X) с отрицательным аргументом, то мы ув�
 
 
 
-sqrt(X) when X < 0 -\>
+sqrt(X) when X < 0 ->
 
 erlang:error({squareRootNegativeArgument, X});
 
-sqrt(X) -\>
+sqrt(X) ->
 
 math:sqrt(X).
 
 
 
-2\> **lib\_misc:sqrt(-1).**
+2> **lib_misc:sqrt(-1).**
 
 \*\* exited: {{squareRootNegativeArgument,-1},
 
-[{lib\_misc,sqrt,1},
+[{lib_misc,sqrt,1},
 
-{erl\_eval,do\_apply,5},
+{erl_eval,do_apply,5},
 
 {shell,exprs,6},
 
-{shell,eval\_loop,3}]} \*\*
+{shell,eval_loop,3}]} \*\*
 
 
 
@@ -579,11 +579,11 @@ Reason}, но помните, что это заставит всех вызыв
 
 case f(X) of
 
-{ok, Val} -\>
+{ok, Val} ->
 
-do\_some\_thing\_with(Val);
+do_some_thing_with(Val);
 
-{error, Why} -\>
+{error, Why} ->
 
 %% ... do something with the error ...
 
@@ -601,7 +601,7 @@ end,
 
 {ok, Val} = f(X),
 
-do\_some\_thing\_with(Val);
+do_some_thing_with(Val);
 
 ...
 
@@ -620,13 +620,13 @@ do\_some\_thing\_with(Val);
 
 
 
-try my\_func(X)
+try my_func(X)
 
 catch
 
-throw:{thisError, X} -\> ...
+throw:{thisError, X} -> ...
 
-throw:{someOtherError, X} -\> ...
+throw:{someOtherError, X} -> ...
 
 end
 
@@ -637,17 +637,17 @@ throw :
 
 
 
-my\_func(X) -\>
+my_func(X) ->
 
 case ... of
 
 ...
 
-... -\>
+... ->
 
 ... throw({thisError, ...})
 
-... -\>
+... ->
 
 ... throw({someOtherError, ...})
 
@@ -664,7 +664,7 @@ try Expr
 
 catch
 
-\_:\_ -\> ... Code to handle all exceptions ...
+_:_ -> ... Code to handle all exceptions ...
 
 end
 
@@ -678,7 +678,7 @@ try Expr
 
 catch
 
-\_ -\> ... Code to handle all exceptions ...
+_ -> ... Code to handle all exceptions ...
 
 end
 
@@ -706,11 +706,11 @@ try...catch это относительно новая конструкция, �
 
 case (catch foo(...)) of
 
-{'EXIT', Why} -\>
+{'EXIT', Why} ->
 
 ...
 
-Val -\>
+Val ->
 
 ...
 
@@ -725,11 +725,11 @@ end
 
 try foo(...) of
 
-Val -\> ...
+Val -> ...
 
 catch
 
-exit: Why -\>
+exit: Why ->
 
 ...
 
@@ -747,35 +747,35 @@ end
 **4.9 Трассировка стека вызовов**
 
 Когда исключение перехвачено, мы можем получить текущий стек вызовов с
-помощью функции erlang:get\_stacktrace(). Рассмотрим пример:
+помощью функции erlang:get_stacktrace(). Рассмотрим пример:
 
 
 
-demo3() -\>
+demo3() ->
 
-try generate\_exception(5)
+try generate_exception(5)
 
 catch
 
-error:X -\>
+error:X ->
 
-{X, erlang:get\_stacktrace()}
+{X, erlang:get_stacktrace()}
 
 end.
 
 
 
-1\> **try\_test:demo3().**
+1> **try_test:demo3().**
 
-{a,[{try\_test,generate\_exception,1},
+{a,[{try_test,generate_exception,1},
 
-{try\_test,demo3,0},
+{try_test,demo3,0},
 
-{erl\_eval,do\_apply,5},
+{erl_eval,do_apply,5},
 
 {shell,exprs,6},
 
-{shell,eval\_loop,3}]}
+{shell,eval_loop,3}]}
 
 
 
@@ -790,11 +790,11 @@ end.
 Сточки зрения иправления ошибок в нашей программе (дебагинга) только
 первые несколько строчек представляют тут для нас интерес. Начало
 трассировки стека говорит нам о том система повалилась во время
-вычисления функции generate\_exception (из модуля try\_test) с одним
-аргументом. try\_test:generate\_exception/1 была вероятно вызвана
-try\_test:demo3() (мы не можем быть в этом абсолютно уверены, потому что
-try\_test:demo3() могла вызвать некоторую другую функцию, которая
-сделала вызов с хвостовой рекурсией try\_test:generate\_exception/1, и в
+вычисления функции generate_exception (из модуля try_test) с одним
+аргументом. try_test:generate_exception/1 была вероятно вызвана
+try_test:demo3() (мы не можем быть в этом абсолютно уверены, потому что
+try_test:demo3() могла вызвать некоторую другую функцию, которая
+сделала вызов с хвостовой рекурсией try_test:generate_exception/1, и в
 этом случае трассировка стека не покажет нам записей о этой
 промежуточной функции).
 

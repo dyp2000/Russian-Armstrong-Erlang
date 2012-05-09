@@ -37,12 +37,12 @@ J2EE контейнере.
 для всех приложений, тогда как функциональная часть (реализация обратных
 вызовов) различна в каждом отдельном случае.
 
-В этой главе мы увидим одно из поведений, модуль gen\_server, во всех
+В этой главе мы увидим одно из поведений, модуль gen_server, во всех
 деталях. Но перед тем как погрузиться во все тонкости работы
-gen\_server, сначала мы рассмотрим простой сервер (простейший сервер,
+gen_server, сначала мы рассмотрим простой сервер (простейший сервер,
 который возможно показать) и будем его изменять шаг за шагом, пока не
-получим полноценный модуль gen\_server. Таким образом, вы реально
-сможете понять, как работает gen\_server и будете готовы к исследованию
+получим полноценный модуль gen_server. Таким образом, вы реально
+сможете понять, как работает gen_server и будете готовы к исследованию
 внутренностей.
 
 Вот план этой главы:
@@ -75,26 +75,26 @@ server1**, **server2**….**, каждый слегка будет отлича�
 
 **-export**([start/2, rpc/2]).
 
-start(Name, Mod) -\>
+start(Name, Mod) ->
 
-register(Name, spawn(**fun**() -\> loop(Name, Mod, Mod:init())
+register(Name, spawn(**fun**() -> loop(Name, Mod, Mod:init())
 **end**)).
 
-rpc(Name, Request) -\>
+rpc(Name, Request) ->
 
 Name ! {self(), Request},
 
 **receive**
 
-{Name, Response} -\> Response
+{Name, Response} -> Response
 
 **end**.
 
-loop(Name, Mod, State) -\>
+loop(Name, Mod, State) ->
 
 **receive**
 
-{From, Request} -\>
+{From, Request} ->
 
 {Response, State1} = Mod:handle(Request, State),
 
@@ -107,7 +107,7 @@ loop(Name, Mod, State1)
 Это очень небольшое количество кода является основой сервера. Давайте
 напишем обратные вызовы для сервера №1. Вот код модуля обратных вызовов:
 
-**-module**(name\_server).
+**-module**(name_server).
 
 **-export**([init/0, add/2, whereis/1, handle/2]).
 
@@ -115,18 +115,18 @@ loop(Name, Mod, State1)
 
 %% client routines
 
-add(Name, Place) -\> rpc(name\_server, {add, Name, Place}).
+add(Name, Place) -> rpc(name_server, {add, Name, Place}).
 
-whereis(Name) -\> rpc(name\_server, {whereis, Name}).
+whereis(Name) -> rpc(name_server, {whereis, Name}).
 
 %% callback routines
 
-init() -\> dict:new().
+init() -> dict:new().
 
-handle({add, Name, Place}, Dict) -\> {ok, dict:store(Name, Place,
+handle({add, Name, Place}, Dict) -> {ok, dict:store(Name, Place,
 Dict)};
 
-handle({whereis, Name}, Dict) -\> {dict:find(Name, Dict), Dict}.
+handle({whereis, Name}, Dict) -> {dict:find(Name, Dict), Dict}.
 
 Этот код фактически выполняет две задачи. Он выступает в роли модуля
 обратных вызовов, вызываемых из серверного кода, и иногда содержит
@@ -135,15 +135,15 @@ handle({whereis, Name}, Dict) -\> {dict:find(Name, Dict), Dict}.
 
 Чтобы увидеть как это работает, сделайте следующее:
 
-1\> server1:start(name\_server, name\_server).
+1> server1:start(name_server, name_server).
 
 true
 
-2\> name\_server:add(joe, "at home").
+2> name_server:add(joe, "at home").
 
 ok
 
-3\> name\_server:whereis(joe).
+3> name_server:whereis(joe).
 
 {ok,"at home"}
 
@@ -165,31 +165,31 @@ ok
 
 **-export**([start/2, rpc/2]).
 
-start(Name, Mod) -\>
+start(Name, Mod) ->
 
-register(Name, spawn(**fun**() -\> loop(Name,Mod,Mod:init()) **end**)).
+register(Name, spawn(**fun**() -> loop(Name,Mod,Mod:init()) **end**)).
 
-rpc(Name, Request) -\>
+rpc(Name, Request) ->
 
 Name ! {self(), Request},
 
 **receive**
 
-{Name, crash} -\> exit(rpc);
+{Name, crash} -> exit(rpc);
 
-{Name, ok, Response} -\> Response
+{Name, ok, Response} -> Response
 
 **end**.
 
-loop(Name, Mod, OldState) -\>
+loop(Name, Mod, OldState) ->
 
 **receive**
 
-{From, Request} -\>
+{From, Request} ->
 
 **try** Mod:handle(Request, OldState) **of**
 
-{Response, NewState} -\>
+{Response, NewState} ->
 
 From ! {Name, ok, Response},
 
@@ -197,9 +197,9 @@ loop(Name, Mod, NewState)
 
 **catch**
 
-\_:Why -\>
+_:Why ->
 
-log\_the\_error(Name, Request, Why),
+log_the_error(Name, Request, Why),
 
 %% send a message to cause the client to crash
 
@@ -213,7 +213,7 @@ loop(Name, Mod, OldState)
 
 **end**.
 
-log\_the\_error(Name, Request, Why) -\>
+log_the_error(Name, Request, Why) ->
 
 io:format("Server \~p request \~p \~n"
 
@@ -249,37 +249,37 @@ io:format("Server \~p request \~p \~n"
 
 **-module**(server3).
 
-**-export**([start/2, rpc/2, swap\_code/2]).
+**-export**([start/2, rpc/2, swap_code/2]).
 
-start(Name, Mod) -\>
+start(Name, Mod) ->
 
 register(Name,
 
-spawn(**fun**() -\> loop(Name,Mod,Mod:init()) **end**)).
+spawn(**fun**() -> loop(Name,Mod,Mod:init()) **end**)).
 
-swap\_code(Name, Mod) -\> rpc(Name, {swap\_code, Mod}).
+swap_code(Name, Mod) -> rpc(Name, {swap_code, Mod}).
 
-rpc(Name, Request) -\>
+rpc(Name, Request) ->
 
 Name ! {self(), Request},
 
 **receive**
 
-{Name, Response} -\> Response
+{Name, Response} -> Response
 
 **end**.
 
-loop(Name, Mod, OldState) -\>
+loop(Name, Mod, OldState) ->
 
 **receive**
 
-{From, {swap\_code, NewCallBackMod}} -\>
+{From, {swap_code, NewCallBackMod}} ->
 
 From ! {Name, ack},
 
 loop(Name, NewCallBackMod, OldState);
 
-{From, Request} -\>
+{From, Request} ->
 
 {Response, NewState} = Mod:handle(Request, OldState),
 
@@ -295,13 +295,13 @@ loop(Name, Mod, NewState)
 мы хотим заменить работающий модуль обратных вызовов на новый модуль,
 имя которого передается в сообщении. Продемонстрировать это можно
 запустив server3 с модулем обратных вызовов и динамический подменить
-модуль на новый. Мы не сможем использовать name\_server в качестве
+модуль на новый. Мы не сможем использовать name_server в качестве
 модуля обратных вызовов, поскольку это имя сервера и оно жестко задано,
 так как компилируется внутрь модуля сервера. В итоге нам необходимо
-сделать копию старого модуля и назвать его name\_server1, где мы изменим
+сделать копию старого модуля и назвать его name_server1, где мы изменим
 имя сервера:
 
-**-module**(name\_server1).
+**-module**(name_server1).
 
 **-export**([init/0, add/2, whereis/1, handle/2]).
 
@@ -309,84 +309,84 @@ loop(Name, Mod, NewState)
 
 %% client routines
 
-add(Name, Place) -\> rpc(name\_server, {add, Name, Place}).
+add(Name, Place) -> rpc(name_server, {add, Name, Place}).
 
-whereis(Name) -\> rpc(name\_server, {whereis, Name}).
+whereis(Name) -> rpc(name_server, {whereis, Name}).
 
 %% callback routines
 
-init() -\> dict:new().
+init() -> dict:new().
 
-handle({add, Name, Place}, Dict) -\> {ok, dict:store(Name, Place,
+handle({add, Name, Place}, Dict) -> {ok, dict:store(Name, Place,
 Dict)};
 
-handle({whereis, Name}, Dict) -\> {dict:find(Name, Dict), Dict}.
+handle({whereis, Name}, Dict) -> {dict:find(Name, Dict), Dict}.
 
-Сначала мы запустим server3 с модулем обратных вызовов name\_server1:
+Сначала мы запустим server3 с модулем обратных вызовов name_server1:
 
-1\> server3:start(name\_server, name\_server1).
+1> server3:start(name_server, name_server1).
 
 true
 
-2\> name\_server:add(joe, "at home").
+2> name_server:add(joe, "at home").
 
 ok
 
-3\> name\_server:add(helen, "at work").
+3> name_server:add(helen, "at work").
 
 ok
 
 Теперь, я полагаю, мы захотим найти все имена которые обслуживает наш
 сервер имен. Но в нашем API нет функции для выполнения такой задачи –
-модуль name\_server имеет лишь функции для добавления и поиска имен.
+модуль name_server имеет лишь функции для добавления и поиска имен.
 
 Молниеносно запускаем наш текстовый редактор и пишем наш новый модуль
 обратных вызовов:
 
-**-module**(new\_name\_server).
+**-module**(new_name_server).
 
-**-export**([init/0, add/2, all\_names/0, delete/1, whereis/1,
+**-export**([init/0, add/2, all_names/0, delete/1, whereis/1,
 handle/2]).
 
 **-import**(server3, [rpc/2]).
 
 %% interface
 
-all\_names() -\> rpc(name\_server, allNames).
+all_names() -> rpc(name_server, allNames).
 
-add(Name, Place) -\> rpc(name\_server, {add, Name, Place}).
+add(Name, Place) -> rpc(name_server, {add, Name, Place}).
 
-delete(Name) -\> rpc(name\_server, {delete, Name}).
+delete(Name) -> rpc(name_server, {delete, Name}).
 
-whereis(Name) -\> rpc(name\_server, {whereis, Name}).
+whereis(Name) -> rpc(name_server, {whereis, Name}).
 
 %% callback routines
 
-init() -\> dict:new().
+init() -> dict:new().
 
-handle({add, Name, Place}, Dict) -\> {ok, dict:store(Name, Place,
+handle({add, Name, Place}, Dict) -> {ok, dict:store(Name, Place,
 Dict)};
 
-handle(allNames, Dict) -\> {dict:fetch\_keys(Dict), Dict};
+handle(allNames, Dict) -> {dict:fetch_keys(Dict), Dict};
 
-handle({delete, Name}, Dict) -\> {ok, dict:erase(Name, Dict)};
+handle({delete, Name}, Dict) -> {ok, dict:erase(Name, Dict)};
 
-handle({whereis, Name}, Dict) -\> {dict:find(Name, Dict), Dict}.
+handle({whereis, Name}, Dict) -> {dict:find(Name, Dict), Dict}.
 
 Сейчас мы скомпилируем этот код и скажем серверу заменить работающий
 модуль обратных вызовов новым:
 
-4\> c(new\_name\_server).
+4> c(new_name_server).
 
-{ok,new\_name\_server}
+{ok,new_name_server}
 
-5\> server3:swap\_code(name\_server, new\_name\_server).
+5> server3:swap_code(name_server, new_name_server).
 
 Ack
 
 И можем запустить новые функции это сервера:
 
-6\> new\_name\_server:all\_names().
+6> new_name_server:all_names().
 
 [joe,helen]
 
@@ -414,41 +414,41 @@ Ack
 
 **-module**(server4).
 
-**-export**([start/2, rpc/2, swap\_code/2]).
+**-export**([start/2, rpc/2, swap_code/2]).
 
-start(Name, Mod) -\>
+start(Name, Mod) ->
 
-register(Name, spawn(**fun**() -\> loop(Name,Mod,Mod:init()) **end**)).
+register(Name, spawn(**fun**() -> loop(Name,Mod,Mod:init()) **end**)).
 
-swap\_code(Name, Mod) -\> rpc(Name, {swap\_code, Mod}).
+swap_code(Name, Mod) -> rpc(Name, {swap_code, Mod}).
 
-rpc(Name, Request) -\>
+rpc(Name, Request) ->
 
 Name ! {self(), Request},
 
 **receive**
 
-{Name, crash} -\> exit(rpc);
+{Name, crash} -> exit(rpc);
 
-{Name, ok, Response} -\> Response
+{Name, ok, Response} -> Response
 
 **end**.
 
-loop(Name, Mod, OldState) -\>
+loop(Name, Mod, OldState) ->
 
 **receive**
 
-{From, {swap\_code, NewCallbackMod}} -\>
+{From, {swap_code, NewCallbackMod}} ->
 
 From ! {Name, ok, ack},
 
 loop(Name, NewCallbackMod, OldState);
 
-{From, Request} -\>
+{From, Request} ->
 
 **try** Mod:handle(Request, OldState) of
 
-{Response, NewState} -\>
+{Response, NewState} ->
 
 From ! {Name, ok, Response},
 
@@ -456,9 +456,9 @@ loop(Name, Mod, NewState)
 
 **catch**
 
-\_: Why -\>
+_: Why ->
 
-log\_the\_error(Name, Request, Why),
+log_the_error(Name, Request, Why),
 
 From ! {Name, crash},
 
@@ -468,7 +468,7 @@ loop(Name, Mod, OldState)
 
 **end**.
 
-log\_the\_error(Name, Request, Why) -\>
+log_the_error(Name, Request, Why) ->
 
 io:format("Server \~p request \~p \~n"
 
@@ -489,32 +489,32 @@ io:format("Server \~p request \~p \~n"
 
 **-export**([start/0, rpc/2]).
 
-start() -\> spawn(**fun**() -\> wait() **end**).
+start() -> spawn(**fun**() -> wait() **end**).
 
-wait() -\>
+wait() ->
 
 **receive**
 
-{become, F} -\> F()
+{become, F} -> F()
 
 **end**.
 
-rpc(Pid, Q) -\>
+rpc(Pid, Q) ->
 
 Pid ! {self(), Q},
 
 **receive**
 
-{Pid, Reply} -\> Reply
+{Pid, Reply} -> Reply
 
 **end**.
 
 Если мы запустим это сервер и отправим ему сообщение {become, F}, то он
 превратится в F сервер, исполнив F(). Запустим сервер:
 
-1\> Pid = server5:start().
+1> Pid = server5:start().
 
-<0.57.0\>
+<0.57.0>
 
 
 
@@ -523,29 +523,29 @@ Pid ! {self(), Q},
 Теперь давайте создадим функциональность сервера. Ничего сложного
 придумывать не будем, просто посчитаем факториал:
 
-**-module**(my\_fac\_server).
+**-module**(my_fac_server).
 
 **-export**([loop/0]).
 
-loop() -\>
+loop() ->
 
 **receive**
 
-{From, {fac, N}} -\>
+{From, {fac, N}} ->
 
 From ! {self(), fac(N)},
 
 loop();
 
-{become, Something} -\>
+{become, Something} ->
 
 Something()
 
 **end**.
 
-fac(0) -\> 1;
+fac(0) -> 1;
 
-fac(N) -\> N \* fac(N-1).
+fac(N) -> N \* fac(N-1).
 
 
 
@@ -569,19 +569,19 @@ fac(N) -\> N \* fac(N-1).
 станет не нужен, мы можем заставить серверы выполнять что-нибудь еще.
 
 Скомпилируйте этот код, теперь вы сможете сказать процессу
-<0.57.0\>**,** превратиться в факториал-сервер:
+<0.57.0>**,** превратиться в факториал-сервер:
 
-2\> c(my\_fac\_server).
+2> c(my_fac_server).
 
-{ok,my\_fac\_server}
+{ok,my_fac_server}
 
-3\> Pid ! {become, fun my\_fac\_server:loop/0}.
+3> Pid ! {become, fun my_fac_server:loop/0}.
 
-{become,\#Fun<my\_fac\_server.loop.0\>}
+{become,\#Fun<my_fac_server.loop.0>}
 
 Теперь, когда наш сервер стал факториал-сервером, мы сделаем вызов:
 
-4\> server5:rpc(Pid, {fac,30}).
+4> server5:rpc(Pid, {fac,30}).
 
 265252859812191058636308480000000
 
@@ -606,7 +606,7 @@ fac(N) -\> N \* fac(N-1).
 тонких ошибки. Я не буде прямо сейчас рассказывать о них, я дам
 некоторые комментарии по этому поводу в конце главы.
 
-Эрланговый модуль gen\_server – это что-то вроде логического завершения
+Эрланговый модуль gen_server – это что-то вроде логического завершения
 последовательности достаточно простых серверов (точно таких же которые
 мы писали на протяжении всей главы).
 
@@ -616,12 +616,12 @@ fac(N) -\> N \* fac(N-1).
 ошибки обрабатываются, и все нефункциональное поведение учтено в типовой
 части сервера.
 
-Итак, сейчас мы совершим огромный прыжок и рассмотрим gen\_server.
+Итак, сейчас мы совершим огромный прыжок и рассмотрим gen_server.
 
-**16.2 Начнем с gen\_server**
+**16.2 Начнем с gen_server**
 
 Я собираюсь окунуть вас в самую глубь проблемы. Вот простой план
-написания модуля обратных вызовов для gen\_server, состоящий из трех
+написания модуля обратных вызовов для gen_server, состоящий из трех
 пунктов:
 
 \1. Выбрать имя для модуля обратных вызовов.
@@ -635,14 +635,14 @@ fac(N) -\> N \* fac(N-1).
 **Шаг 1: Выбрать имя для модуля обратных вызовов**
 
 Мы будем делать очень простую платежную систему. Поэтому назовем модуль
-my\_bank.
+my_bank.
 
 **Шаг 2: Написать интерфейсные конструкции**
 
 ****
 
 Мы определим пять интерфейсных конструкций, все они будут в модуле
-my\_bank:
+my_bank:
 
 start()
 
@@ -652,7 +652,7 @@ stop()
 
 Закрыть банк.
 
-new\_account(Who)
+new_account(Who)
 
 Создать новый аккаунт.
 
@@ -664,69 +664,69 @@ withdraw(Who, Amount)
 
 Взять деньги, если есть на счету.
 
-Каждая конструкция это ровно одна конструкция для вызова gen\_server,
+Каждая конструкция это ровно одна конструкция для вызова gen_server,
 как показано ниже:
 
-start() -\> gen\_server:start\_link({local, ?MODULE}, ?MODULE, [], []).
+start() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
-stop() -\> gen\_server:call(?MODULE, stop).
+stop() -> gen_server:call(?MODULE, stop).
 
-new\_account(Who) -\> gen\_server:call(?MODULE, {new, Who}).
+new_account(Who) -> gen_server:call(?MODULE, {new, Who}).
 
-deposit(Who, Amount) -\> gen\_server:call(?MODULE, {add, Who, Amount}).
+deposit(Who, Amount) -> gen_server:call(?MODULE, {add, Who, Amount}).
 
-withdraw(Who, Amount) -\> gen\_server:call(?MODULE, {remove, Who,
+withdraw(Who, Amount) -> gen_server:call(?MODULE, {remove, Who,
 Amount}).
 
-gen\_server:start\_link({local, Name}, Mod, ...) запускает *локальный
+gen_server:start_link({local, Name}, Mod, ...) запускает *локальный
 сервер* (можно использовать аргумент global для того, чтобы он был
 доступен кластеру Эрланг-серверов). Макрос ?MODULE содержит имя модуля
-my\_bank. Mod – это имя модуля обратных вызовов. Остальные аргументы
-gen\_server:start мы пока не будем рассматривать.
+my_bank. Mod – это имя модуля обратных вызовов. Остальные аргументы
+gen_server:start мы пока не будем рассматривать.
 
-gen\_server:call(?MODULE, Term)** **используется для вызова удаленных
+gen_server:call(?MODULE, Term)** **используется для вызова удаленных
 процедур сервера.
 
 **Шаг 3: Написать конструкции модуля обратных вызовов**
 
 Наш модуль обратных вызовов должен экспортировать шесть функций: init/1,
 
-handle\_call/3, handle\_cast/2, handle\_info/2, terminate/2, и
-code\_change/3.
+handle_call/3, handle_cast/2, handle_info/2, terminate/2, и
+code_change/3.
 
 Чтобы облегчить жизнь, мы можем использовать один из шаблонов для
-создания gen\_server. Вот пример:
+создания gen_server. Вот пример:
 
-%% gen\_server\_mini\_template
-
-
-
-**-behaviour**(gen\_server).
-
-**-export**([start\_link/0]).
+%% gen_server_mini_template
 
 
 
-%% gen\_server callbacks
+**-behaviour**(gen_server).
 
-**-export**([init/1, handle\_call/3, handle\_cast/2, handle\_info/2,
+**-export**([start_link/0]).
 
-terminate/2, code\_change/3]).
 
-start\_link() -\> gen\_server:start\_link({local, ?SERVER}, ?MODULE, [],
+
+%% gen_server callbacks
+
+**-export**([init/1, handle_call/3, handle_cast/2, handle_info/2,
+
+terminate/2, code_change/3]).
+
+start_link() -> gen_server:start_link({local, ?SERVER}, ?MODULE, [],
 []).
 
-init([]) -\> {ok, State}.
+init([]) -> {ok, State}.
 
-handle\_call(\_Request, \_From, State) -\> {reply, Reply, State}.
+handle_call(_Request, _From, State) -> {reply, Reply, State}.
 
-handle\_cast(\_Msg, State) -\> {noreply, State}.
+handle_cast(_Msg, State) -> {noreply, State}.
 
-handle\_info(\_Info, State) -\> {noreply, State}.
+handle_info(_Info, State) -> {noreply, State}.
 
-terminate(\_Reason, \_State) -\> ok.
+terminate(_Reason, _State) -> ok.
 
-code\_change(\_OldVsn, State, Extra) -\> {ok, State}.
+code_change(_OldVsn, State, Extra) -> {ok, State}.
 
 Этот пример содержит простой скелет, который нужно заполнить, чтобы
 получить сервер. Ключевое слово –behaviour используется компилятором,
@@ -734,18 +734,18 @@ code\_change(\_OldVsn, State, Extra) -\> {ok, State}.
 
 *Примечание*: Если вы используете emacs, то вы сможете вставить шаблон
 несколькими командами. Если ваш редактор переключен в режим эрланга, то
-выберите в меню Erlang → Skeletons для создания шаблона gen\_server.
+выберите в меню Erlang -> Skeletons для создания шаблона gen_server.
 Если у вас нет emacs, то не паникуйте. Я включил текст шаблона в конец
 главы.
 
 Итак, шаблон вставлен, и мы просто отредактируем его куски. Мы имеем все
 аргументы в интерфейсных конструкциях, согласно аргументам шаблона.
 
-Наиболее важная часть для нас это функция handle\_call/3. Мы реализуем
+Наиболее важная часть для нас это функция handle_call/3. Мы реализуем
 код трех запросов в нашем интерфейсе. Пока заполним многоточиями
 некоторые места, как показано ниже:
 
-handle\_call({new, Who}, From, State} -\>
+handle_call({new, Who}, From, State} ->
 
 Reply = ...
 
@@ -753,7 +753,7 @@ State1 = ...
 
 {reply, Reply, State1};
 
-handle\_call({add, Who, Amount}, From, State} -\>
+handle_call({add, Who, Amount}, From, State} ->
 
 Reply = ...
 
@@ -761,7 +761,7 @@ State1 = ...
 
 {reply, Reply, State1};
 
-handle\_call({remove, Who, Amount}, From, State} -\>
+handle_call({remove, Who, Amount}, From, State} ->
 
 Reply = ...
 
@@ -779,19 +779,19 @@ State это просто переменная, представляющая г�
 
 После редактирования кусков кода в шаблоне, мы получили следующий код:
 
-init([]) -\> {ok, ets:new(?MODULE,[])}.
+init([]) -> {ok, ets:new(?MODULE,[])}.
 
 
 
-handle\_call({new,Who}, \_From, Tab) -\>
+handle_call({new,Who}, _From, Tab) ->
 
 Reply = **case** ets:lookup(Tab, Who) **of**
 
-[] -\> ets:insert(Tab, {Who,0}),
+[] -> ets:insert(Tab, {Who,0}),
 
 {welcome, Who};
 
-[\_] -\> {Who, you\_already\_are\_a\_customer}
+[_] -> {Who, you_already_are_a_customer}
 
 ** end**,
 
@@ -799,113 +799,113 @@ Reply = **case** ets:lookup(Tab, Who) **of**
 
 {reply, Reply, Tab};
 
-handle\_call({add,Who,X}, \_From, Tab) -\>
+handle_call({add,Who,X}, _From, Tab) ->
 
 Reply = **case** ets:lookup(Tab, Who) **of**
 
-[] -\> not\_a\_customer;
+[] -> not_a_customer;
 
 
 
-[{Who,Balance}] -\>
+[{Who,Balance}] ->
 
 NewBalance = Balance + X,
 
 ets:insert(Tab, {Who, NewBalance}),
 
-{thanks, Who, your\_balance\_is, NewBalance
+{thanks, Who, your_balance_is, NewBalance
 
 ** end**,
 
 {reply, Reply, Tab};
 
-handle\_call({remove,Who, X}, \_From, Tab) -\>
+handle_call({remove,Who, X}, _From, Tab) ->
 
 Reply = **case** ets:lookup(Tab, Who) **of**
 
 ****
 
-[] -\> not\_a\_customer;
+[] -> not_a_customer;
 
 
 
-[{Who,Balance}] when X =< Balance -\>
+[{Who,Balance}] when X =< Balance ->
 
 NewBalance = Balance - X,
 
 ets:insert(Tab, {Who, NewBalance}),
 
-{thanks, Who, your\_balance\_is, NewBalance};
+{thanks, Who, your_balance_is, NewBalance};
 
-[{Who,Balance}] -\>
+[{Who,Balance}] ->
 
-{sorry,Who,you\_only\_have,Balance,in\_the\_bank}
+{sorry,Who,you_only_have,Balance,in_the_bank}
 
 **end**,
 
 {reply, Reply, Tab};
 
-handle\_call(stop, \_From, Tab) -\>
+handle_call(stop, _From, Tab) ->
 
 {stop, normal, stopped, Tab}.
 
-handle\_cast(\_Msg, State) -\> {noreply, State}.
+handle_cast(_Msg, State) -> {noreply, State}.
 
-handle\_info(\_Info, State) -\> {noreply, State}.
+handle_info(_Info, State) -> {noreply, State}.
 
-terminate(\_Reason, \_State) -\> ok.
+terminate(_Reason, _State) -> ok.
 
-code\_change(\_OldVsn, State, Extra) -\> {ok, State}.
+code_change(_OldVsn, State, Extra) -> {ok, State}.
 
-Запускаем наш сервер, вызвав gen\_server:start\_link(Name, CallBackMod,
+Запускаем наш сервер, вызвав gen_server:start_link(Name, CallBackMod,
 StartArgs, Opts); эта конструкция вызовет в модуле обратных вызовов
 Mod:init(StartArgs), и должны нам вернуть {ok, State}. Значение State
-передается как третий аргумент в handle\_call.
+передается как третий аргумент в handle_call.
 
-Отмечу как мы остановим сервер. handle\_call(Stop, From, Tab) вернет
+Отмечу как мы остановим сервер. handle_call(Stop, From, Tab) вернет
 {stop, normal, stopped, Tab} при остановке сервера. Второй аргумент
 (normal) используется как первый аргумент в конструкции
-my\_bank:terminate/2. Третий аргумент (stopped) становится возвращаемым
-значением my\_bank:stop().
+my_bank:terminate/2. Третий аргумент (stopped) становится возвращаемым
+значением my_bank:stop().
 
 Теперь все готово. Давайте посетим наш банк:
 
-1\> my\_bank:start().
+1> my_bank:start().
 
-{ok,<0.33.0\>}
+{ok,<0.33.0>}
 
-2\> my\_bank:deposit("joe", 10).
+2> my_bank:deposit("joe", 10).
 
-not\_a\_customer
+not_a_customer
 
-3\> my\_bank:new\_account("joe").
+3> my_bank:new_account("joe").
 
 {welcome,"joe"}
 
-4\> my\_bank:deposit("joe", 10).
+4> my_bank:deposit("joe", 10).
 
-{thanks,"joe",your\_balance\_is,10}
+{thanks,"joe",your_balance_is,10}
 
-5\> my\_bank:deposit("joe", 30).
+5> my_bank:deposit("joe", 30).
 
-{thanks,"joe",your\_balance\_is,40}
+{thanks,"joe",your_balance_is,40}
 
-6\> my\_bank:withdraw("joe", 15).
+6> my_bank:withdraw("joe", 15).
 
-{thanks,"joe",your\_balance\_is,25}
+{thanks,"joe",your_balance_is,25}
 
-7\> my\_bank:withdraw("joe", 45).
+7> my_bank:withdraw("joe", 45).
 
-{sorry,"joe",you\_only\_have,25,in\_the\_bank}
+{sorry,"joe",you_only_have,25,in_the_bank}
 
-**16.3 Структура обратных вызовов gen\_server**
+**16.3 Структура обратных вызовов gen_server**
 
 Теперь вооружившись идеями, можем приступить к более детальному
-рассмотрению структуры обратных вызовов gen\_server.
+рассмотрению структуры обратных вызовов gen_server.
 
 **Что же происходит, когда мы запускаем сервер?**
 
-Вызов gen\_server:start\_link(Name, Mod, InitArgs, Opts) запускает все.
+Вызов gen_server:start_link(Name, Mod, InitArgs, Opts) запускает все.
 Создается сервер Name. Запускается модуль обратных вызовов Mod. Opts
 управляют поведением типичного сервера. Здесь может быть
 протоколирование сообщений, функции отладки, и много чего еще. Типичный
@@ -915,7 +915,7 @@ not\_a\_customer
 
 %%--------------------------------------------------------------------
 
-%% Function: init(Args) -\> {ok, State} |
+%% Function: init(Args) -> {ok, State} |
 
 %% {ok, State, Timeout} |
 
@@ -927,12 +927,12 @@ not\_a\_customer
 
 %%--------------------------------------------------------------------
 
-init([]) -\>
+init([]) ->
 
 {ok, \#state{}}.
 
 При нормальном положении дел, мы просто вернем {ok, State}. Значение
-других аргументов вы можете найти в руководстве по gen\_server.
+других аргументов вы можете найти в руководстве по gen_server.
 
 Если возвращается значение {ok, State}, значит, сервер успешно запущен и
 его начальное состояние State.
@@ -940,16 +940,16 @@ init([]) -\>
 **Что же происходит, когда мы обращаемся к серверу?**
 
 Для обращения к серверу клиентская программа вызывает
-gen\_server:call(Name, Request). В результате будет вызвана функция
-handle\_call/3 из модуля обратных вызовов.
+gen_server:call(Name, Request). В результате будет вызвана функция
+handle_call/3 из модуля обратных вызовов.
 
-handle\_call/3 имеет следующий шаблон:
+handle_call/3 имеет следующий шаблон:
 
 %%----------------------------------------------------------------------
 
 %% Function:
 
-%% handle\_call(Request, From, State) -\> {reply, Reply, State} |
+%% handle_call(Request, From, State) -> {reply, Reply, State} |
 
 %% &amp;nbsp; {reply, Reply, State, Timeout} |
 
@@ -965,19 +965,19 @@ handle\_call/3 имеет следующий шаблон:
 
 %%----------------------------------------------------------------------
 
-handle\_call(\_Request, \_From, State) -\>
+handle_call(_Request, _From, State) ->
 
 Reply = ok,
 
 {reply, Reply, State}.
 
-Request (второй аргумент gen\_server:call/2) станет первым аргумент
-handle\_call/3. From – это PID, запрашивающего клиентского процесса, а
+Request (второй аргумент gen_server:call/2) станет первым аргумент
+handle_call/3. From – это PID, запрашивающего клиентского процесса, а
 State – это текущее состояние клиента.
 
 Если все хорошо, мы возвращаем {reply, Reply, NewState}. Когда это
 происходит Reply уходит обратно к клиенту, где превращается в
-возвращаемое значение gen\_server:call. NewState – это следующее
+возвращаемое значение gen_server:call. NewState – это следующее
 состояние сервера.
 
 Другие возвращаемые значения {noreply, …} и {stop, …} используются
@@ -989,17 +989,17 @@ State – это текущее состояние клиента.
 
 ****
 
-Мы увидели взаимодействие между gen\_server:call и handle\_call. Это то,
+Мы увидели взаимодействие между gen_server:call и handle_call. Это то,
 что используется для реализации *вызова удаленных процедур (remote
-procedure call)*. gen\_server:cast(Name, Name) реализация образа,
+procedure call)*. gen_server:cast(Name, Name) реализация образа,
 который просто вызывается, не возвращая значений (на самом деле просто
 сообщение, но обычно это вызов образа из удаленной процедуры).
 
-Соответствующий обратный вызов handle\_cast показан в шаблоне ниже:
+Соответствующий обратный вызов handle_cast показан в шаблоне ниже:
 
 %%--------------------------------------------------------------------
 
-%% Function: handle\_cast(Msg, State) -\> {noreply, NewState} |
+%% Function: handle_cast(Msg, State) -> {noreply, NewState} |
 
 %% {noreply, NewState, Timeout} |
 
@@ -1009,7 +1009,7 @@ procedure call)*. gen\_server:cast(Name, Name) реализация образа
 
 %%--------------------------------------------------------------------
 
-handle\_cast(\_Msg, State) -\>
+handle_cast(_Msg, State) ->
 
 {noreply, NewState}.
 
@@ -1018,7 +1018,7 @@ handle\_cast(\_Msg, State) -\>
 
 **Спонтанные сообщения**
 
-Функция обратного вызова handle\_info(info, State) используется для
+Функция обратного вызова handle_info(info, State) используется для
 обработки спонтанных сообщений получаемых сервером. Так что же такое
 спонтанные сообщения? Если сервер связан с другими процессами и
 перехватывает их, он может внезапно принять неожиданное сообщение
@@ -1026,11 +1026,11 @@ handle\_cast(\_Msg, State) -\>
 сервера, может просто отправить ему сообщение. Любые такие сообщения
 будут приняты сервером как значение переменной Info.
 
-Шаблон для handle\_info выглядит так:
+Шаблон для handle_info выглядит так:
 
 %%--------------------------------------------------------------------
 
-%% Function: handle\_info(Info, State) -\> {noreply, State} |
+%% Function: handle_info(Info, State) -> {noreply, State} |
 
 %% {noreply, State, Timeout} |
 
@@ -1040,16 +1040,16 @@ handle\_cast(\_Msg, State) -\>
 
 %%--------------------------------------------------------------------
 
-handle\_info(\_Info, State) -\>
+handle_info(_Info, State) ->
 
 {noreply, State}.
 
-Возвращаемое значение такое же как у handle\_cast.
+Возвращаемое значение такое же как у handle_cast.
 
 **Прощай, малышка.**
 
 Сервер может прервать свою работу по многим причинам. Один из
-handle\_Something вызовов может вернуть {stop, Reason, NewState}, либо
+handle_Something вызовов может вернуть {stop, Reason, NewState}, либо
 сервер может рухнуть при сообщении {‘Exit’, reason}. При любом раскладе
 будет вызвана функция terminate(Reason, NewState).
 
@@ -1057,21 +1057,21 @@ handle\_Something вызовов может вернуть {stop, Reason, NewSta
 
 %%--------------------------------------------------------------------
 
-%% Function: terminate(Reason, State) -\> void()
+%% Function: terminate(Reason, State) -> void()
 
-%% Description: This function is called by a gen\_server when it is
+%% Description: This function is called by a gen_server when it is
 
 %% about to terminate. It should be the opposite of Module:init/1 and
 
 %% do any necessary
 
-%% cleaning up. When it returns, the gen\_server terminates with Reason.
+%% cleaning up. When it returns, the gen_server terminates with Reason.
 
 %% The return value is ignored.
 
 %%--------------------------------------------------------------------
 
-terminate(\_Reason, State) -\>
+terminate(_Reason, State) ->
 
 ok.
 
@@ -1102,39 +1102,39 @@ ok.
 
 
 
-**gen\_server template**
+**gen_server template**
 
 %%%-------------------------------------------------------------------
 
-%%% File : gen\_server\_template.full
+%%% File : gen_server_template.full
 
-%%% Author : my name <yourname@localhost.localdomain\>
+%%% Author : my name <yourname@localhost.localdomain>
 
 %%% Description :
 
 %%%
 
-%%% Created : 2 Mar 2007 by my name <yourname@localhost.localdomain\>
+%%% Created : 2 Mar 2007 by my name <yourname@localhost.localdomain>
 
 %%%-------------------------------------------------------------------
 
 -**module**().
 
--**behaviour**(gen\_server).
+-**behaviour**(gen_server).
 
 
 
 %% API
 
--**export**([start\_link/0]).
+-**export**([start_link/0]).
 
 
 
-%% gen\_server callbacks
+%% gen_server callbacks
 
--e**xport**([init/1, handle\_call/3, handle\_cast/2, handle\_info/2,
+-e**xport**([init/1, handle_call/3, handle_cast/2, handle_info/2,
 
-terminate/2, code\_change/3]).
+terminate/2, code_change/3]).
 
 
 
@@ -1150,27 +1150,27 @@ terminate/2, code\_change/3]).
 
 %%--------------------------------------------------------------------
 
-%% Function: start\_link() -\> {ok,Pid} | ignore | {error,Error}
+%% Function: start_link() -> {ok,Pid} | ignore | {error,Error}
 
 %% Description: Starts the server
 
 %%--------------------------------------------------------------------
 
-start\_link() -\>
+start_link() ->
 
-gen\_server:start\_link({local, ?SERVER}, ?MODULE, [], []).
+gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
 
 
 
 %%====================================================================
 
-%% gen\_server callbacks
+%% gen_server callbacks
 
 %%====================================================================
 
 %%--------------------------------------------------------------------
 
-%% Function: init(Args) -\> {ok, State} |
+%% Function: init(Args) -> {ok, State} |
 
 %% {ok, State, Timeout} |
 
@@ -1182,7 +1182,7 @@ gen\_server:start\_link({local, ?SERVER}, ?MODULE, [], []).
 
 %%--------------------------------------------------------------------
 
-init([]) -\>
+init([]) ->
 
 {ok, \#state{}}.
 
@@ -1190,7 +1190,7 @@ init([]) -\>
 
 %%--------------------------------------------------------------------
 
-%% Function: %% handle\_call(Request, From, State) -\> {reply, Reply,
+%% Function: %% handle_call(Request, From, State) -> {reply, Reply,
 State} |
 
 %% {reply, Reply, State, Timeout} |
@@ -1207,7 +1207,7 @@ State} |
 
 %%--------------------------------------------------------------------
 
-handle\_call(\_Request, \_From, State) -\>
+handle_call(_Request, _From, State) ->
 
 Reply = ok,
 
@@ -1217,7 +1217,7 @@ Reply = ok,
 
 %%--------------------------------------------------------------------
 
-%% Function: handle\_cast(Msg, State) -\> {noreply, State} |
+%% Function: handle_cast(Msg, State) -> {noreply, State} |
 
 %% {noreply, State, Timeout} |
 
@@ -1227,7 +1227,7 @@ Reply = ok,
 
 %%--------------------------------------------------------------------
 
-handle\_cast(\_Msg, State) -\>
+handle_cast(_Msg, State) ->
 
 {noreply, State}.
 
@@ -1235,7 +1235,7 @@ handle\_cast(\_Msg, State) -\>
 
 %%--------------------------------------------------------------------
 
-%% Function: handle\_info(Info, State) -\> {noreply, State} |
+%% Function: handle_info(Info, State) -> {noreply, State} |
 
 %% {noreply, State, Timeout} |
 
@@ -1245,7 +1245,7 @@ handle\_cast(\_Msg, State) -\>
 
 %%--------------------------------------------------------------------
 
-handle\_info(\_Info, State) -\>
+handle_info(_Info, State) ->
 
 {noreply, State}.
 
@@ -1253,21 +1253,21 @@ handle\_info(\_Info, State) -\>
 
 %%--------------------------------------------------------------------
 
-%% Function: terminate(Reason, State) -\> void()
+%% Function: terminate(Reason, State) -> void()
 
-%% Description: This function is called by a gen\_server when it is
+%% Description: This function is called by a gen_server when it is
 about to
 
 %% terminate. It should be the opposite of Module:init/1 and do any
 necessary
 
-%% cleaning up. When it returns, the gen\_server terminates with Reason.
+%% cleaning up. When it returns, the gen_server terminates with Reason.
 
 %% The return value is ignored.
 
 %%--------------------------------------------------------------------
 
-terminate(\_Reason, \_State) -\>
+terminate(_Reason, _State) ->
 
 ok.
 
@@ -1275,13 +1275,13 @@ ok.
 
 %%--------------------------------------------------------------------
 
-%% Func: code\_change(OldVsn, State, Extra) -\> {ok, NewState}
+%% Func: code_change(OldVsn, State, Extra) -> {ok, NewState}
 
 %% Description: Convert process state when code is changed
 
 %%--------------------------------------------------------------------
 
-code\_change(\_OldVsn, State, \_Extra) -\>
+code_change(_OldVsn, State, _Extra) ->
 
 {ok, State}.
 
@@ -1293,134 +1293,134 @@ code\_change(\_OldVsn, State, \_Extra) -\>
 
 %%--------------------------------------------------------------------
 
-**my\_bank**
+**my_bank**
 
 ****
 
--**module**(my\_bank).
+-**module**(my_bank).
 
 
 
--**behaviour**(gen\_server).
+-**behaviour**(gen_server).
 
 -**export**([start/0]).
 
 
 
-%% gen\_server callbacks
+%% gen_server callbacks
 
--**export**([init/1, handle\_call/3, handle\_cast/2, handle\_info/2,
+-**export**([init/1, handle_call/3, handle_cast/2, handle_info/2,
 
-terminate/2, code\_change/3]).
+terminate/2, code_change/3]).
 
--**compile**(export\_all).
-
-
-
-start() -\> gen\_server:start\_link({local, ?MODULE}, ?MODULE, [], []).
-
-stop() -\> gen\_server:call(?MODULE, stop).
+-**compile**(export_all).
 
 
 
-new\_account(Who) -\> gen\_server:call(?MODULE, {new, Who}).
+start() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
-deposit(Who, Amount) -\> gen\_server:call(?MODULE, {add, Who, Amount}).
+stop() -> gen_server:call(?MODULE, stop).
 
-withdraw(Who, Amount) -\> gen\_server:call(?MODULE, {remove, Who,
+
+
+new_account(Who) -> gen_server:call(?MODULE, {new, Who}).
+
+deposit(Who, Amount) -> gen_server:call(?MODULE, {add, Who, Amount}).
+
+withdraw(Who, Amount) -> gen_server:call(?MODULE, {remove, Who,
 Amount}).
 
 
 
-init([]) -\> {ok, ets:new(?MODULE,[])}.
+init([]) -> {ok, ets:new(?MODULE,[])}.
 
 
 
-handle\_call({new,Who}, \_From, Tab) -\>
+handle_call({new,Who}, _From, Tab) ->
 
 Reply = **case** ets:lookup(Tab, Who) of
 
-[] -\> ets:insert(Tab, {Who,0}),
+[] -> ets:insert(Tab, {Who,0}),
 
 {welcome, Who};
 
-[\_] -\> {Who, you\_already\_are\_a\_customer}
+[_] -> {Who, you_already_are_a_customer}
 
 **end**,
 
 {reply, Reply, Tab};
 
-handle\_call({add,Who,X}, \_From, Tab) -\>
+handle_call({add,Who,X}, _From, Tab) ->
 
 Reply = **case** ets:lookup(Tab, Who) of
 
-[] -\> not\_a\_customer;
+[] -> not_a_customer;
 
-[{Who,Balance}] -\>
+[{Who,Balance}] ->
 
 NewBalance = Balance + X,
 
 ets:insert(Tab, {Who, NewBalance}),
 
-{thanks, Who, your\_balance\_is, NewBalance}
+{thanks, Who, your_balance_is, NewBalance}
 
 **end**,
 
 {reply, Reply, Tab};
 
-handle\_call({remove,Who, X}, \_From, Tab) -\>
+handle_call({remove,Who, X}, _From, Tab) ->
 
 Reply = **case **ets:lookup(Tab, Who) of
 
-[] -\> not\_a\_customer;
+[] -> not_a_customer;
 
-[{Who,Balance}] when X =< Balance -\>
+[{Who,Balance}] when X =< Balance ->
 
 NewBalance = Balance - X,
 
 ets:insert(Tab, {Who, NewBalance}),
 
-{thanks, Who, your\_balance\_is, NewBalance};
+{thanks, Who, your_balance_is, NewBalance};
 
-[{Who,Balance}] -\>
+[{Who,Balance}] ->
 
-{sorry,Who,you\_only\_have,Balance,in\_the\_bank}
+{sorry,Who,you_only_have,Balance,in_the_bank}
 
 **end**,
 
 {reply, Reply, Tab};
 
-handle\_call(stop, \_From, Tab) -\>
+handle_call(stop, _From, Tab) ->
 
 {stop, normal, stopped, Tab}.
 
 
 
-handle\_cast(\_Msg, State) -\> {noreply, State}.
+handle_cast(_Msg, State) -> {noreply, State}.
 
-handle\_info(\_Info, State) -\> {noreply, State}.
+handle_info(_Info, State) -> {noreply, State}.
 
-terminate(\_Reason, \_State) -\> ok.
+terminate(_Reason, _State) -> ok.
 
-code\_change(\_OldVsn, State, Extra) -\> {ok, State}.
+code_change(_OldVsn, State, Extra) -> {ok, State}.
 
 
 
 **16.5 Копаем глубже**
 
-Мы увидели, что gen\_server достаточно прост. Мы не рассмотрели
-некоторые интерфейсные функции gen\_server-а, и не поговорили обо всех
+Мы увидели, что gen_server достаточно прост. Мы не рассмотрели
+некоторые интерфейсные функции gen_server-а, и не поговорили обо всех
 аргументах интерфейсных функций. Если вы поняли основные идеи, то с
-деталями разберетесь, обратившись к документации по gen\_server.
+деталями разберетесь, обратившись к документации по gen_server.
 
 
 
 В этой главе мы увидели только простейшие возможные пути использования
-gen\_server, но этого должно быть достаточно для решения большинства
-задач. Более сложные приложения позволяют gen\_server-у отвечать со
+gen_server, но этого должно быть достаточно для решения большинства
+задач. Более сложные приложения позволяют gen_server-у отвечать со
 значением noreply и и делегировать ответ другому процессу. Информацию об
 этом вы можете прочитать в главе "Принципы дизайна" и в руководстве по
-модулям sys и proc\_lib.
+модулям sys и proc_lib.
 
 
 
@@ -1440,19 +1440,19 @@ EPL is a derivative of the Mozilla Public License (MPL).*
 
 
 
-Availiable from http://www.erlang.org/doc/pdf/design\_principles.pdf.
+Availiable from http://www.erlang.org/doc/pdf/design_principles.pdf.
 
 
 
-http://media.pragprog.com/titles/jaerlang/code/gen\_server\_template.full
+http://media.pragprog.com/titles/jaerlang/code/gen_server_template.full
 
 
 
-http://media.pragprog.com/titles/jaerlang/code/my\_bank.erl
+http://media.pragprog.com/titles/jaerlang/code/my_bank.erl
 
 
 
-http://www.erlang.org/doc/pdf/design\_principles.pdf
+http://www.erlang.org/doc/pdf/design_principles.pdf
 
 
 

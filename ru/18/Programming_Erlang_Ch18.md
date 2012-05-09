@@ -13,8 +13,8 @@
 
 
 Мы создадим два сервера: один будет генерировать простые числа, а второй
-вычислять площадь. Чтобы сделать это, мы будем использовать gen\_server,
-о котором мы говорили в разделе 16.2, "Начнем с gen\_server" на странице
+вычислять площадь. Чтобы сделать это, мы будем использовать gen_server,
+о котором мы говорили в разделе 16.2, "Начнем с gen_server" на странице
 301.
 
 
@@ -139,18 +139,18 @@ E - это событие (любой Эрланг-элемент (term)). RegPr
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/event\_handler.erl"СкачатьHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/event\_handler.erl"
+"http://media.pragprog.com/titles/jaerlang/code/event_handler.erl"СкачатьHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/event_handler.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/event\_handler.erl"eventHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/event\_handler.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/event\_handler.erl"handlerHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/event\_handler.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/event\_handler.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/event_handler.erl"eventHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/event_handler.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/event_handler.erl"handlerHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/event_handler.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/event_handler.erl"erl
 
--module(event\_handler).
+-module(event_handler).
 
--export([make/1, add\_handler/2, event/2]).
+-export([make/1, add_handler/2, event/2]).
 
 
 
@@ -158,41 +158,41 @@ HYPERLINK
 
 %% the handler function is noOp -- so we do nothing with the event
 
-make(Name) -\>
+make(Name) ->
 
-register(Name, spawn(fun() -\> my\_handler(fun no\_op/1) end)).
+register(Name, spawn(fun() -> my_handler(fun no_op/1) end)).
 
 
 
-add\_handler(Name, Fun) -\> Name ! {add, Fun}.
+add_handler(Name, Fun) -> Name ! {add, Fun}.
 
 
 
 %% generate an event
 
-event(Name, X) -\> Name ! {event, X}.
+event(Name, X) -> Name ! {event, X}.
 
 
 
-my\_handler(Fun) -\>
+my_handler(Fun) ->
 
 receive
 
-{add, Fun1} -\>
+{add, Fun1} ->
 
-my\_handler(Fun1);
+my_handler(Fun1);
 
-{event, Any} -\>
+{event, Any} ->
 
 (catch Fun(Any)),
 
-my\_handler(Fun)
+my_handler(Fun)
 
 end.
 
 
 
-no\_op(\_) -\> void.
+no_op(_) -> void.
 
 
 
@@ -200,20 +200,20 @@ API обработчика событий следующий:
 
 
 
-event\_handler:make(Name)
+event_handler:make(Name)
 
 Приготовить "ничего не делающий" обработчик называемый Name (атом). Это
 то место, куда будут направляться события.
 
 
 
-event\_handler:event(Name, X)
+event_handler:event(Name, X)
 
 Отправить событие X обработчику Name.
 
 
 
-event\_handler:add\_handler(Name, Fun)
+event_handler:add_handler(Name, Fun)
 
 Добавить обработчик Fun к обработчику событий Name. Когда происходит
 событие X, обработчик выполнит Fun(X).
@@ -224,11 +224,11 @@ event\_handler:add\_handler(Name, Fun)
 
 
 
-1\> event\_handler:make(errors).
+1> event_handler:make(errors).
 
 true
 
-2\> event\_handler:event(errors, hi).
+2> event_handler:event(errors, hi).
 
 {event,hi}
 
@@ -246,34 +246,34 @@ true
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/motor\_controller.erl"ЗагрузитьHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/motor\_controller.erl"
+"http://media.pragprog.com/titles/jaerlang/code/motor_controller.erl"ЗагрузитьHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/motor_controller.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/motor\_controller.erl"motorHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/motor\_controller.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/motor\_controller.erl"controllerHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/motor\_controller.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/motor\_controller.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/motor_controller.erl"motorHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/motor_controller.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/motor_controller.erl"controllerHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/motor_controller.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/motor_controller.erl"erl
 
--module(motor\_controller).
-
-
-
--export([add\_event\_handler/0]).
+-module(motor_controller).
 
 
 
-add\_event\_handler() -\>
-
-event\_handler:add\_handler(errors, fun controller/1).
+-export([add_event_handler/0]).
 
 
 
-controller(too\_hot) -\>
+add_event_handler() ->
+
+event_handler:add_handler(errors, fun controller/1).
+
+
+
+controller(too_hot) ->
 
 io:format("Turn off the motor\~n" );
 
-controller(X) -\>
+controller(X) ->
 
 io:format("\~w ignored event: \~p\~n" ,[?MODULE, X]).
 
@@ -283,32 +283,32 @@ io:format("\~w ignored event: \~p\~n" ,[?MODULE, X]).
 
 
 
-3\> c(motor\_controller).
+3> c(motor_controller).
 
-{ok,motor\_controller}
+{ok,motor_controller}
 
-4\> motor\_controller:add\_event\_handler().
+4> motor_controller:add_event_handler().
 
-{add,\#Fun<motor\_controller.0.99476749\>}
+{add,\#Fun<motor_controller.0.99476749>}
 
 
 
 Теперь, когда события будут отправлены обработчику, они будут обработаны
-функцией motor\_controller:controller/1:
+функцией motor_controller:controller/1:
 
 
 
-5\> event\_handler:event(errors, cool).
+5> event_handler:event(errors, cool).
 
-motor\_controller ignored event: cool
+motor_controller ignored event: cool
 
 {event,cool}
 
-6\> event\_handler:event(errors, too\_hot).
+6> event_handler:event(errors, too_hot).
 
 Turn off the motor
 
-{event,too\_hot}
+{event,too_hot}
 
 
 
@@ -323,30 +323,30 @@ Turn off the motor
 **Очень позднее связывание с "изменением ваших мыслей"**
 
 Предположим, что мы пишем функцию, которая скрывает конструкцию
-event\_handler:event от программиста. Например, мы пишем следующее:
+event_handler:event от программиста. Например, мы пишем следующее:
 
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"ЗагрузитьHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl" HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"libHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"miscHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"ЗагрузитьHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl" HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"libHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"miscHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"erl
 
 
 
-too\_hot() -\>
+too_hot() ->
 
-event\_handler:event(errors, too\_hot).
+event_handler:event(errors, too_hot).
 
 
 
-В этом случае мы говорим программисту вызывать lib\_misc:too\_hot() в
+В этом случае мы говорим программисту вызывать lib_misc:too_hot() в
 своем коде, когда дела пойдут плохо. В большинстве языков
-программирования вызов функции too\_hot был бы статически или
+программирования вызов функции too_hot был бы статически или
 динамически прилинкован в код программы. Так как вызов прилинкован,
 значит он выполняет фиксированную работу зависящую от кода. Если позднее
 изменится наше понимание и мы решим изменить что-нибудь, то это будет не
@@ -407,11 +407,11 @@ event\_handler:event(errors, too\_hot).
 
 
 
-@spec error\_logger:error\_msg(String) -\> ok
+@spec error_logger:error_msg(String) -> ok
 
 Отправить сообщение об ошибке регистратору ошибок.
 
-1\> error\_logger:error\_msg("An error has occurred\\n").
+1> error_logger:error_msg("An error has occurred\\n").
 
 =ERROR REPORT==== 28-Mar-2007::10:46:28 ===
 
@@ -421,12 +421,12 @@ ok
 
 
 
-@spec error\_logger:error\_msg(Format, Data) -\> ok
+@spec error_logger:error_msg(Format, Data) -> ok
 
 Отправить сообщение об ошибке регистратору ошибок. Аргументы такие же
 как и для io:format(Format, Data).
 
-2\> error\_logger:error\_msg("\~s, an error has occurred\\n", ["Joe"]).
+2> error_logger:error_msg("\~s, an error has occurred\\n", ["Joe"]).
 
 =ERROR REPORT==== 28-Mar-2007::10:47:09 ===
 
@@ -436,7 +436,7 @@ ok
 
 
 
-@spec error\_logger:error\_report(Report) -\> ok
+@spec error_logger:error_report(Report) -> ok
 
 Отправить стандартный отчет об ошибке регистратору ошибок.
 
@@ -446,22 +446,22 @@ ok
 
 • @type Data = term()
 
-3\> error\_logger:error\_report([{tag1,data1},a\_term,{tag2,data}]).
+3> error_logger:error_report([{tag1,data1},a_term,{tag2,data}]).
 
 =ERROR REPORT==== 28-Mar-2007::10:51:51 ===
 
 tag1: data1
 
-a\_term
+a_term
 
 tag2: data
 
 
 
 Это только небольшая часть доступного API. Обсуждение деталей не очень
-интересно. В наших программах мы будем использовать только error\_msg.
+интересно. В наших программах мы будем использовать только error_msg.
 Полное описание можно посмотреть на страницах руководства по
-error\_logger.
+error_logger.
 
 
 
@@ -496,15 +496,15 @@ error\_logger.
 
 
 
-$ erl -boot start\_clean
+$ erl -boot start_clean
 
 Такой запуск обеспечит окружение для разработки программ. Будет
 поддерживаться только простая регистрация ошибок. (Команда erl без
-аргумена boot эквивалентна команде erl -boot start\_clean)
+аргумена boot эквивалентна команде erl -boot start_clean)
 
 
 
-$ erl -boot start\_sasl
+$ erl -boot start_sasl
 
 Такой запуск обеспечит окружение для запуска системы готовой к
 эксплуатации. Библиотеки поддержки системной архитектуры (SASL - System
@@ -528,7 +528,7 @@ SASL без настройки
 
 
 
-$ erl -boot start\_sasl
+$ erl -boot start_sasl
 
 Erlang (BEAM) emulator version 5.5.3 [async-threads:0] ...
 
@@ -536,19 +536,19 @@ Erlang (BEAM) emulator version 5.5.3 [async-threads:0] ...
 
 =PROGRESS REPORT==== 27-Mar-2007::11:49:12 ===
 
-supervisor: {local,sasl\_safe\_sup}
+supervisor: {local,sasl_safe_sup}
 
-started: [{pid,<0.32.0\>},
+started: [{pid,<0.32.0>},
 
-{name,alarm\_handler},
+{name,alarm_handler},
 
-{mfa,{alarm\_handler,start\_link,[]}},
+{mfa,{alarm_handler,start_link,[]}},
 
-{restart\_type,permanent},
+{restart_type,permanent},
 
 {shutdown,2000},
 
-{child\_type,worker}]
+{child_type,worker}]
 
 
 
@@ -558,12 +558,12 @@ Eshell V5.5.3 (abort with \^G)
 
 
 
-Сейчас мы вызовем одну из конструкций error\_logger для отчета об
+Сейчас мы вызовем одну из конструкций error_logger для отчета об
 ошибке:
 
 
 
-1\> error\_logger:error\_msg("This is an error\\n").
+1> error_logger:error_msg("This is an error\\n").
 
 =ERROR REPORT==== 27-Mar-2007::11:53:08 ===
 
@@ -613,7 +613,7 @@ normal или shutdown.
 
 
 Мы можем дополнительно вызвать конкретную конструкцию модуля
-error\_handler, чтобы обработать все три типа отчетов. Это позволит нам
+error_handler, чтобы обработать все три типа отчетов. Это позволит нам
 использовать соощения об ошибках, предупреждения и сообщения
 информационного характера. Три этих термина ничего не означают;
 воспринимайте их как теги, позволяющие программисту различать природу
@@ -640,7 +640,7 @@ HYPERLINK
 
 [{sasl, [
 
-{sasl\_error\_logger, false}
+{sasl_error_logger, false}
 
 ]}].
 
@@ -653,9 +653,9 @@ HYPERLINK
 
 
 
-$ erl -boot start\_sasl -config elog1
+$ erl -boot start_sasl -config elog1
 
-1\> error\_logger:error\_msg("This is an error\\n").
+1> error_logger:error_msg("This is an error\\n").
 
 =ERROR REPORT==== 27-Mar-2007::11:53:08 ===
 
@@ -687,7 +687,7 @@ HYPERLINK
 
 %% All reports go to this file
 
-{sasl\_error\_logger, {file, "/home/joe/error\_logs/THELOG" }}
+{sasl_error_logger, {file, "/home/joe/error_logs/THELOG" }}
 
 ]}].
 
@@ -698,9 +698,9 @@ HYPERLINK
 
 
 
-$ erl -boot start\_sasl -config elog2
+$ erl -boot start_sasl -config elog2
 
-1\> error\_logger:error\_msg("This is an error\\n").
+1> error_logger:error_msg("This is an error\\n").
 
 =ERROR REPORT==== 27-Mar-2007::11:53:08 ===
 
@@ -708,26 +708,26 @@ This is an error ok
 
 
 
-Если мы посмотрим файл /home/joe/error\_logs/THELOG, в начале файла мы
+Если мы посмотрим файл /home/joe/error_logs/THELOG, в начале файла мы
 найдем следующие строки:
 
 
 
 =PROGRESS REPORT==== 28-Mar-2007::11:30:55 ===
 
-supervisor: {local,sasl\_safe\_sup}
+supervisor: {local,sasl_safe_sup}
 
-started: [{pid,<0.34.0\>},
+started: [{pid,<0.34.0>},
 
-{name,alarm\_handler},
+{name,alarm_handler},
 
-{mfa,{alarm\_handler,start\_link,[]}},
+{mfa,{alarm_handler,start_link,[]}},
 
-{restart\_type,permanent},
+{restart_type,permanent},
 
 {shutdown,2000},
 
-{child\_type,worker}]
+{child_type,worker}]
 
 ...
 
@@ -754,29 +754,29 @@ HYPERLINK
 
 [{sasl, [
 
-{sasl\_error\_logger, false},
+{sasl_error_logger, false},
 
 %% задать параметры кольцевого журнала
 
 %% директория с файлом журнала
 
-{error\_logger\_mf\_dir,"/home/joe/error\_logs" },
+{error_logger_mf_dir,"/home/joe/error_logs" },
 
 %% \# кол-во байт выделенное для журнала
 
-{error\_logger\_mf\_maxbytes,10485760}, % 10 MB
+{error_logger_mf_maxbytes,10485760}, % 10 MB
 
 %% максимальное кол-во файлов-журналов
 
-{error\_logger\_mf\_maxfiles, 10}
+{error_logger_mf_maxfiles, 10}
 
 ]}].
 
 
 
-$erl -boot start\_sasl -config elog3
+$erl -boot start_sasl -config elog3
 
-1\> error\_logger:error\_msg("This is an error\\n").
+1> error_logger:error_msg("This is an error\\n").
 
 =ERROR REPORT==== 28-Mar-2007::11:36:19 ===
 
@@ -817,25 +817,25 @@ HYPERLINK
 
 %% minimise shell error logging
 
-{sasl\_error\_logger, false},
+{sasl_error_logger, false},
 
 %% only report errors
 
-{errlog\_type, error},
+{errlog_type, error},
 
 %% define the parameters of the rotating log
 
 %% the log file directory
 
-{error\_logger\_mf\_dir,"/home/joe/error\_logs" },
+{error_logger_mf_dir,"/home/joe/error_logs" },
 
 %% \# bytes per logfile
 
-{error\_logger\_mf\_maxbytes,10485760}, % 10 MB
+{error_logger_mf_maxbytes,10485760}, % 10 MB
 
 %% maximum number of
 
-{error\_logger\_mf\_maxfiles, 10}
+{error_logger_mf_maxfiles, 10}
 
 ]}].
 
@@ -855,19 +855,19 @@ HYPERLINK
 
 
 
-1\> rb:help().
+1> rb:help().
 
 Report Browser Tool - usage
 
 ===========================
 
-rb:start() - start the rb\_server with default options
+rb:start() - start the rb_server with default options
 
 rb:start(Options) - where Options is a list of:
 
-{start\_log, FileName}
+{start_log, FileName}
 
-- default: standard\_io
+- default: standard_io
 
 {max, MaxNoOfReports}
 
@@ -888,45 +888,45 @@ rb:start(Options) - where Options is a list of:
 
 
 
-2\> rb:start([{max,20}]).
+2> rb:start([{max,20}]).
 
 rb: reading report...done.
 
-3\> rb:list().
+3> rb:list().
 
 No Type Process Date Time
 
 == ==== ======= ==== ====
 
-11 progress <0.29.0\> 2007-03-28 11:34:31
+11 progress <0.29.0> 2007-03-28 11:34:31
 
-10 progress <0.29.0\> 2007-03-28 11:34:31
+10 progress <0.29.0> 2007-03-28 11:34:31
 
-9 progress <0.29.0\> 2007-03-28 11:34:31
+9 progress <0.29.0> 2007-03-28 11:34:31
 
-8 progress <0.29.0\> 2007-03-28 11:34:31
+8 progress <0.29.0> 2007-03-28 11:34:31
 
-7 progress <0.22.0\> 2007-03-28 11:34:31
+7 progress <0.22.0> 2007-03-28 11:34:31
 
-6 progress <0.29.0\> 2007-03-28 11:35:53
+6 progress <0.29.0> 2007-03-28 11:35:53
 
-5 progress <0.29.0\> 2007-03-28 11:35:53
+5 progress <0.29.0> 2007-03-28 11:35:53
 
-4 progress <0.29.0\> 2007-03-28 11:35:53
+4 progress <0.29.0> 2007-03-28 11:35:53
 
-3 progress <0.29.0\> 2007-03-28 11:35:53
+3 progress <0.29.0> 2007-03-28 11:35:53
 
-2 progress <0.22.0\> 2007-03-28 11:35:53
+2 progress <0.22.0> 2007-03-28 11:35:53
 
-1 error <0.23.0\> 2007-03-28 11:36:19
+1 error <0.23.0> 2007-03-28 11:36:19
 
 ok
 
-\> rb:show(1).
+> rb:show(1).
 
 
 
-ERROR REPORT <0.40.0\> 2007-03-28 11:36:19
+ERROR REPORT <0.40.0> 2007-03-28 11:36:19
 
 ===========================================================
 
@@ -965,60 +965,60 @@ ok
 
 
 Обработчик тревог это модуль обратных вызовов OTP для поведения
-gen\_event. Вот его код:
+gen_event. Вот его код:
 
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"ЗагрузатьHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"ЗагрузатьHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"myHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"alarmHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"handlerHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"myHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"alarmHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"handlerHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"erl
 
--module(my\_alarm\_handler).
+-module(my_alarm_handler).
 
--behaviour(gen\_event).
+-behaviour(gen_event).
 
 
 
-%% gen\_event callbacks
+%% gen_event callbacks
 
--export([init/1, handle\_event/2, handle\_call/2,
+-export([init/1, handle_event/2, handle_call/2,
 
-handle\_info/2, terminate/2]).
+handle_info/2, terminate/2]).
 
 
 
 %% init(Args) must return {ok, State}
 
-init(Args) -\>
+init(Args) ->
 
-io:format("\*\*\* my\_alarm\_handler init:\~p\~n" ,[Args]),
+io:format("\*\*\* my_alarm_handler init:\~p\~n" ,[Args]),
 
 {ok, 0}.
 
 
 
-handle\_event({set\_alarm, tooHot}, N) -\>
+handle_event({set_alarm, tooHot}, N) ->
 
-error\_logger:error\_msg("\*\*\* Tell the Engineer to turn on the
+error_logger:error_msg("\*\*\* Tell the Engineer to turn on the
 fan\~n" ),
 
 {ok, N+1};
 
-handle\_event({clear\_alarm, tooHot}, N) -\>
+handle_event({clear_alarm, tooHot}, N) ->
 
-error\_logger:error\_msg("\*\*\* Danger over. Turn off the fan\~n" ),
+error_logger:error_msg("\*\*\* Danger over. Turn off the fan\~n" ),
 
 {ok, N};
 
-handle\_event(Event, N) -\>
+handle_event(Event, N) ->
 
 io:format("\*\*\* unmatched event:\~p\~n" ,[Event]),
 
@@ -1026,24 +1026,24 @@ io:format("\*\*\* unmatched event:\~p\~n" ,[Event]),
 
 
 
-handle\_call(\_Request, N) -\> Reply = N, {ok, N, N}.
+handle_call(_Request, N) -> Reply = N, {ok, N, N}.
 
 
 
-handle\_info(\_Info, N) -\> {ok, N}.
+handle_info(_Info, N) -> {ok, N}.
 
 
 
-terminate(\_Reason, \_N) -\> ok.
+terminate(_Reason, _N) -> ok.
 
 
 
-Этот код очень похож на код обратных вызовов gen\_server, который мы
+Этот код очень похож на код обратных вызовов gen_server, который мы
 видели раньше в разделе 16.3, "*Что же происходит когда мы вызываем
 сервер*?", на странице 306. Интересующей нас конструкцией является
-handle\_event(Event, State). Она возвращает {ok, NewState}. Event - это
+handle_event(Event, State). Она возвращает {ok, NewState}. Event - это
 кортеж имеющий форму {EventType, EventArg}, где EventType это атом
-set\_event или clear\_event, а EventArg - это пользовательские
+set_event или clear_event, а EventArg - это пользовательские
 аргументы. Чуть позже мы рассмотрим как генерируются такие события.
 
 
@@ -1053,27 +1053,27 @@ set\_event или clear\_event, а EventArg - это пользовательс�
 
 
 
-$ erl -boot start\_sasl -config elog3
+$ erl -boot start_sasl -config elog3
 
-1\> alarm\_handler:set\_alarm(tooHot).
+1> alarm_handler:set_alarm(tooHot).
 
 ok
 
 =INFO REPORT==== 28-Mar-2007::14:20:06 ===
 
-alarm\_handler: {set,tooHot}
+alarm_handler: {set,tooHot}
 
 
 
-2\> gen\_event:swap\_handler(alarm\_handler,
+2> gen_event:swap_handler(alarm_handler,
 
-{alarm\_handler, swap},
+{alarm_handler, swap},
 
-{my\_alarm\_handler, xyz}).
+{my_alarm_handler, xyz}).
 
-\*\*\* my\_alarm\_handler init:{xyz,{alarm\_handler,[tooHot]}}
+\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[tooHot]}}
 
-3\> alarm\_handler:set\_alarm(tooHot).
+3> alarm_handler:set_alarm(tooHot).
 
 ok
 
@@ -1081,7 +1081,7 @@ ok
 
 \*\*\* Tell the Engineer to turn on the fan
 
-4\> alarm\_handler:clear\_alarm(tooHot).
+4> alarm_handler:clear_alarm(tooHot).
 
 ok
 
@@ -1093,7 +1093,7 @@ ok
 
 Что же здесть присходит?
 
-Мы запустили Эрланг с -boot start\_sasl. Когда мы сделали это, мы
+Мы запустили Эрланг с -boot start_sasl. Когда мы сделали это, мы
 получили стандартный обработчик тревог. Когда мы устанавливаем или
 очищаем тревогу, то ничего не происходит. Это простой "ничего не
 делающий" обработчик событий, мы такие рассматривали раньше.
@@ -1102,12 +1102,12 @@ ok
 информационный отчет. Здесь нет специальной обработки тревог.
 
 Мы установили свой обработчик тревог (строка 2). Аргумент в
-my\_alarm\_handler (xyz) не имеет особого значения; синтаксис требует
+my_alarm_handler (xyz) не имеет особого значения; синтаксис требует
 какое-нибудь значение, но поскольку нам не требуются значения, мы просто
 используем атом xyz, мы сможем увидеть этот аргумент при выводе на
 консоль.
 
- Строка •• my\_alarm\_handler\_init: ... напечатана из нашего модуля
+ Строка •• my_alarm_handler_init: ... напечатана из нашего модуля
 обратных вызовов.
 
 Мы установили и очистили тревогу tooHot (строки 3 и 4). Это отработал
@@ -1122,11 +1122,11 @@ my\_alarm\_handler (xyz) не имеет особого значения; син
 
 
 
-1\> rb:start([{max,20}]).
+1> rb:start([{max,20}]).
 
 rb: reading report...done.
 
-2\> rb:list().
+2> rb:list().
 
 No Type Process Date Time
 
@@ -1134,17 +1134,17 @@ No Type Process Date Time
 
 ...
 
-3 info\_report <0.29.0\> 2007-03-28 14:20:06
+3 info_report <0.29.0> 2007-03-28 14:20:06
 
-2 error <0.29.0\> 2007-03-28 14:22:19
+2 error <0.29.0> 2007-03-28 14:22:19
 
-1 error <0.29.0\> 2007-03-28 14:22:39
+1 error <0.29.0> 2007-03-28 14:22:39
 
-3\> rb:show(1).
+3> rb:show(1).
 
 
 
-ERROR REPORT <0.33.0\> 2007-03-28 14:22:39
+ERROR REPORT <0.33.0> 2007-03-28 14:22:39
 
 =====================================================
 
@@ -1152,9 +1152,9 @@ ERROR REPORT <0.33.0\> 2007-03-28 14:22:39
 
 ok
 
-4\> rb:show(2).
+4> rb:show(2).
 
-ERROR REPORT <0.33.0\> 2007-03-28 14:22:19
+ERROR REPORT <0.33.0> 2007-03-28 14:22:19
 
 =====================================================
 
@@ -1184,8 +1184,8 @@ ERROR REPORT <0.33.0\> 2007-03-28 14:22:19
 
 Наше приложение состоит из двух серверов: сервер простых чисел и сервер
 рассчёта площади. Рассмотрим сервер простых чисел. Он написан с
-использованием поведения gen\_server (см. раздел 16.2 "*Начинаем с
-gen\_server*" на стр. 301). Замечу, что он включает в себя обработку
+использованием поведения gen_server (см. раздел 16.2 "*Начинаем с
+gen_server*" на стр. 301). Замечу, что он включает в себя обработку
 тревог которую мы разработали в предыдущем разделе.
 
 
@@ -1195,56 +1195,56 @@ gen\_server*" на стр. 301). Замечу, что он включает в �
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"ЗагрузитьHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"ЗагрузитьHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"primeHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"primeHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"erl
 
--module(prime\_server).
+-module(prime_server).
 
--behaviour(gen\_server).
-
-
-
--export([new\_prime/1, start\_link/0]).
+-behaviour(gen_server).
 
 
 
-%% gen\_server callbacks
-
--export([init/1, handle\_call/3, handle\_cast/2, handle\_info/2,
-
-terminate/2, code\_change/3]).
+-export([new_prime/1, start_link/0]).
 
 
 
-start\_link() -\>
+%% gen_server callbacks
 
-gen\_server:start\_link({local, ?MODULE}, ?MODULE, [], []).
+-export([init/1, handle_call/3, handle_cast/2, handle_info/2,
+
+terminate/2, code_change/3]).
 
 
 
-new\_prime(N) -\>
+start_link() ->
+
+gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+
+
+
+new_prime(N) ->
 
 %% 20000 is a timeout (ms)
 
-gen\_server:call(?MODULE, {prime, N}, 20000).
+gen_server:call(?MODULE, {prime, N}, 20000).
 
 
 
-init([]) -\>
+init([]) ->
 
-%% Note we must set trap\_exit = true if we
+%% Note we must set trap_exit = true if we
 
 %% want terminate/2 to be called when the application
 
 %% is stopped
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
 io:format("\~p starting\~n" ,[?MODULE]),
 
@@ -1252,21 +1252,21 @@ io:format("\~p starting\~n" ,[?MODULE]),
 
 
 
-handle\_call({prime, K}, \_From, N) -\>
+handle_call({prime, K}, _From, N) ->
 
-{reply, make\_new\_prime(K), N+1}.
-
-
-
-handle\_cast(\_Msg, N) -\> {noreply, N}.
+{reply, make_new_prime(K), N+1}.
 
 
 
-handle\_info(\_Info, N) -\> {noreply, N}.
+handle_cast(_Msg, N) -> {noreply, N}.
 
 
 
-terminate(\_Reason, \_N) -\>
+handle_info(_Info, N) -> {noreply, N}.
+
+
+
+terminate(_Reason, _N) ->
 
 io:format("\~p stopping\~n" ,[?MODULE]),
 
@@ -1274,27 +1274,27 @@ ok.
 
 
 
-code\_change(\_OldVsn, N, \_Extra) -\> {ok, N}.
+code_change(_OldVsn, N, _Extra) -> {ok, N}.
 
 
 
-make\_new\_prime(K) -\>
+make_new_prime(K) ->
 
 if
 
-K \> 100 -\>
+K > 100 ->
 
-alarm\_handler:set\_alarm(tooHot),
+alarm_handler:set_alarm(tooHot),
 
-N = lib\_primes:make\_prime(K),
+N = lib_primes:make_prime(K),
 
-alarm\_handler:clear\_alarm(tooHot),
+alarm_handler:clear_alarm(tooHot),
 
 N;
 
-true -\>
+true ->
 
-lib\_primes:make\_prime(K)
+lib_primes:make_prime(K)
 
 end.
 
@@ -1305,7 +1305,7 @@ end.
 
 
 Теперь рассмотрим сервер площади. Он так же построен на поведении
-gen\_server. Заметьте, написание сервера очень быстрый процесс. Когда я
+gen_server. Заметьте, написание сервера очень быстрый процесс. Когда я
 писал этот пример, я просто скопировал код из сервера простых чисел и
 вставил его в новый сервер. Все заняло несколько минут.
 
@@ -1319,54 +1319,54 @@ gen\_server. Заметьте, написание сервера очень бы
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"ЗагрузитьHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"ЗагрузитьHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"areaHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"areaHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"erl
 
--module(area\_server).
+-module(area_server).
 
--behaviour(gen\_server).
-
-
-
--export([area/1, start\_link/0]).
+-behaviour(gen_server).
 
 
 
-%% gen\_server callbacks
-
--export([init/1, handle\_call/3, handle\_cast/2, handle\_info/2,
-
-terminate/2, code\_change/3]).
+-export([area/1, start_link/0]).
 
 
 
-start\_link() -\>
+%% gen_server callbacks
 
-gen\_server:start\_link({local, ?MODULE}, ?MODULE, [], []).
+-export([init/1, handle_call/3, handle_cast/2, handle_info/2,
 
-
-
-area(Thing) -\>
-
-gen\_server:call(?MODULE, {area, Thing}).
+terminate/2, code_change/3]).
 
 
 
-init([]) -\>
+start_link() ->
 
-%% Note we must set trap\_exit = true if we
+gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+
+
+
+area(Thing) ->
+
+gen_server:call(?MODULE, {area, Thing}).
+
+
+
+init([]) ->
+
+%% Note we must set trap_exit = true if we
 
 %% want terminate/2 to be called when the application
 
 %% is stopped
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
 io:format("\~p starting\~n" ,[?MODULE]),
 
@@ -1374,20 +1374,20 @@ io:format("\~p starting\~n" ,[?MODULE]),
 
 
 
-handle\_call({area, Thing}, \_From, N) -\> {reply, compute\_area(Thing),
+handle_call({area, Thing}, _From, N) -> {reply, compute_area(Thing),
 N+1}.
 
 
 
-handle\_cast(\_Msg, N) -\> {noreply, N}.
+handle_cast(_Msg, N) -> {noreply, N}.
 
 
 
-handle\_info(\_Info, N) -\> {noreply, N}.
+handle_info(_Info, N) -> {noreply, N}.
 
 
 
-terminate(\_Reason, \_N) -\>
+terminate(_Reason, _N) ->
 
 io:format("\~p stopping\~n" ,[?MODULE]),
 
@@ -1395,15 +1395,15 @@ ok.
 
 
 
-code\_change(\_OldVsn, N, \_Extra) -\> {ok, N}.
+code_change(_OldVsn, N, _Extra) -> {ok, N}.
 
 
 
-compute\_area({square, X}) -\> X\*X;
+compute_area({square, X}) -> X\*X;
 
 
 
-compute\_area({rectonge, X, Y}) -\> X\*Y.
+compute_area({rectonge, X, Y}) -> X\*Y.
 
 
 
@@ -1411,7 +1411,7 @@ compute\_area({rectonge, X, Y}) -\> X\*Y.
 
 
 
-надзор one\_for\_one
+надзор one_for_one
 
 Если один процесс рухнет, он будет перезапущен
 
@@ -1421,7 +1421,7 @@ compute\_area({rectonge, X, Y}) -\> X\*Y.
 
 
 
-надзор all\_for\_one
+надзор all_for_one
 
 Если один процесс рухнет, все процессы будут прерваны и перезапущены
 
@@ -1473,7 +1473,7 @@ compute\_area({rectonge, X, Y}) -\> X\*Y.
 
 
 
-init(...) -\>
+init(...) ->
 
 {ok, {RestartStrategy, MaxRestarts, Time},
 
@@ -1481,8 +1481,8 @@ init(...) -\>
 
 
 
-Здесь RestartStrategy это один из атомов one\_for\_one или
-all\_for\_one. MaxRestarts и Time указывают на "частоту перезапуска".
+Здесь RestartStrategy это один из атомов one_for_one или
+all_for_one. MaxRestarts и Time указывают на "частоту перезапуска".
 Если супервизор перезапускает процессы большее число раз, чем указано в
 MaxRestarts за Time секунд, то работа супервизора будет прервана. Это
 делается для того, чтобы остановить бесконечный цикл перезапуска
@@ -1502,65 +1502,65 @@ Worker1, Worker2 и т.д. это кортеж описывающий как з�
 Для начала, думаю, нам надо выбрать имя для нашей компании. Пусть будет
 sellaprime. Задача супервизора sellaprime - это конечно же держать
 всегда запущенными сервер простых чисел и сервер площади. Для этого
-напишем уже другой модуль обратных вызовов, теперь для gen\_supervisor.
+напишем уже другой модуль обратных вызовов, теперь для gen_supervisor.
 Вот этот модуль:
 
 
 
 HYPERLINK ""ЗагрузитьHYPERLINK "" HYPERLINK ""sellaprimeHYPERLINK
-""\_HYPERLINK ""supervisorHYPERLINK "".HYPERLINK ""erl
+""_HYPERLINK ""supervisorHYPERLINK "".HYPERLINK ""erl
 
--module(sellaprime\_supervisor).
+-module(sellaprime_supervisor).
 
 -behaviour(supervisor). % see erl -man supervisor
 
 
 
--export([start/0, start\_in\_shell\_for\_testing/0, start\_link/1,
+-export([start/0, start_in_shell_for_testing/0, start_link/1,
 init/1]).
 
 
 
-start() -\>
+start() ->
 
-spawn(fun() -\>
+spawn(fun() ->
 
-supervisor:start\_link({local,?MODULE}, ?MODULE, \_Arg = [])
+supervisor:start_link({local,?MODULE}, ?MODULE, _Arg = [])
 
 end).
 
 
 
-start\_in\_shell\_for\_testing() -\>
+start_in_shell_for_testing() ->
 
-{ok, Pid} = supervisor:start\_link({local,?MODULE}, ?MODULE, \_Arg =
+{ok, Pid} = supervisor:start_link({local,?MODULE}, ?MODULE, _Arg =
 []),
 
 unlink(Pid).
 
 
 
-start\_link(Args) -\>
+start_link(Args) ->
 
-supervisor:start\_link({local,?MODULE}, ?MODULE, Args).
+supervisor:start_link({local,?MODULE}, ?MODULE, Args).
 
 
 
-init([]) -\>
+init([]) ->
 
 %% Install my personal error handler
 
-gen\_event:swap\_handler(alarm\_handler,
+gen_event:swap_handler(alarm_handler,
 
-{alarm\_handler, swap},
+{alarm_handler, swap},
 
-{my\_alarm\_handler, xyz}),
+{my_alarm_handler, xyz}),
 
-{ok, {{one\_for\_one, 3, 10},
+{ok, {{one_for_one, 3, 10},
 
 [{tag1,
 
-{area\_server, start\_link, []},
+{area_server, start_link, []},
 
 permanent,
 
@@ -1568,11 +1568,11 @@ permanent,
 
 worker,
 
-[area\_server]},
+[area_server]},
 
 {tag2,
 
-{prime\_server, start\_link, []},
+{prime_server, start_link, []},
 
 permanent,
 
@@ -1580,7 +1580,7 @@ permanent,
 
 worker,
 
-[prime\_server]}
+[prime_server]}
 
 ]}}.
 
@@ -1591,13 +1591,13 @@ worker,
 
 
 HYPERLINK ""ЗагрузитьHYPERLINK "" HYPERLINK ""sellaprimeHYPERLINK
-""\_HYPERLINK ""supervisorHYPERLINK "".HYPERLINK ""erl
+""_HYPERLINK ""supervisorHYPERLINK "".HYPERLINK ""erl
 
-{ok, {{one\_for\_one, 3, 10},
+{ok, {{one_for_one, 3, 10},
 
 [{tag1,
 
-{area\_server, start\_link, []},
+{area_server, start_link, []},
 
 permanent,
 
@@ -1605,11 +1605,11 @@ permanent,
 
 worker,
 
-[area\_server]},
+[area_server]},
 
 {tag2,
 
-{prime\_server, start\_link, []},
+{prime_server, start_link, []},
 
 permanent,
 
@@ -1617,7 +1617,7 @@ permanent,
 
 worker,
 
-[prime\_server]}
+[prime_server]}
 
 ]}}.
 
@@ -1692,7 +1692,7 @@ Type = worker | supervisor
 [Mod1]
 
 Это имя модуля обратных вызовов, если дочерний процесс имеет поведение
-supervisor или gen\_server (Возможны и другие значения - см. руководство
+supervisor или gen_server (Возможны и другие значения - см. руководство
 по Супервизору)
 
 
@@ -1710,15 +1710,15 @@ supervisor или gen\_server (Возможны и другие значения
 
 
 
-$ erl -boot start\_sasl -config elog3
+$ erl -boot start_sasl -config elog3
 
-1\> sellaprime\_supervisor:start\_in\_shell\_for\_testing().
+1> sellaprime_supervisor:start_in_shell_for_testing().
 
-\*\*\* my\_alarm\_handler init:{xyz,{alarm\_handler,[]}}
+\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[]}}
 
-area\_server starting
+area_server starting
 
-prime\_server starting
+prime_server starting
 
 
 
@@ -1726,7 +1726,7 @@ prime\_server starting
 
 
 
-2\> area\_server:area({square,10}).
+2> area_server:area({square,10}).
 
 100
 
@@ -1736,13 +1736,13 @@ prime\_server starting
 
 
 
-3\> area\_server:area({rectangle,10,20}).
+3> area_server:area({rectangle,10,20}).
 
-area\_server stopping
+area_server stopping
 
 =ERROR REPORT==== 28-Mar-2007::15:15:54 ===
 
-\*\* Generic server area\_server terminating
+\*\* Generic server area_server terminating
 
 \*\* Last message in was {area,{rectangle,10,20}}
 
@@ -1755,8 +1755,8 @@ area\_server stopping
 Эрланг был разработан для программирования отказоустойчивых систем.
 Первоначальная разработка была сделана в Лаборатории Вычислительной
 Техники Шведской компании Эрикссон. С тех пор группа OTP вела разработку
-с помощью десятков сотрудников компании. Используя gen\_server,
-gen\_supervisor и другие поведения Эрланга строились системы с
+с помощью десятков сотрудников компании. Используя gen_server,
+gen_supervisor и другие поведения Эрланга строились системы с
 надежностью 99.9999999% (тут девять девяток). При правильном
 использовании, механизм обработки ошибок может помочь сделать вашу
 программу работающей вечно (ну, или почти вечно). Регистратор ошибок,
@@ -1770,29 +1770,29 @@ gen\_supervisor и другие поведения Эрланга строили
 \*\* Reason for termination ==
 
 \*\*
-{function\_clause,[{area\_server,compute\_area,[{rectangle,10,20}]},
+{function_clause,[{area_server,compute_area,[{rectangle,10,20}]},
 
-{area\_server,handle\_call,3},
+{area_server,handle_call,3},
 
-{gen\_server,handle\_msg,6},
+{gen_server,handle_msg,6},
 
-{proc\_lib,init\_p,5}]}
+{proc_lib,init_p,5}]}
 
-area\_server starting
+area_server starting
 
-\*\* exited: {{function\_clause,
+\*\* exited: {{function_clause,
 
-[{area\_server,compute\_area,[{rectangle,10,20}]},
+[{area_server,compute_area,[{rectangle,10,20}]},
 
-{area\_server,handle\_call,3},
+{area_server,handle_call,3},
 
-{gen\_server,handle\_msg,6},
+{gen_server,handle_msg,6},
 
-{proc\_lib,init\_p,5}]},
+{proc_lib,init_p,5}]},
 
-{gen\_server,call,
+{gen_server,call,
 
-[area\_server,{area,{rectangle,10,20}}]}} \*\*
+[area_server,{area,{rectangle,10,20}}]}} \*\*
 
 
 
@@ -1807,7 +1807,7 @@ area\_server starting
 
 
 
-4\> area\_server:area({square,25}).
+4> area_server:area({square,25}).
 
 625
 
@@ -1818,7 +1818,7 @@ area\_server starting
 
 
 
-5\> prime\_server:new\_prime(20).
+5> prime_server:new_prime(20).
 
 Generating a 20 digit prime ........
 
@@ -1830,7 +1830,7 @@ Generating a 20 digit prime ........
 
 
 
-6\> prime\_server:new\_prime(120).
+6> prime_server:new_prime(120).
 
 Generating a 120 digit prime
 
@@ -1862,59 +1862,59 @@ Generating a 120 digit prime
 
 
 
-1\> rb:start([{max,20}]).
+1> rb:start([{max,20}]).
 
 rb: reading report...done.
 
 rb: reading report...done.
 
-{ok,<0.53.0\>}
+{ok,<0.53.0>}
 
-2\> rb:list().
+2> rb:list().
 
 No Type Process Date Time
 
 == ==== ======= ==== ====
 
-20 progress <0.29.0\> 2007-03-28 15:05:15
+20 progress <0.29.0> 2007-03-28 15:05:15
 
-19 progress <0.22.0\> 2007-03-28 15:05:15
+19 progress <0.22.0> 2007-03-28 15:05:15
 
-18 progress <0.23.0\> 2007-03-28 15:05:21
+18 progress <0.23.0> 2007-03-28 15:05:21
 
-17 supervisor\_report <0.23.0\> 2007-03-28 15:05:21
+17 supervisor_report <0.23.0> 2007-03-28 15:05:21
 
-16 error <0.23.0\> 2007-03-28 15:07:07
+16 error <0.23.0> 2007-03-28 15:07:07
 
-15 error <0.23.0\> 2007-03-28 15:07:23
+15 error <0.23.0> 2007-03-28 15:07:23
 
-14 error <0.23.0\> 2007-03-28 15:07:41
+14 error <0.23.0> 2007-03-28 15:07:41
 
-13 progress <0.29.0\> 2007-03-28 15:15:07
+13 progress <0.29.0> 2007-03-28 15:15:07
 
-12 progress <0.29.0\> 2007-03-28 15:15:07
+12 progress <0.29.0> 2007-03-28 15:15:07
 
-11 progress <0.29.0\> 2007-03-28 15:15:07
+11 progress <0.29.0> 2007-03-28 15:15:07
 
-10 progress <0.29.0\> 2007-03-28 15:15:07
+10 progress <0.29.0> 2007-03-28 15:15:07
 
-9 progress <0.22.0\> 2007-03-28 15:15:07
+9 progress <0.22.0> 2007-03-28 15:15:07
 
-8 progress <0.23.0\> 2007-03-28 15:15:13
+8 progress <0.23.0> 2007-03-28 15:15:13
 
-7 progress <0.23.0\> 2007-03-28 15:15:13
+7 progress <0.23.0> 2007-03-28 15:15:13
 
-6 error <0.23.0\> 2007-03-28 15:15:54
+6 error <0.23.0> 2007-03-28 15:15:54
 
-5 crash\_report area\_server 2007-03-28 15:15:54
+5 crash_report area_server 2007-03-28 15:15:54
 
-4 supervisor\_report <0.23.0\> 2007-03-28 15:15:54
+4 supervisor_report <0.23.0> 2007-03-28 15:15:54
 
-3 progress <0.23.0\> 2007-03-28 15:15:54
+3 progress <0.23.0> 2007-03-28 15:15:54
 
-2 error <0.29.0\> 2007-03-28 15:22:17
+2 error <0.29.0> 2007-03-28 15:22:17
 
-1 error <0.29.0\> 2007-03-28 15:22:20
+1 error <0.29.0> 2007-03-28 15:22:20
 
 
 
@@ -1923,15 +1923,15 @@ No Type Process Date Time
 
 
 
-9\> rb:show(5).
+9> rb:show(5).
 
-CRASH REPORT <0.43.0\> 2007-03-28 15:15:54
+CRASH REPORT <0.43.0> 2007-03-28 15:15:54
 
 ================================================================
 
 Crashing process
 
-pid <0.43.0\>
+pid <0.43.0>
 
 registe
 
@@ -1950,8 +1950,8 @@ registe
 
 
 Мы создадим два сервера: один будет генерировать простые числа, а второй
-вычислять площадь. Чтобы сделать это, мы будем использовать gen\_server,
-о котором мы говорили в разделе 16.2, "Начнем с gen\_server" на странице
+вычислять площадь. Чтобы сделать это, мы будем использовать gen_server,
+о котором мы говорили в разделе 16.2, "Начнем с gen_server" на странице
 301.
 
 
@@ -2076,18 +2076,18 @@ E - это событие (любой Эрланг-элемент (term)). RegPr
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/event\_handler.erl"СкачатьHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/event\_handler.erl"
+"http://media.pragprog.com/titles/jaerlang/code/event_handler.erl"СкачатьHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/event_handler.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/event\_handler.erl"eventHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/event\_handler.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/event\_handler.erl"handlerHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/event\_handler.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/event\_handler.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/event_handler.erl"eventHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/event_handler.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/event_handler.erl"handlerHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/event_handler.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/event_handler.erl"erl
 
--module(event\_handler).
+-module(event_handler).
 
--export([make/1, add\_handler/2, event/2]).
+-export([make/1, add_handler/2, event/2]).
 
 
 
@@ -2095,41 +2095,41 @@ HYPERLINK
 
 %% the handler function is noOp -- so we do nothing with the event
 
-make(Name) -\>
+make(Name) ->
 
-register(Name, spawn(fun() -\> my\_handler(fun no\_op/1) end)).
+register(Name, spawn(fun() -> my_handler(fun no_op/1) end)).
 
 
 
-add\_handler(Name, Fun) -\> Name ! {add, Fun}.
+add_handler(Name, Fun) -> Name ! {add, Fun}.
 
 
 
 %% generate an event
 
-event(Name, X) -\> Name ! {event, X}.
+event(Name, X) -> Name ! {event, X}.
 
 
 
-my\_handler(Fun) -\>
+my_handler(Fun) ->
 
 receive
 
-{add, Fun1} -\>
+{add, Fun1} ->
 
-my\_handler(Fun1);
+my_handler(Fun1);
 
-{event, Any} -\>
+{event, Any} ->
 
 (catch Fun(Any)),
 
-my\_handler(Fun)
+my_handler(Fun)
 
 end.
 
 
 
-no\_op(\_) -\> void.
+no_op(_) -> void.
 
 
 
@@ -2137,20 +2137,20 @@ API обработчика событий следующий:
 
 
 
-event\_handler:make(Name)
+event_handler:make(Name)
 
 Приготовить "ничего не делающий" обработчик называемый Name (атом). Это
 то место, куда будут направляться события.
 
 
 
-event\_handler:event(Name, X)
+event_handler:event(Name, X)
 
 Отправить событие X обработчику Name.
 
 
 
-event\_handler:add\_handler(Name, Fun)
+event_handler:add_handler(Name, Fun)
 
 Добавить обработчик Fun к обработчику событий Name. Когда происходит
 событие X, обработчик выполнит Fun(X).
@@ -2161,11 +2161,11 @@ event\_handler:add\_handler(Name, Fun)
 
 
 
-1\> event\_handler:make(errors).
+1> event_handler:make(errors).
 
 true
 
-2\> event\_handler:event(errors, hi).
+2> event_handler:event(errors, hi).
 
 {event,hi}
 
@@ -2183,34 +2183,34 @@ true
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/motor\_controller.erl"ЗагрузитьHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/motor\_controller.erl"
+"http://media.pragprog.com/titles/jaerlang/code/motor_controller.erl"ЗагрузитьHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/motor_controller.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/motor\_controller.erl"motorHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/motor\_controller.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/motor\_controller.erl"controllerHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/motor\_controller.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/motor\_controller.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/motor_controller.erl"motorHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/motor_controller.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/motor_controller.erl"controllerHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/motor_controller.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/motor_controller.erl"erl
 
--module(motor\_controller).
-
-
-
--export([add\_event\_handler/0]).
+-module(motor_controller).
 
 
 
-add\_event\_handler() -\>
-
-event\_handler:add\_handler(errors, fun controller/1).
+-export([add_event_handler/0]).
 
 
 
-controller(too\_hot) -\>
+add_event_handler() ->
+
+event_handler:add_handler(errors, fun controller/1).
+
+
+
+controller(too_hot) ->
 
 io:format("Turn off the motor\~n" );
 
-controller(X) -\>
+controller(X) ->
 
 io:format("\~w ignored event: \~p\~n" ,[?MODULE, X]).
 
@@ -2220,32 +2220,32 @@ io:format("\~w ignored event: \~p\~n" ,[?MODULE, X]).
 
 
 
-3\> c(motor\_controller).
+3> c(motor_controller).
 
-{ok,motor\_controller}
+{ok,motor_controller}
 
-4\> motor\_controller:add\_event\_handler().
+4> motor_controller:add_event_handler().
 
-{add,\#Fun<motor\_controller.0.99476749\>}
+{add,\#Fun<motor_controller.0.99476749>}
 
 
 
 Теперь, когда события будут отправлены обработчику, они будут обработаны
-функцией motor\_controller:controller/1:
+функцией motor_controller:controller/1:
 
 
 
-5\> event\_handler:event(errors, cool).
+5> event_handler:event(errors, cool).
 
-motor\_controller ignored event: cool
+motor_controller ignored event: cool
 
 {event,cool}
 
-6\> event\_handler:event(errors, too\_hot).
+6> event_handler:event(errors, too_hot).
 
 Turn off the motor
 
-{event,too\_hot}
+{event,too_hot}
 
 
 
@@ -2260,30 +2260,30 @@ Turn off the motor
 **Очень позднее связывание с "изменением ваших мыслей"**
 
 Предположим, что мы пишем функцию, которая скрывает конструкцию
-event\_handler:event от программиста. Например, мы пишем следующее:
+event_handler:event от программиста. Например, мы пишем следующее:
 
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"ЗагрузитьHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl" HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"libHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"miscHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/lib\_misc.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"ЗагрузитьHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl" HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"libHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"miscHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/lib_misc.erl"erl
 
 
 
-too\_hot() -\>
+too_hot() ->
 
-event\_handler:event(errors, too\_hot).
+event_handler:event(errors, too_hot).
 
 
 
-В этом случае мы говорим программисту вызывать lib\_misc:too\_hot() в
+В этом случае мы говорим программисту вызывать lib_misc:too_hot() в
 своем коде, когда дела пойдут плохо. В большинстве языков
-программирования вызов функции too\_hot был бы статически или
+программирования вызов функции too_hot был бы статически или
 динамически прилинкован в код программы. Так как вызов прилинкован,
 значит он выполняет фиксированную работу зависящую от кода. Если позднее
 изменится наше понимание и мы решим изменить что-нибудь, то это будет не
@@ -2344,11 +2344,11 @@ event\_handler:event(errors, too\_hot).
 
 
 
-@spec error\_logger:error\_msg(String) -\> ok
+@spec error_logger:error_msg(String) -> ok
 
 Отправить сообщение об ошибке регистратору ошибок.
 
-1\> error\_logger:error\_msg("An error has occurred\\n").
+1> error_logger:error_msg("An error has occurred\\n").
 
 =ERROR REPORT==== 28-Mar-2007::10:46:28 ===
 
@@ -2358,12 +2358,12 @@ ok
 
 
 
-@spec error\_logger:error\_msg(Format, Data) -\> ok
+@spec error_logger:error_msg(Format, Data) -> ok
 
 Отправить сообщение об ошибке регистратору ошибок. Аргументы такие же
 как и для io:format(Format, Data).
 
-2\> error\_logger:error\_msg("\~s, an error has occurred\\n", ["Joe"]).
+2> error_logger:error_msg("\~s, an error has occurred\\n", ["Joe"]).
 
 =ERROR REPORT==== 28-Mar-2007::10:47:09 ===
 
@@ -2373,7 +2373,7 @@ ok
 
 
 
-@spec error\_logger:error\_report(Report) -\> ok
+@spec error_logger:error_report(Report) -> ok
 
 Отправить стандартный отчет об ошибке регистратору ошибок.
 
@@ -2383,22 +2383,22 @@ ok
 
 • @type Data = term()
 
-3\> error\_logger:error\_report([{tag1,data1},a\_term,{tag2,data}]).
+3> error_logger:error_report([{tag1,data1},a_term,{tag2,data}]).
 
 =ERROR REPORT==== 28-Mar-2007::10:51:51 ===
 
 tag1: data1
 
-a\_term
+a_term
 
 tag2: data
 
 
 
 Это только небольшая часть доступного API. Обсуждение деталей не очень
-интересно. В наших программах мы будем использовать только error\_msg.
+интересно. В наших программах мы будем использовать только error_msg.
 Полное описание можно посмотреть на страницах руководства по
-error\_logger.
+error_logger.
 
 
 
@@ -2433,15 +2433,15 @@ error\_logger.
 
 
 
-$ erl -boot start\_clean
+$ erl -boot start_clean
 
 Такой запуск обеспечит окружение для разработки программ. Будет
 поддерживаться только простая регистрация ошибок. (Команда erl без
-аргумена boot эквивалентна команде erl -boot start\_clean)
+аргумена boot эквивалентна команде erl -boot start_clean)
 
 
 
-$ erl -boot start\_sasl
+$ erl -boot start_sasl
 
 Такой запуск обеспечит окружение для запуска системы готовой к
 эксплуатации. Библиотеки поддержки системной архитектуры (SASL - System
@@ -2465,7 +2465,7 @@ SASL без настройки
 
 
 
-$ erl -boot start\_sasl
+$ erl -boot start_sasl
 
 Erlang (BEAM) emulator version 5.5.3 [async-threads:0] ...
 
@@ -2473,19 +2473,19 @@ Erlang (BEAM) emulator version 5.5.3 [async-threads:0] ...
 
 =PROGRESS REPORT==== 27-Mar-2007::11:49:12 ===
 
-supervisor: {local,sasl\_safe\_sup}
+supervisor: {local,sasl_safe_sup}
 
-started: [{pid,<0.32.0\>},
+started: [{pid,<0.32.0>},
 
-{name,alarm\_handler},
+{name,alarm_handler},
 
-{mfa,{alarm\_handler,start\_link,[]}},
+{mfa,{alarm_handler,start_link,[]}},
 
-{restart\_type,permanent},
+{restart_type,permanent},
 
 {shutdown,2000},
 
-{child\_type,worker}]
+{child_type,worker}]
 
 
 
@@ -2495,12 +2495,12 @@ Eshell V5.5.3 (abort with \^G)
 
 
 
-Сейчас мы вызовем одну из конструкций error\_logger для отчета об
+Сейчас мы вызовем одну из конструкций error_logger для отчета об
 ошибке:
 
 
 
-1\> error\_logger:error\_msg("This is an error\\n").
+1> error_logger:error_msg("This is an error\\n").
 
 =ERROR REPORT==== 27-Mar-2007::11:53:08 ===
 
@@ -2550,7 +2550,7 @@ normal или shutdown.
 
 
 Мы можем дополнительно вызвать конкретную конструкцию модуля
-error\_handler, чтобы обработать все три типа отчетов. Это позволит нам
+error_handler, чтобы обработать все три типа отчетов. Это позволит нам
 использовать соощения об ошибках, предупреждения и сообщения
 информационного характера. Три этих термина ничего не означают;
 воспринимайте их как теги, позволяющие программисту различать природу
@@ -2577,7 +2577,7 @@ HYPERLINK
 
 [{sasl, [
 
-{sasl\_error\_logger, false}
+{sasl_error_logger, false}
 
 ]}].
 
@@ -2590,9 +2590,9 @@ HYPERLINK
 
 
 
-$ erl -boot start\_sasl -config elog1
+$ erl -boot start_sasl -config elog1
 
-1\> error\_logger:error\_msg("This is an error\\n").
+1> error_logger:error_msg("This is an error\\n").
 
 =ERROR REPORT==== 27-Mar-2007::11:53:08 ===
 
@@ -2624,7 +2624,7 @@ HYPERLINK
 
 %% All reports go to this file
 
-{sasl\_error\_logger, {file, "/home/joe/error\_logs/THELOG" }}
+{sasl_error_logger, {file, "/home/joe/error_logs/THELOG" }}
 
 ]}].
 
@@ -2635,9 +2635,9 @@ HYPERLINK
 
 
 
-$ erl -boot start\_sasl -config elog2
+$ erl -boot start_sasl -config elog2
 
-1\> error\_logger:error\_msg("This is an error\\n").
+1> error_logger:error_msg("This is an error\\n").
 
 =ERROR REPORT==== 27-Mar-2007::11:53:08 ===
 
@@ -2645,26 +2645,26 @@ This is an error ok
 
 
 
-Если мы посмотрим файл /home/joe/error\_logs/THELOG, в начале файла мы
+Если мы посмотрим файл /home/joe/error_logs/THELOG, в начале файла мы
 найдем следующие строки:
 
 
 
 =PROGRESS REPORT==== 28-Mar-2007::11:30:55 ===
 
-supervisor: {local,sasl\_safe\_sup}
+supervisor: {local,sasl_safe_sup}
 
-started: [{pid,<0.34.0\>},
+started: [{pid,<0.34.0>},
 
-{name,alarm\_handler},
+{name,alarm_handler},
 
-{mfa,{alarm\_handler,start\_link,[]}},
+{mfa,{alarm_handler,start_link,[]}},
 
-{restart\_type,permanent},
+{restart_type,permanent},
 
 {shutdown,2000},
 
-{child\_type,worker}]
+{child_type,worker}]
 
 ...
 
@@ -2691,29 +2691,29 @@ HYPERLINK
 
 [{sasl, [
 
-{sasl\_error\_logger, false},
+{sasl_error_logger, false},
 
 %% задать параметры кольцевого журнала
 
 %% директория с файлом журнала
 
-{error\_logger\_mf\_dir,"/home/joe/error\_logs" },
+{error_logger_mf_dir,"/home/joe/error_logs" },
 
 %% \# кол-во байт выделенное для журнала
 
-{error\_logger\_mf\_maxbytes,10485760}, % 10 MB
+{error_logger_mf_maxbytes,10485760}, % 10 MB
 
 %% максимальное кол-во файлов-журналов
 
-{error\_logger\_mf\_maxfiles, 10}
+{error_logger_mf_maxfiles, 10}
 
 ]}].
 
 
 
-$erl -boot start\_sasl -config elog3
+$erl -boot start_sasl -config elog3
 
-1\> error\_logger:error\_msg("This is an error\\n").
+1> error_logger:error_msg("This is an error\\n").
 
 =ERROR REPORT==== 28-Mar-2007::11:36:19 ===
 
@@ -2754,25 +2754,25 @@ HYPERLINK
 
 %% minimise shell error logging
 
-{sasl\_error\_logger, false},
+{sasl_error_logger, false},
 
 %% only report errors
 
-{errlog\_type, error},
+{errlog_type, error},
 
 %% define the parameters of the rotating log
 
 %% the log file directory
 
-{error\_logger\_mf\_dir,"/home/joe/error\_logs" },
+{error_logger_mf_dir,"/home/joe/error_logs" },
 
 %% \# bytes per logfile
 
-{error\_logger\_mf\_maxbytes,10485760}, % 10 MB
+{error_logger_mf_maxbytes,10485760}, % 10 MB
 
 %% maximum number of
 
-{error\_logger\_mf\_maxfiles, 10}
+{error_logger_mf_maxfiles, 10}
 
 ]}].
 
@@ -2792,19 +2792,19 @@ HYPERLINK
 
 
 
-1\> rb:help().
+1> rb:help().
 
 Report Browser Tool - usage
 
 ===========================
 
-rb:start() - start the rb\_server with default options
+rb:start() - start the rb_server with default options
 
 rb:start(Options) - where Options is a list of:
 
-{start\_log, FileName}
+{start_log, FileName}
 
-- default: standard\_io
+- default: standard_io
 
 {max, MaxNoOfReports}
 
@@ -2825,45 +2825,45 @@ rb:start(Options) - where Options is a list of:
 
 
 
-2\> rb:start([{max,20}]).
+2> rb:start([{max,20}]).
 
 rb: reading report...done.
 
-3\> rb:list().
+3> rb:list().
 
 No Type Process Date Time
 
 == ==== ======= ==== ====
 
-11 progress <0.29.0\> 2007-03-28 11:34:31
+11 progress <0.29.0> 2007-03-28 11:34:31
 
-10 progress <0.29.0\> 2007-03-28 11:34:31
+10 progress <0.29.0> 2007-03-28 11:34:31
 
-9 progress <0.29.0\> 2007-03-28 11:34:31
+9 progress <0.29.0> 2007-03-28 11:34:31
 
-8 progress <0.29.0\> 2007-03-28 11:34:31
+8 progress <0.29.0> 2007-03-28 11:34:31
 
-7 progress <0.22.0\> 2007-03-28 11:34:31
+7 progress <0.22.0> 2007-03-28 11:34:31
 
-6 progress <0.29.0\> 2007-03-28 11:35:53
+6 progress <0.29.0> 2007-03-28 11:35:53
 
-5 progress <0.29.0\> 2007-03-28 11:35:53
+5 progress <0.29.0> 2007-03-28 11:35:53
 
-4 progress <0.29.0\> 2007-03-28 11:35:53
+4 progress <0.29.0> 2007-03-28 11:35:53
 
-3 progress <0.29.0\> 2007-03-28 11:35:53
+3 progress <0.29.0> 2007-03-28 11:35:53
 
-2 progress <0.22.0\> 2007-03-28 11:35:53
+2 progress <0.22.0> 2007-03-28 11:35:53
 
-1 error <0.23.0\> 2007-03-28 11:36:19
+1 error <0.23.0> 2007-03-28 11:36:19
 
 ok
 
-\> rb:show(1).
+> rb:show(1).
 
 
 
-ERROR REPORT <0.40.0\> 2007-03-28 11:36:19
+ERROR REPORT <0.40.0> 2007-03-28 11:36:19
 
 ===========================================================
 
@@ -2902,60 +2902,60 @@ ok
 
 
 Обработчик тревог это модуль обратных вызовов OTP для поведения
-gen\_event. Вот его код:
+gen_event. Вот его код:
 
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"ЗагрузатьHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"ЗагрузатьHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"myHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"alarmHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"handlerHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/my\_alarm\_handler.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"myHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"alarmHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"handlerHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/my_alarm_handler.erl"erl
 
--module(my\_alarm\_handler).
+-module(my_alarm_handler).
 
--behaviour(gen\_event).
+-behaviour(gen_event).
 
 
 
-%% gen\_event callbacks
+%% gen_event callbacks
 
--export([init/1, handle\_event/2, handle\_call/2,
+-export([init/1, handle_event/2, handle_call/2,
 
-handle\_info/2, terminate/2]).
+handle_info/2, terminate/2]).
 
 
 
 %% init(Args) must return {ok, State}
 
-init(Args) -\>
+init(Args) ->
 
-io:format("\*\*\* my\_alarm\_handler init:\~p\~n" ,[Args]),
+io:format("\*\*\* my_alarm_handler init:\~p\~n" ,[Args]),
 
 {ok, 0}.
 
 
 
-handle\_event({set\_alarm, tooHot}, N) -\>
+handle_event({set_alarm, tooHot}, N) ->
 
-error\_logger:error\_msg("\*\*\* Tell the Engineer to turn on the
+error_logger:error_msg("\*\*\* Tell the Engineer to turn on the
 fan\~n" ),
 
 {ok, N+1};
 
-handle\_event({clear\_alarm, tooHot}, N) -\>
+handle_event({clear_alarm, tooHot}, N) ->
 
-error\_logger:error\_msg("\*\*\* Danger over. Turn off the fan\~n" ),
+error_logger:error_msg("\*\*\* Danger over. Turn off the fan\~n" ),
 
 {ok, N};
 
-handle\_event(Event, N) -\>
+handle_event(Event, N) ->
 
 io:format("\*\*\* unmatched event:\~p\~n" ,[Event]),
 
@@ -2963,24 +2963,24 @@ io:format("\*\*\* unmatched event:\~p\~n" ,[Event]),
 
 
 
-handle\_call(\_Request, N) -\> Reply = N, {ok, N, N}.
+handle_call(_Request, N) -> Reply = N, {ok, N, N}.
 
 
 
-handle\_info(\_Info, N) -\> {ok, N}.
+handle_info(_Info, N) -> {ok, N}.
 
 
 
-terminate(\_Reason, \_N) -\> ok.
+terminate(_Reason, _N) -> ok.
 
 
 
-Этот код очень похож на код обратных вызовов gen\_server, который мы
+Этот код очень похож на код обратных вызовов gen_server, который мы
 видели раньше в разделе 16.3, "*Что же происходит когда мы вызываем
 сервер*?", на странице 306. Интересующей нас конструкцией является
-handle\_event(Event, State). Она возвращает {ok, NewState}. Event - это
+handle_event(Event, State). Она возвращает {ok, NewState}. Event - это
 кортеж имеющий форму {EventType, EventArg}, где EventType это атом
-set\_event или clear\_event, а EventArg - это пользовательские
+set_event или clear_event, а EventArg - это пользовательские
 аргументы. Чуть позже мы рассмотрим как генерируются такие события.
 
 
@@ -2990,27 +2990,27 @@ set\_event или clear\_event, а EventArg - это пользовательс�
 
 
 
-$ erl -boot start\_sasl -config elog3
+$ erl -boot start_sasl -config elog3
 
-1\> alarm\_handler:set\_alarm(tooHot).
+1> alarm_handler:set_alarm(tooHot).
 
 ok
 
 =INFO REPORT==== 28-Mar-2007::14:20:06 ===
 
-alarm\_handler: {set,tooHot}
+alarm_handler: {set,tooHot}
 
 
 
-2\> gen\_event:swap\_handler(alarm\_handler,
+2> gen_event:swap_handler(alarm_handler,
 
-{alarm\_handler, swap},
+{alarm_handler, swap},
 
-{my\_alarm\_handler, xyz}).
+{my_alarm_handler, xyz}).
 
-\*\*\* my\_alarm\_handler init:{xyz,{alarm\_handler,[tooHot]}}
+\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[tooHot]}}
 
-3\> alarm\_handler:set\_alarm(tooHot).
+3> alarm_handler:set_alarm(tooHot).
 
 ok
 
@@ -3018,7 +3018,7 @@ ok
 
 \*\*\* Tell the Engineer to turn on the fan
 
-4\> alarm\_handler:clear\_alarm(tooHot).
+4> alarm_handler:clear_alarm(tooHot).
 
 ok
 
@@ -3030,7 +3030,7 @@ ok
 
 Что же здесть присходит?
 
-Мы запустили Эрланг с -boot start\_sasl. Когда мы сделали это, мы
+Мы запустили Эрланг с -boot start_sasl. Когда мы сделали это, мы
 получили стандартный обработчик тревог. Когда мы устанавливаем или
 очищаем тревогу, то ничего не происходит. Это простой "ничего не
 делающий" обработчик событий, мы такие рассматривали раньше.
@@ -3039,12 +3039,12 @@ ok
 информационный отчет. Здесь нет специальной обработки тревог.
 
 Мы установили свой обработчик тревог (строка 2). Аргумент в
-my\_alarm\_handler (xyz) не имеет особого значения; синтаксис требует
+my_alarm_handler (xyz) не имеет особого значения; синтаксис требует
 какое-нибудь значение, но поскольку нам не требуются значения, мы просто
 используем атом xyz, мы сможем увидеть этот аргумент при выводе на
 консоль.
 
- Строка •• my\_alarm\_handler\_init: ... напечатана из нашего модуля
+ Строка •• my_alarm_handler_init: ... напечатана из нашего модуля
 обратных вызовов.
 
 Мы установили и очистили тревогу tooHot (строки 3 и 4). Это отработал
@@ -3059,11 +3059,11 @@ my\_alarm\_handler (xyz) не имеет особого значения; син
 
 
 
-1\> rb:start([{max,20}]).
+1> rb:start([{max,20}]).
 
 rb: reading report...done.
 
-2\> rb:list().
+2> rb:list().
 
 No Type Process Date Time
 
@@ -3071,17 +3071,17 @@ No Type Process Date Time
 
 ...
 
-3 info\_report <0.29.0\> 2007-03-28 14:20:06
+3 info_report <0.29.0> 2007-03-28 14:20:06
 
-2 error <0.29.0\> 2007-03-28 14:22:19
+2 error <0.29.0> 2007-03-28 14:22:19
 
-1 error <0.29.0\> 2007-03-28 14:22:39
+1 error <0.29.0> 2007-03-28 14:22:39
 
-3\> rb:show(1).
+3> rb:show(1).
 
 
 
-ERROR REPORT <0.33.0\> 2007-03-28 14:22:39
+ERROR REPORT <0.33.0> 2007-03-28 14:22:39
 
 =====================================================
 
@@ -3089,9 +3089,9 @@ ERROR REPORT <0.33.0\> 2007-03-28 14:22:39
 
 ok
 
-4\> rb:show(2).
+4> rb:show(2).
 
-ERROR REPORT <0.33.0\> 2007-03-28 14:22:19
+ERROR REPORT <0.33.0> 2007-03-28 14:22:19
 
 =====================================================
 
@@ -3121,8 +3121,8 @@ ERROR REPORT <0.33.0\> 2007-03-28 14:22:19
 
 Наше приложение состоит из двух серверов: сервер простых чисел и сервер
 рассчёта площади. Рассмотрим сервер простых чисел. Он написан с
-использованием поведения gen\_server (см. раздел 16.2 "*Начинаем с
-gen\_server*" на стр. 301). Замечу, что он включает в себя обработку
+использованием поведения gen_server (см. раздел 16.2 "*Начинаем с
+gen_server*" на стр. 301). Замечу, что он включает в себя обработку
 тревог которую мы разработали в предыдущем разделе.
 
 
@@ -3132,56 +3132,56 @@ gen\_server*" на стр. 301). Замечу, что он включает в �
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"ЗагрузитьHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"ЗагрузитьHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"primeHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"primeHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"erl
 
--module(prime\_server).
+-module(prime_server).
 
--behaviour(gen\_server).
-
-
-
--export([new\_prime/1, start\_link/0]).
+-behaviour(gen_server).
 
 
 
-%% gen\_server callbacks
-
--export([init/1, handle\_call/3, handle\_cast/2, handle\_info/2,
-
-terminate/2, code\_change/3]).
+-export([new_prime/1, start_link/0]).
 
 
 
-start\_link() -\>
+%% gen_server callbacks
 
-gen\_server:start\_link({local, ?MODULE}, ?MODULE, [], []).
+-export([init/1, handle_call/3, handle_cast/2, handle_info/2,
+
+terminate/2, code_change/3]).
 
 
 
-new\_prime(N) -\>
+start_link() ->
+
+gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+
+
+
+new_prime(N) ->
 
 %% 20000 is a timeout (ms)
 
-gen\_server:call(?MODULE, {prime, N}, 20000).
+gen_server:call(?MODULE, {prime, N}, 20000).
 
 
 
-init([]) -\>
+init([]) ->
 
-%% Note we must set trap\_exit = true if we
+%% Note we must set trap_exit = true if we
 
 %% want terminate/2 to be called when the application
 
 %% is stopped
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
 io:format("\~p starting\~n" ,[?MODULE]),
 
@@ -3189,21 +3189,21 @@ io:format("\~p starting\~n" ,[?MODULE]),
 
 
 
-handle\_call({prime, K}, \_From, N) -\>
+handle_call({prime, K}, _From, N) ->
 
-{reply, make\_new\_prime(K), N+1}.
-
-
-
-handle\_cast(\_Msg, N) -\> {noreply, N}.
+{reply, make_new_prime(K), N+1}.
 
 
 
-handle\_info(\_Info, N) -\> {noreply, N}.
+handle_cast(_Msg, N) -> {noreply, N}.
 
 
 
-terminate(\_Reason, \_N) -\>
+handle_info(_Info, N) -> {noreply, N}.
+
+
+
+terminate(_Reason, _N) ->
 
 io:format("\~p stopping\~n" ,[?MODULE]),
 
@@ -3211,27 +3211,27 @@ ok.
 
 
 
-code\_change(\_OldVsn, N, \_Extra) -\> {ok, N}.
+code_change(_OldVsn, N, _Extra) -> {ok, N}.
 
 
 
-make\_new\_prime(K) -\>
+make_new_prime(K) ->
 
 if
 
-K \> 100 -\>
+K > 100 ->
 
-alarm\_handler:set\_alarm(tooHot),
+alarm_handler:set_alarm(tooHot),
 
-N = lib\_primes:make\_prime(K),
+N = lib_primes:make_prime(K),
 
-alarm\_handler:clear\_alarm(tooHot),
+alarm_handler:clear_alarm(tooHot),
 
 N;
 
-true -\>
+true ->
 
-lib\_primes:make\_prime(K)
+lib_primes:make_prime(K)
 
 end.
 
@@ -3242,7 +3242,7 @@ end.
 
 
 Теперь рассмотрим сервер площади. Он так же построен на поведении
-gen\_server. Заметьте, написание сервера очень быстрый процесс. Когда я
+gen_server. Заметьте, написание сервера очень быстрый процесс. Когда я
 писал этот пример, я просто скопировал код из сервера простых чисел и
 вставил его в новый сервер. Все заняло несколько минут.
 
@@ -3256,54 +3256,54 @@ gen\_server. Заметьте, написание сервера очень бы
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"ЗагрузитьHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"ЗагрузитьHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"areaHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/prime\_server.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"areaHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/prime_server.erl"erl
 
--module(area\_server).
+-module(area_server).
 
--behaviour(gen\_server).
-
-
-
--export([area/1, start\_link/0]).
+-behaviour(gen_server).
 
 
 
-%% gen\_server callbacks
-
--export([init/1, handle\_call/3, handle\_cast/2, handle\_info/2,
-
-terminate/2, code\_change/3]).
+-export([area/1, start_link/0]).
 
 
 
-start\_link() -\>
+%% gen_server callbacks
 
-gen\_server:start\_link({local, ?MODULE}, ?MODULE, [], []).
+-export([init/1, handle_call/3, handle_cast/2, handle_info/2,
 
-
-
-area(Thing) -\>
-
-gen\_server:call(?MODULE, {area, Thing}).
+terminate/2, code_change/3]).
 
 
 
-init([]) -\>
+start_link() ->
 
-%% Note we must set trap\_exit = true if we
+gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+
+
+
+area(Thing) ->
+
+gen_server:call(?MODULE, {area, Thing}).
+
+
+
+init([]) ->
+
+%% Note we must set trap_exit = true if we
 
 %% want terminate/2 to be called when the application
 
 %% is stopped
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
 io:format("\~p starting\~n" ,[?MODULE]),
 
@@ -3311,20 +3311,20 @@ io:format("\~p starting\~n" ,[?MODULE]),
 
 
 
-handle\_call({area, Thing}, \_From, N) -\> {reply, compute\_area(Thing),
+handle_call({area, Thing}, _From, N) -> {reply, compute_area(Thing),
 N+1}.
 
 
 
-handle\_cast(\_Msg, N) -\> {noreply, N}.
+handle_cast(_Msg, N) -> {noreply, N}.
 
 
 
-handle\_info(\_Info, N) -\> {noreply, N}.
+handle_info(_Info, N) -> {noreply, N}.
 
 
 
-terminate(\_Reason, \_N) -\>
+terminate(_Reason, _N) ->
 
 io:format("\~p stopping\~n" ,[?MODULE]),
 
@@ -3332,21 +3332,21 @@ ok.
 
 
 
-code\_change(\_OldVsn, N, \_Extra) -\> {ok, N}.
+code_change(_OldVsn, N, _Extra) -> {ok, N}.
 
 
 
-compute\_area({square, X}) -\> X\*X;
+compute_area({square, X}) -> X\*X;
 
 
 
-compute\_area({rectonge, X, Y}) -\> X\*Y.
+compute_area({rectonge, X, Y}) -> X\*Y.
 
 
 
 
 
-надзор one\_for\_one
+надзор one_for_one
 
 Если один процесс рухнет, он будет перезапущен
 
@@ -3356,7 +3356,7 @@ compute\_area({rectonge, X, Y}) -\> X\*Y.
 
 
 
-надзор all\_for\_one
+надзор all_for_one
 
 Если один процесс рухнет, все процессы будут прерваны и перезапущены
 
@@ -3408,7 +3408,7 @@ compute\_area({rectonge, X, Y}) -\> X\*Y.
 
 
 
-init(...) -\>
+init(...) ->
 
 {ok, {RestartStrategy, MaxRestarts, Time},
 
@@ -3416,8 +3416,8 @@ init(...) -\>
 
 
 
-Здесь RestartStrategy это один из атомов one\_for\_one или
-all\_for\_one. MaxRestarts и Time указывают на "частоту перезапуска".
+Здесь RestartStrategy это один из атомов one_for_one или
+all_for_one. MaxRestarts и Time указывают на "частоту перезапуска".
 Если супервизор перезапускает процессы большее число раз, чем указано в
 MaxRestarts за Time секунд, то работа супервизора будет прервана. Это
 делается для того, чтобы остановить бесконечный цикл перезапуска
@@ -3437,65 +3437,65 @@ Worker1, Worker2 и т.д. это кортеж описывающий как з�
 Для начала, думаю, нам надо выбрать имя для нашей компании. Пусть будет
 sellaprime. Задача супервизора sellaprime - это конечно же держать
 всегда запущенными сервер простых чисел и сервер площади. Для этого
-напишем уже другой модуль обратных вызовов, теперь для gen\_supervisor.
+напишем уже другой модуль обратных вызовов, теперь для gen_supervisor.
 Вот этот модуль:
 
 
 
 HYPERLINK ""ЗагрузитьHYPERLINK "" HYPERLINK ""sellaprimeHYPERLINK
-""\_HYPERLINK ""supervisorHYPERLINK "".HYPERLINK ""erl
+""_HYPERLINK ""supervisorHYPERLINK "".HYPERLINK ""erl
 
--module(sellaprime\_supervisor).
+-module(sellaprime_supervisor).
 
 -behaviour(supervisor). % see erl -man supervisor
 
 
 
--export([start/0, start\_in\_shell\_for\_testing/0, start\_link/1,
+-export([start/0, start_in_shell_for_testing/0, start_link/1,
 init/1]).
 
 
 
-start() -\>
+start() ->
 
-spawn(fun() -\>
+spawn(fun() ->
 
-supervisor:start\_link({local,?MODULE}, ?MODULE, \_Arg = [])
+supervisor:start_link({local,?MODULE}, ?MODULE, _Arg = [])
 
 end).
 
 
 
-start\_in\_shell\_for\_testing() -\>
+start_in_shell_for_testing() ->
 
-{ok, Pid} = supervisor:start\_link({local,?MODULE}, ?MODULE, \_Arg =
+{ok, Pid} = supervisor:start_link({local,?MODULE}, ?MODULE, _Arg =
 []),
 
 unlink(Pid).
 
 
 
-start\_link(Args) -\>
+start_link(Args) ->
 
-supervisor:start\_link({local,?MODULE}, ?MODULE, Args).
+supervisor:start_link({local,?MODULE}, ?MODULE, Args).
 
 
 
-init([]) -\>
+init([]) ->
 
 %% Install my personal error handler
 
-gen\_event:swap\_handler(alarm\_handler,
+gen_event:swap_handler(alarm_handler,
 
-{alarm\_handler, swap},
+{alarm_handler, swap},
 
-{my\_alarm\_handler, xyz}),
+{my_alarm_handler, xyz}),
 
-{ok, {{one\_for\_one, 3, 10},
+{ok, {{one_for_one, 3, 10},
 
 [{tag1,
 
-{area\_server, start\_link, []},
+{area_server, start_link, []},
 
 permanent,
 
@@ -3503,11 +3503,11 @@ permanent,
 
 worker,
 
-[area\_server]},
+[area_server]},
 
 {tag2,
 
-{prime\_server, start\_link, []},
+{prime_server, start_link, []},
 
 permanent,
 
@@ -3515,7 +3515,7 @@ permanent,
 
 worker,
 
-[prime\_server]}
+[prime_server]}
 
 ]}}.
 
@@ -3526,13 +3526,13 @@ worker,
 
 
 HYPERLINK ""ЗагрузитьHYPERLINK "" HYPERLINK ""sellaprimeHYPERLINK
-""\_HYPERLINK ""supervisorHYPERLINK "".HYPERLINK ""erl
+""_HYPERLINK ""supervisorHYPERLINK "".HYPERLINK ""erl
 
-{ok, {{one\_for\_one, 3, 10},
+{ok, {{one_for_one, 3, 10},
 
 [{tag1,
 
-{area\_server, start\_link, []},
+{area_server, start_link, []},
 
 permanent,
 
@@ -3540,11 +3540,11 @@ permanent,
 
 worker,
 
-[area\_server]},
+[area_server]},
 
 {tag2,
 
-{prime\_server, start\_link, []},
+{prime_server, start_link, []},
 
 permanent,
 
@@ -3552,7 +3552,7 @@ permanent,
 
 worker,
 
-[prime\_server]}
+[prime_server]}
 
 ]}}.
 
@@ -3627,7 +3627,7 @@ Type = worker | supervisor
 [Mod1]
 
 Это имя модуля обратных вызовов, если дочерний процесс имеет поведение
-supervisor или gen\_server (Возможны и другие значения - см. руководство
+supervisor или gen_server (Возможны и другие значения - см. руководство
 по Супервизору)
 
 
@@ -3645,15 +3645,15 @@ supervisor или gen\_server (Возможны и другие значения
 
 
 
-$ erl -boot start\_sasl -config elog3
+$ erl -boot start_sasl -config elog3
 
-1\> sellaprime\_supervisor:start\_in\_shell\_for\_testing().
+1> sellaprime_supervisor:start_in_shell_for_testing().
 
-\*\*\* my\_alarm\_handler init:{xyz,{alarm\_handler,[]}}
+\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[]}}
 
-area\_server starting
+area_server starting
 
-prime\_server starting
+prime_server starting
 
 
 
@@ -3661,7 +3661,7 @@ prime\_server starting
 
 
 
-2\> area\_server:area({square,10}).
+2> area_server:area({square,10}).
 
 100
 
@@ -3671,13 +3671,13 @@ prime\_server starting
 
 
 
-3\> area\_server:area({rectangle,10,20}).
+3> area_server:area({rectangle,10,20}).
 
-area\_server stopping
+area_server stopping
 
 =ERROR REPORT==== 28-Mar-2007::15:15:54 ===
 
-\*\* Generic server area\_server terminating
+\*\* Generic server area_server terminating
 
 \*\* Last message in was {area,{rectangle,10,20}}
 
@@ -3690,8 +3690,8 @@ area\_server stopping
 Эрланг был разработан для программирования отказоустойчивых систем.
 Первоначальная разработка была сделана в Лаборатории Вычислительной
 Техники Шведской компании Эрикссон. С тех пор группа OTP вела разработку
-с помощью десятков сотрудников компании. Используя gen\_server,
-gen\_supervisor и другие поведения Эрланга строились системы с
+с помощью десятков сотрудников компании. Используя gen_server,
+gen_supervisor и другие поведения Эрланга строились системы с
 надежностью 99.9999999% (тут девять девяток). При правильном
 использовании, механизм обработки ошибок может помочь сделать вашу
 программу работающей вечно (ну, или почти вечно). Регистратор ошибок,
@@ -3705,29 +3705,29 @@ gen\_supervisor и другие поведения Эрланга строили
 \*\* Reason for termination ==
 
 \*\*
-{function\_clause,[{area\_server,compute\_area,[{rectangle,10,20}]},
+{function_clause,[{area_server,compute_area,[{rectangle,10,20}]},
 
-{area\_server,handle\_call,3},
+{area_server,handle_call,3},
 
-{gen\_server,handle\_msg,6},
+{gen_server,handle_msg,6},
 
-{proc\_lib,init\_p,5}]}
+{proc_lib,init_p,5}]}
 
-area\_server starting
+area_server starting
 
-\*\* exited: {{function\_clause,
+\*\* exited: {{function_clause,
 
-[{area\_server,compute\_area,[{rectangle,10,20}]},
+[{area_server,compute_area,[{rectangle,10,20}]},
 
-{area\_server,handle\_call,3},
+{area_server,handle_call,3},
 
-{gen\_server,handle\_msg,6},
+{gen_server,handle_msg,6},
 
-{proc\_lib,init\_p,5}]},
+{proc_lib,init_p,5}]},
 
-{gen\_server,call,
+{gen_server,call,
 
-[area\_server,{area,{rectangle,10,20}}]}} \*\*
+[area_server,{area,{rectangle,10,20}}]}} \*\*
 
 
 
@@ -3742,7 +3742,7 @@ area\_server starting
 
 
 
-4\> area\_server:area({square,25}).
+4> area_server:area({square,25}).
 
 625
 
@@ -3753,7 +3753,7 @@ area\_server starting
 
 
 
-5\> prime\_server:new\_prime(20).
+5> prime_server:new_prime(20).
 
 Generating a 20 digit prime ........
 
@@ -3765,7 +3765,7 @@ Generating a 20 digit prime ........
 
 
 
-6\> prime\_server:new\_prime(120).
+6> prime_server:new_prime(120).
 
 Generating a 120 digit prime
 
@@ -3797,59 +3797,59 @@ Generating a 120 digit prime
 
 
 
-1\> rb:start([{max,20}]).
+1> rb:start([{max,20}]).
 
 rb: reading report...done.
 
 rb: reading report...done.
 
-{ok,<0.53.0\>}
+{ok,<0.53.0>}
 
-2\> rb:list().
+2> rb:list().
 
 No Type Process Date Time
 
 == ==== ======= ==== ====
 
-20 progress <0.29.0\> 2007-03-28 15:05:15
+20 progress <0.29.0> 2007-03-28 15:05:15
 
-19 progress <0.22.0\> 2007-03-28 15:05:15
+19 progress <0.22.0> 2007-03-28 15:05:15
 
-18 progress <0.23.0\> 2007-03-28 15:05:21
+18 progress <0.23.0> 2007-03-28 15:05:21
 
-17 supervisor\_report <0.23.0\> 2007-03-28 15:05:21
+17 supervisor_report <0.23.0> 2007-03-28 15:05:21
 
-16 error <0.23.0\> 2007-03-28 15:07:07
+16 error <0.23.0> 2007-03-28 15:07:07
 
-15 error <0.23.0\> 2007-03-28 15:07:23
+15 error <0.23.0> 2007-03-28 15:07:23
 
-14 error <0.23.0\> 2007-03-28 15:07:41
+14 error <0.23.0> 2007-03-28 15:07:41
 
-13 progress <0.29.0\> 2007-03-28 15:15:07
+13 progress <0.29.0> 2007-03-28 15:15:07
 
-12 progress <0.29.0\> 2007-03-28 15:15:07
+12 progress <0.29.0> 2007-03-28 15:15:07
 
-11 progress <0.29.0\> 2007-03-28 15:15:07
+11 progress <0.29.0> 2007-03-28 15:15:07
 
-10 progress <0.29.0\> 2007-03-28 15:15:07
+10 progress <0.29.0> 2007-03-28 15:15:07
 
-9 progress <0.22.0\> 2007-03-28 15:15:07
+9 progress <0.22.0> 2007-03-28 15:15:07
 
-8 progress <0.23.0\> 2007-03-28 15:15:13
+8 progress <0.23.0> 2007-03-28 15:15:13
 
-7 progress <0.23.0\> 2007-03-28 15:15:13
+7 progress <0.23.0> 2007-03-28 15:15:13
 
-6 error <0.23.0\> 2007-03-28 15:15:54
+6 error <0.23.0> 2007-03-28 15:15:54
 
-5 crash\_report area\_server 2007-03-28 15:15:54
+5 crash_report area_server 2007-03-28 15:15:54
 
-4 supervisor\_report <0.23.0\> 2007-03-28 15:15:54
+4 supervisor_report <0.23.0> 2007-03-28 15:15:54
 
-3 progress <0.23.0\> 2007-03-28 15:15:54
+3 progress <0.23.0> 2007-03-28 15:15:54
 
-2 error <0.29.0\> 2007-03-28 15:22:17
+2 error <0.29.0> 2007-03-28 15:22:17
 
-1 error <0.29.0\> 2007-03-28 15:22:20
+1 error <0.29.0> 2007-03-28 15:22:20
 
 
 
@@ -3858,61 +3858,61 @@ No Type Process Date Time
 
 
 
-9\> rb:show(5).
+9> rb:show(5).
 
-CRASH REPORT <0.43.0\> 2007-03-28 15:15:54
+CRASH REPORT <0.43.0> 2007-03-28 15:15:54
 
 ================================================================
 
 Crashing process
 
-pid <0.43.0\>
+pid <0.43.0>
 
-registered\_name area\_server
+registered_name area_server
 
-error\_info
+error_info
 
-{function\_clause,[{area\_server,compute\_area,[{rectangle,10,20}]},
+{function_clause,[{area_server,compute_area,[{rectangle,10,20}]},
 
-{area\_server,handle\_call,3},
+{area_server,handle_call,3},
 
-{gen\_server,handle\_msg,6},
+{gen_server,handle_msg,6},
 
-{proc\_lib,init\_p,5}]}
+{proc_lib,init_p,5}]}
 
-initial\_call
+initial_call
 
-{gen,init\_it,
+{gen,init_it,
 
-[gen\_server,
+[gen_server,
 
-<0.42.0\>,
+<0.42.0>,
 
-<0.42.0\>,
+<0.42.0>,
 
-{local,area\_server},
+{local,area_server},
 
-area\_server,
+area_server,
 
 [],
 
 []]}
 
-ancestors [sellaprime\_supervisor,<0.40.0\>]
+ancestors [sellaprime_supervisor,<0.40.0>]
 
 messages []
 
-links [<0.42.0\>]
+links [<0.42.0>]
 
 dictionary []
 
-trap\_exit false
+trap_exit false
 
 status running
 
-heap\_size 233
+heap_size 233
 
-stack\_size 21
+stack_size 21
 
 reductions 199
 
@@ -3920,16 +3920,16 @@ ok
 
 
 
-Распечатка {function\_clause, compute\_area, ...} отображает точное
+Распечатка {function_clause, compute_area, ...} отображает точное
 место в программе сервера где произошла авария. Это должно помочь легко
 локализовать и исправить ошибку. Давайте перейдем к рассмотрению
 следующих ошибок:
 
 
 
-10\> rb:show(2).
+10> rb:show(2).
 
-ERROR REPORT <0.33.0\> 2007-03-28 15:22:17
+ERROR REPORT <0.33.0> 2007-03-28 15:22:17
 
 ================================================================
 
@@ -3941,9 +3941,9 @@ ERROR REPORT <0.33.0\> 2007-03-28 15:22:17
 
 
 
-10\> rb:show(1).
+10> rb:show(1).
 
-ERROR REPORT <0.33.0\> 2007-03-28 15:22:20
+ERROR REPORT <0.33.0> 2007-03-28 15:22:20
 
 ================================================================
 
@@ -3983,17 +3983,17 @@ HYPERLINK
 
 {vsn, "1.0" },
 
-{modules, [sellaprime\_app, sellaprime\_supervisor, area\_server,
+{modules, [sellaprime_app, sellaprime_supervisor, area_server,
 
-prime\_server, lib\_primes, my\_alarm\_handler]},
+prime_server, lib_primes, my_alarm_handler]},
 
-{registered,[area\_server, prime\_server, sellaprime\_super]},
+{registered,[area_server, prime_server, sellaprime_super]},
 
 {applications, [kernel,stdlib]},
 
-{mod, {sellaprime\_app,[]}},
+{mod, {sellaprime_app,[]}},
 
-{start\_phases, []}
+{start_phases, []}
 
 ]}.
 
@@ -4005,16 +4005,16 @@ prime\_server, lib\_primes, my\_alarm\_handler]},
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/sellaprime\_app.erl"ЗагрузитьHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/sellaprime\_app.erl"
+"http://media.pragprog.com/titles/jaerlang/code/sellaprime_app.erl"ЗагрузитьHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/sellaprime_app.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/sellaprime\_app.erl"sellaprimeHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/sellaprime\_app.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/sellaprime\_app.erl"appHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/sellaprime\_app.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/sellaprime\_app.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/sellaprime_app.erl"sellaprimeHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/sellaprime_app.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/sellaprime_app.erl"appHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/sellaprime_app.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/sellaprime_app.erl"erl
 
--module(sellaprime\_app).
+-module(sellaprime_app).
 
 -behaviour(application).
 
@@ -4024,7 +4024,7 @@ HYPERLINK
 
 %%--------------------------------------------------------------------
 
-%% Function: start(Type, StartArgs) -\> {ok, Pid} |
+%% Function: start(Type, StartArgs) -> {ok, Pid} |
 
 %% {ok, Pid, State} |
 
@@ -4045,15 +4045,15 @@ processes
 
 
 
-start(\_Type, StartArgs) -\>
+start(_Type, StartArgs) ->
 
-sellaprime\_supervisor:start\_link(StartArgs).
+sellaprime_supervisor:start_link(StartArgs).
 
 
 
 %%--------------------------------------------------------------------
 
-%% Function: stop(State) -\> void()
+%% Function: stop(State) -> void()
 
 %% Description: This function is called whenever an application
 
@@ -4065,7 +4065,7 @@ sellaprime\_supervisor:start\_link(StartArgs).
 
 
 
-stop(\_State) -\>
+stop(_State) ->
 
 ok.
 
@@ -4077,9 +4077,9 @@ ok.
 
 
 
-$ erl -boot start\_sasl -config elog3
+$ erl -boot start_sasl -config elog3
 
-1\> application:loaded\_applications().
+1> application:loaded_applications().
 
 [{kernel,"ERTS CXC 138 10","2.11.3"},
 
@@ -4087,11 +4087,11 @@ $ erl -boot start\_sasl -config elog3
 
 {sasl,"SASL CXC 138 11","2.1.4"}]
 
-2\> application:load(sellaprime).
+2> application:load(sellaprime).
 
 ok
 
-3\> application:loaded\_applications().
+3> application:loaded_applications().
 
 [{sellaprime,"The Prime Number Shop","1.0"},
 
@@ -4101,21 +4101,21 @@ ok
 
 {sasl,"SASL CXC 138 11","2.1.4"}]
 
-4\> application:start(sellaprime).
+4> application:start(sellaprime).
 
-\*\*\* my\_alarm\_handler init:{xyz,{alarm\_handler,[]}}
+\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[]}}
 
-area\_server starting
+area_server starting
 
-prime\_server starting
+prime_server starting
 
 ok
 
-5\> application:stop(sellaprime).
+5> application:stop(sellaprime).
 
-prime\_server stopping
+prime_server stopping
 
-area\_server stopping
+area_server stopping
 
 
 
@@ -4129,11 +4129,11 @@ type: temporary
 
 ok
 
-6\> application:unload(sellaprime).
+6> application:unload(sellaprime).
 
 ok
 
-7\> application:loaded\_applications().
+7> application:loaded_applications().
 
 [{kernel,"ERTS CXC 138 10","2.11.4"},
 
@@ -4165,25 +4165,25 @@ ok
 
 
 
-$ erl -boot start\_sasl -config elog3
+$ erl -boot start_sasl -config elog3
 
-1\> application:start(sellaprime).
+1> application:start(sellaprime).
 
-\*\*\* my\_alarm\_handler init:{xyz,{alarm\_handler,[]}}
+\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[]}}
 
-area\_server starting
+area_server starting
 
-prime\_server starting
-
-ok
-
-2\> init:stop().
+prime_server starting
 
 ok
 
-prime\_server stopping
+2> init:stop().
 
-area\_server stopping
+ok
+
+prime_server stopping
+
+area_server stopping
 
 $
 
@@ -4191,7 +4191,7 @@ $
 
 Две строки следующие за командой номер 2 получены из сервера площади и
 сервера простых чисел, они показывают нам, что был вызван метод
-terminate/2 из модуля обратных вызовов gen\_server.
+terminate/2 из модуля обратных вызовов gen_server.
 
 
 
@@ -4223,25 +4223,25 @@ terminate/2 из модуля обратных вызовов gen\_server.
 
 *Content*
 
-area\_server.erl
+area_server.erl
 
-Сервер областей - модуль обратных вызовов gen\_server
+Сервер областей - модуль обратных вызовов gen_server
 
-prime\_server.erl
+prime_server.erl
 
-Сервер простых чисел - модуль обратных вызовов gen\_server
+Сервер простых чисел - модуль обратных вызовов gen_server
 
-sellaprim\_supervisor.erl
+sellaprim_supervisor.erl
 
 Модуль обратных вызовов Супервизора
 
-sellaprim\_app.erl
+sellaprim_app.erl
 
 Модуль обратных вызовов Приложения
 
-my\_alam\_handler.erl
+my_alam_handler.erl
 
-Модуль обратных вызовов Событий для gen\_event
+Модуль обратных вызовов Событий для gen_event
 
 sellaprime.app
 
@@ -4260,8 +4260,8 @@ elog4.config
 
 
 Мы запускаем систему следующими командами:
- $ erl -boot start\_sasl -config elog4.config
- 1\> application:start(sellaprime).
+ $ erl -boot start_sasl -config elog4.config
+ 1> application:start(sellaprime).
  ...
 
  Файл sellaprime.app должен находиться в корневом каталоге из которого
@@ -4269,20 +4269,20 @@ elog4.config
 
  В этом случае контроллер приложения сможет обнаружить {mod, ...},
 объявленый в sellaprime.app. Он содержит имя контроллера приложения. И
-конечно же это модуль sellaprime\_app.
+конечно же это модуль sellaprime_app.
 
-Вызвается обратный вызов sellaprime\_app:start/2.
+Вызвается обратный вызов sellaprime_app:start/2.
 
-sellaprime\_app:start/2 вызывает sellaprime\_supervisor:start\_link/2,
+sellaprime_app:start/2 вызывает sellaprime_supervisor:start_link/2,
 который, в свою очередь, запускает супервизор sellaprime.
 
-Вызвается обратный вызов супервизора sellaprime\_supervisor:init/1 - он
+Вызвается обратный вызов супервизора sellaprime_supervisor:init/1 - он
 устанавливает обработчик ошибок и возвращает спецификацию надзора.
 Спецификация надзора сообщает как запускать сервер площади и сервер
 простых чисел.
 
 sellaprime супервизор запускает сервер площади и сервер простых чисел.
-Они реализованы как модули обратных вызовов gen\_server.
+Они реализованы как модули обратных вызовов gen_server.
 
 
 
@@ -4310,8 +4310,8 @@ application:stop(sellaprime) или init:stop().
 ****
 
 Я пропустил довольно много подробностей, разъяснив только принципы. Вы
-сможете найти подробности на страницах руководства по gen\_event,
-error\_logger, supervisor и application.
+сможете найти подробности на страницах руководства по gen_event,
+error_logger, supervisor и application.
 
 
 
@@ -4333,44 +4333,44 @@ error\_logger, supervisor и application.
 
 
 HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"httpHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"://HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"wwwHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf".HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"erlangHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf".HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"orgHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"/HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"docHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"/HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"pdfHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"/HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"designHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"\_HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"principlesHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf".HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"pdf
+"http://www.erlang.org/doc/pdf/design_principles.pdf"httpHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"://HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"wwwHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf".HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"erlangHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf".HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"orgHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"/HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"docHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"/HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"pdfHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"/HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"designHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"_HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"principlesHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf".HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"pdf
 
 (страница 97) Gen servers, gen event, supervisors
 
 HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"httpHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"://HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"wwwHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf".HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"erlangHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf".HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"orgHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"/HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"docHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"/HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"pdfHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"/HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"systemHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"\_HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"principlesHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf".HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"pdf
+"http://www.erlang.org/doc/pdf/system_principles.pdf"httpHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"://HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"wwwHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf".HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"erlangHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf".HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"orgHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"/HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"docHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"/HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"pdfHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"/HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"systemHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"_HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"principlesHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf".HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"pdf
 
 (страница 19) Как сделать boot файл
 
@@ -4406,7 +4406,7 @@ HYPERLINK "http://www.erlang.org/doc/pdf/appmon.pdf"httpHYPERLINK
 
 %% Here we use 'Bertrand's postulate.
 
-%% Bertrands postulate is that for every N \> 3,
+%% Bertrands postulate is that for every N > 3,
 
 %% there is a prime P satisfying N < P < 2N - 2
 
@@ -4416,49 +4416,49 @@ HYPERLINK "http://www.erlang.org/doc/pdf/appmon.pdf"httpHYPERLINK
 
 
 
-make\_prime(1) -\>
+make_prime(1) ->
 
 lists:nth(random:uniform(5), [1,2,3,5,7]);
 
-make\_prime(K) when K \> 0 -\>
+make_prime(K) when K > 0 ->
 
-new\_seed(),
+new_seed(),
 
-N = make\_random\_int(K),
+N = make_random_int(K),
 
-if N \> 3 -\>
+if N > 3 ->
 
 io:format("Generating a \~w digit prime " ,[K]),
 
 MaxTries = N - 3,
 
-P1 = make\_prime(MaxTries, N+1),
+P1 = make_prime(MaxTries, N+1),
 
 io:format("\~n" ,[]),
 
 P1;
 
-true -\>
+true ->
 
-make\_prime(K)
+make_prime(K)
 
 end.
 
 
 
-make\_prime(0, \_) -\>
+make_prime(0, _) ->
 
 exit(impossible);
 
-make\_prime(K, P) -\>
+make_prime(K, P) ->
 
 io:format("." ,[]),
 
-case is\_prime(P) of
+case is_prime(P) of
 
-true -\> P;
+true -> P;
 
-false -\> make\_prime(K-1, P+1)
+false -> make_prime(K-1, P+1)
 
 end.
 
@@ -4470,53 +4470,53 @@ end.
 
 %% A\^N mod N = A
 
-is\_prime(D) -\>
+is_prime(D) ->
 
-new\_seed(),
+new_seed(),
 
-is\_prime(D, 100).
-
-
-
-is\_prime(D, Ntests) -\>
-
-N = length(integer\_to\_list(D)) -1,
-
-is\_prime(Ntests, D, N).
+is_prime(D, 100).
 
 
 
-is\_prime(0, \_, \_) -\> true;
+is_prime(D, Ntests) ->
 
-is\_prime(Ntest, N, Len) -\>
+N = length(integer_to_list(D)) -1,
+
+is_prime(Ntests, D, N).
+
+
+
+is_prime(0, _, _) -> true;
+
+is_prime(Ntest, N, Len) ->
 
 K = random:uniform(Len),
 
 %% A is a random number less than N
 
-A = make\_random\_int(K),
+A = make_random_int(K),
 
 if
 
-A < N -\>
+A < N ->
 
-case lib\_lin:pow(A,N,N) of
+case lib_lin:pow(A,N,N) of
 
-A -\> is\_prime(Ntest-1,N,Len);
+A -> is_prime(Ntest-1,N,Len);
 
-\_ -\> false
+_ -> false
 
 end;
 
-true -\>
+true ->
 
-is\_prime(Ntest, N, Len)
+is_prime(Ntest, N, Len)
 
 end.
 
 
 
-1\> lib\_primes:make\_prime(500).
+1> lib_primes:make_prime(500).
 
 Generating a 500 digit prime ..............................
 
@@ -4540,51 +4540,51 @@ Generating a 500 digit prime ..............................
 
 
 
-red\_name area\_server
+red_name area_server
 
-error\_info
+error_info
 
-{function\_clause,[{area\_server,compute\_area,[{rectangle,10,20}]},
+{function_clause,[{area_server,compute_area,[{rectangle,10,20}]},
 
-{area\_server,handle\_call,3},
+{area_server,handle_call,3},
 
-{gen\_server,handle\_msg,6},
+{gen_server,handle_msg,6},
 
-{proc\_lib,init\_p,5}]}
+{proc_lib,init_p,5}]}
 
-initial\_call
+initial_call
 
-{gen,init\_it,
+{gen,init_it,
 
-[gen\_server,
+[gen_server,
 
-<0.42.0\>,
+<0.42.0>,
 
-<0.42.0\>,
+<0.42.0>,
 
-{local,area\_server},
+{local,area_server},
 
-area\_server,
+area_server,
 
 [],
 
 []]}
 
-ancestors [sellaprime\_supervisor,<0.40.0\>]
+ancestors [sellaprime_supervisor,<0.40.0>]
 
 messages []
 
-links [<0.42.0\>]
+links [<0.42.0>]
 
 dictionary []
 
-trap\_exit false
+trap_exit false
 
 status running
 
-heap\_size 233
+heap_size 233
 
-stack\_size 21
+stack_size 21
 
 reductions 199
 
@@ -4592,16 +4592,16 @@ ok
 
 
 
-Распечатка {function\_clause, compute\_area, ...} отображает точное
+Распечатка {function_clause, compute_area, ...} отображает точное
 место в программе сервера где произошла авария. Это должно помочь легко
 локализовать и исправить ошибку. Давайте перейдем к рассмотрению
 следующих ошибок:
 
 
 
-10\> rb:show(2).
+10> rb:show(2).
 
-ERROR REPORT <0.33.0\> 2007-03-28 15:22:17
+ERROR REPORT <0.33.0> 2007-03-28 15:22:17
 
 ================================================================
 
@@ -4613,9 +4613,9 @@ ERROR REPORT <0.33.0\> 2007-03-28 15:22:17
 
 
 
-10\> rb:show(1).
+10> rb:show(1).
 
-ERROR REPORT <0.33.0\> 2007-03-28 15:22:20
+ERROR REPORT <0.33.0> 2007-03-28 15:22:20
 
 ================================================================
 
@@ -4655,17 +4655,17 @@ HYPERLINK
 
 {vsn, "1.0" },
 
-{modules, [sellaprime\_app, sellaprime\_supervisor, area\_server,
+{modules, [sellaprime_app, sellaprime_supervisor, area_server,
 
-prime\_server, lib\_primes, my\_alarm\_handler]},
+prime_server, lib_primes, my_alarm_handler]},
 
-{registered,[area\_server, prime\_server, sellaprime\_super]},
+{registered,[area_server, prime_server, sellaprime_super]},
 
 {applications, [kernel,stdlib]},
 
-{mod, {sellaprime\_app,[]}},
+{mod, {sellaprime_app,[]}},
 
-{start\_phases, []}
+{start_phases, []}
 
 ]}.
 
@@ -4677,16 +4677,16 @@ prime\_server, lib\_primes, my\_alarm\_handler]},
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/sellaprime\_app.erl"ЗагрузитьHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/sellaprime\_app.erl"
+"http://media.pragprog.com/titles/jaerlang/code/sellaprime_app.erl"ЗагрузитьHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/sellaprime_app.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/sellaprime\_app.erl"sellaprimeHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/sellaprime\_app.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/sellaprime\_app.erl"appHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/sellaprime\_app.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/sellaprime\_app.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/sellaprime_app.erl"sellaprimeHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/sellaprime_app.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/sellaprime_app.erl"appHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/sellaprime_app.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/sellaprime_app.erl"erl
 
--module(sellaprime\_app).
+-module(sellaprime_app).
 
 -behaviour(application).
 
@@ -4696,7 +4696,7 @@ HYPERLINK
 
 %%--------------------------------------------------------------------
 
-%% Function: start(Type, StartArgs) -\> {ok, Pid} |
+%% Function: start(Type, StartArgs) -> {ok, Pid} |
 
 %% {ok, Pid, State} |
 
@@ -4717,15 +4717,15 @@ processes
 
 
 
-start(\_Type, StartArgs) -\>
+start(_Type, StartArgs) ->
 
-sellaprime\_supervisor:start\_link(StartArgs).
+sellaprime_supervisor:start_link(StartArgs).
 
 
 
 %%--------------------------------------------------------------------
 
-%% Function: stop(State) -\> void()
+%% Function: stop(State) -> void()
 
 %% Description: This function is called whenever an application
 
@@ -4737,7 +4737,7 @@ sellaprime\_supervisor:start\_link(StartArgs).
 
 
 
-stop(\_State) -\>
+stop(_State) ->
 
 ok.
 
@@ -4749,9 +4749,9 @@ ok.
 
 
 
-$ erl -boot start\_sasl -config elog3
+$ erl -boot start_sasl -config elog3
 
-1\> application:loaded\_applications().
+1> application:loaded_applications().
 
 [{kernel,"ERTS CXC 138 10","2.11.3"},
 
@@ -4759,11 +4759,11 @@ $ erl -boot start\_sasl -config elog3
 
 {sasl,"SASL CXC 138 11","2.1.4"}]
 
-2\> application:load(sellaprime).
+2> application:load(sellaprime).
 
 ok
 
-3\> application:loaded\_applications().
+3> application:loaded_applications().
 
 [{sellaprime,"The Prime Number Shop","1.0"},
 
@@ -4773,21 +4773,21 @@ ok
 
 {sasl,"SASL CXC 138 11","2.1.4"}]
 
-4\> application:start(sellaprime).
+4> application:start(sellaprime).
 
-\*\*\* my\_alarm\_handler init:{xyz,{alarm\_handler,[]}}
+\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[]}}
 
-area\_server starting
+area_server starting
 
-prime\_server starting
+prime_server starting
 
 ok
 
-5\> application:stop(sellaprime).
+5> application:stop(sellaprime).
 
-prime\_server stopping
+prime_server stopping
 
-area\_server stopping
+area_server stopping
 
 
 
@@ -4801,11 +4801,11 @@ type: temporary
 
 ok
 
-6\> application:unload(sellaprime).
+6> application:unload(sellaprime).
 
 ok
 
-7\> application:loaded\_applications().
+7> application:loaded_applications().
 
 [{kernel,"ERTS CXC 138 10","2.11.4"},
 
@@ -4837,25 +4837,25 @@ ok
 
 
 
-$ erl -boot start\_sasl -config elog3
+$ erl -boot start_sasl -config elog3
 
-1\> application:start(sellaprime).
+1> application:start(sellaprime).
 
-\*\*\* my\_alarm\_handler init:{xyz,{alarm\_handler,[]}}
+\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[]}}
 
-area\_server starting
+area_server starting
 
-prime\_server starting
-
-ok
-
-2\> init:stop().
+prime_server starting
 
 ok
 
-prime\_server stopping
+2> init:stop().
 
-area\_server stopping
+ok
+
+prime_server stopping
+
+area_server stopping
 
 $
 
@@ -4863,7 +4863,7 @@ $
 
 Две строки следующие за командой номер 2 получены из сервера площади и
 сервера простых чисел, они показывают нам, что был вызван метод
-terminate/2 из модуля обратных вызовов gen\_server.
+terminate/2 из модуля обратных вызовов gen_server.
 
 
 
@@ -4895,25 +4895,25 @@ terminate/2 из модуля обратных вызовов gen\_server.
 
 *Content*
 
-area\_server.erl
+area_server.erl
 
-Сервер областей - модуль обратных вызовов gen\_server
+Сервер областей - модуль обратных вызовов gen_server
 
-prime\_server.erl
+prime_server.erl
 
-Сервер простых чисел - модуль обратных вызовов gen\_server
+Сервер простых чисел - модуль обратных вызовов gen_server
 
-sellaprim\_supervisor.erl
+sellaprim_supervisor.erl
 
 Модуль обратных вызовов Супервизора
 
-sellaprim\_app.erl
+sellaprim_app.erl
 
 Модуль обратных вызовов Приложения
 
-my\_alam\_handler.erl
+my_alam_handler.erl
 
-Модуль обратных вызовов Событий для gen\_event
+Модуль обратных вызовов Событий для gen_event
 
 sellaprime.app
 
@@ -4932,8 +4932,8 @@ elog4.config
 
 
 Мы запускаем систему следующими командами:
- $ erl -boot start\_sasl -config elog4.config
- 1\> application:start(sellaprime).
+ $ erl -boot start_sasl -config elog4.config
+ 1> application:start(sellaprime).
  ...
 
  Файл sellaprime.app должен находиться в корневом каталоге из которого
@@ -4941,20 +4941,20 @@ elog4.config
 
  В этом случае контроллер приложения сможет обнаружить {mod, ...},
 объявленый в sellaprime.app. Он содержит имя контроллера приложения. И
-конечно же это модуль sellaprime\_app.
+конечно же это модуль sellaprime_app.
 
-Вызвается обратный вызов sellaprime\_app:start/2.
+Вызвается обратный вызов sellaprime_app:start/2.
 
-sellaprime\_app:start/2 вызывает sellaprime\_supervisor:start\_link/2,
+sellaprime_app:start/2 вызывает sellaprime_supervisor:start_link/2,
 который, в свою очередь, запускает супервизор sellaprime.
 
-Вызвается обратный вызов супервизора sellaprime\_supervisor:init/1 - он
+Вызвается обратный вызов супервизора sellaprime_supervisor:init/1 - он
 устанавливает обработчик ошибок и возвращает спецификацию надзора.
 Спецификация надзора сообщает как запускать сервер площади и сервер
 простых чисел.
 
 sellaprime супервизор запускает сервер площади и сервер простых чисел.
-Они реализованы как модули обратных вызовов gen\_server.
+Они реализованы как модули обратных вызовов gen_server.
 
 
 
@@ -4982,8 +4982,8 @@ application:stop(sellaprime) или init:stop().
 ****
 
 Я пропустил довольно много подробностей, разъяснив только принципы. Вы
-сможете найти подробности на страницах руководства по gen\_event,
-error\_logger, supervisor и application.
+сможете найти подробности на страницах руководства по gen_event,
+error_logger, supervisor и application.
 
 
 
@@ -5005,44 +5005,44 @@ error\_logger, supervisor и application.
 
 
 HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"httpHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"://HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"wwwHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf".HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"erlangHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf".HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"orgHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"/HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"docHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"/HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"pdfHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"/HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"designHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"\_HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"principlesHYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf".HYPERLINK
-"http://www.erlang.org/doc/pdf/design\_principles.pdf"pdf
+"http://www.erlang.org/doc/pdf/design_principles.pdf"httpHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"://HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"wwwHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf".HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"erlangHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf".HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"orgHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"/HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"docHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"/HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"pdfHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"/HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"designHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"_HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"principlesHYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf".HYPERLINK
+"http://www.erlang.org/doc/pdf/design_principles.pdf"pdf
 
 (страница 97) Gen servers, gen event, supervisors
 
 HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"httpHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"://HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"wwwHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf".HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"erlangHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf".HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"orgHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"/HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"docHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"/HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"pdfHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"/HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"systemHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"\_HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"principlesHYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf".HYPERLINK
-"http://www.erlang.org/doc/pdf/system\_principles.pdf"pdf
+"http://www.erlang.org/doc/pdf/system_principles.pdf"httpHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"://HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"wwwHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf".HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"erlangHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf".HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"orgHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"/HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"docHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"/HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"pdfHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"/HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"systemHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"_HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"principlesHYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf".HYPERLINK
+"http://www.erlang.org/doc/pdf/system_principles.pdf"pdf
 
 (страница 19) Как сделать boot файл
 
@@ -5078,7 +5078,7 @@ HYPERLINK "http://www.erlang.org/doc/pdf/appmon.pdf"httpHYPERLINK
 
 %% Here we use 'Bertrand's postulate.
 
-%% Bertrands postulate is that for every N \> 3,
+%% Bertrands postulate is that for every N > 3,
 
 %% there is a prime P satisfying N < P < 2N - 2
 
@@ -5088,49 +5088,49 @@ HYPERLINK "http://www.erlang.org/doc/pdf/appmon.pdf"httpHYPERLINK
 
 
 
-make\_prime(1) -\>
+make_prime(1) ->
 
 lists:nth(random:uniform(5), [1,2,3,5,7]);
 
-make\_prime(K) when K \> 0 -\>
+make_prime(K) when K > 0 ->
 
-new\_seed(),
+new_seed(),
 
-N = make\_random\_int(K),
+N = make_random_int(K),
 
-if N \> 3 -\>
+if N > 3 ->
 
 io:format("Generating a \~w digit prime " ,[K]),
 
 MaxTries = N - 3,
 
-P1 = make\_prime(MaxTries, N+1),
+P1 = make_prime(MaxTries, N+1),
 
 io:format("\~n" ,[]),
 
 P1;
 
-true -\>
+true ->
 
-make\_prime(K)
+make_prime(K)
 
 end.
 
 
 
-make\_prime(0, \_) -\>
+make_prime(0, _) ->
 
 exit(impossible);
 
-make\_prime(K, P) -\>
+make_prime(K, P) ->
 
 io:format("." ,[]),
 
-case is\_prime(P) of
+case is_prime(P) of
 
-true -\> P;
+true -> P;
 
-false -\> make\_prime(K-1, P+1)
+false -> make_prime(K-1, P+1)
 
 end.
 
@@ -5142,53 +5142,53 @@ end.
 
 %% A\^N mod N = A
 
-is\_prime(D) -\>
+is_prime(D) ->
 
-new\_seed(),
+new_seed(),
 
-is\_prime(D, 100).
-
-
-
-is\_prime(D, Ntests) -\>
-
-N = length(integer\_to\_list(D)) -1,
-
-is\_prime(Ntests, D, N).
+is_prime(D, 100).
 
 
 
-is\_prime(0, \_, \_) -\> true;
+is_prime(D, Ntests) ->
 
-is\_prime(Ntest, N, Len) -\>
+N = length(integer_to_list(D)) -1,
+
+is_prime(Ntests, D, N).
+
+
+
+is_prime(0, _, _) -> true;
+
+is_prime(Ntest, N, Len) ->
 
 K = random:uniform(Len),
 
 %% A is a random number less than N
 
-A = make\_random\_int(K),
+A = make_random_int(K),
 
 if
 
-A < N -\>
+A < N ->
 
-case lib\_lin:pow(A,N,N) of
+case lib_lin:pow(A,N,N) of
 
-A -\> is\_prime(Ntest-1,N,Len);
+A -> is_prime(Ntest-1,N,Len);
 
-\_ -\> false
+_ -> false
 
 end;
 
-true -\>
+true ->
 
-is\_prime(Ntest, N, Len)
+is_prime(Ntest, N, Len)
 
 end.
 
 
 
-1\> lib\_primes:make\_prime(500).
+1> lib_primes:make_prime(500).
 
 Generating a 500 digit prime ..............................
 

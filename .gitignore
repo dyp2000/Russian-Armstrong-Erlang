@@ -1,6 +1,7 @@
 *.swp
 latex/*
 book
+*.pyg
 !latex/makepdf
 !latex/README
 !latex/template.tex

@@ -61,7 +61,7 @@ proxy - посредник
 
 В этой главе мы поговорим о двух основных моделях распределённости:
 
-●▪ *Распределённый Эрланг*: обеспечивает метод для программирования
+* *Распределённый Эрланг*: обеспечивает метод для программирования
 приложений, которые работают на наборе сильно связанных компьютеров1 . В
 распределённом Эрланге программы пишутся так, чтобы работать на *узлах*
 Эрланга. Мы можем порождать процессы на любом узле и все примитивы
@@ -75,11 +75,11 @@ proxy - посредник
 сети за межсетевым экраном, хотя, конечно, они могут работать и в
 открытой сети.
 
-●▪ *Распределение на основе сокетов*: используя TCP/IP сокеты, можно
+* *Распределение на основе сокетов*: используя TCP/IP сокеты, можно
 писать распределённые приложения, которые работают в *небезопасной*
 среде. Программная модель менее мощная, по сравнению с распределённым
 Эрлангом, но более безопасная. В части 10.5 *Распределение на основе
-сокетов*, на стр. \_\_\_\_ мы увидим, как создавать приложения,
+сокетов*, на стр. ____ мы увидим, как создавать приложения,
 используя простой распределённый механизм на основе сокетов.
 
 Если вы подумаете о предыдущих главах, то вспомните, что основной
@@ -148,19 +148,19 @@ proxy - посредник
 Наш сервер имён kvs — это простой сервер вида ключ-значение. У него
 следующий интерфейс:
 
-@spec kvs:start() -\> true
+@spec kvs:start() -> true
 
 Запускает сервер; создаёт сервер с зарегистрированным именем kvs.
 
 
 
-@spec kvs:store(Key, Value) -\> true
+@spec kvs:store(Key, Value) -> true
 
 Связывает ключ и значение.
 
 
 
-@spec kvs:lookup(Key) -\> {ok, Value} | undefined
+@spec kvs:lookup(Key) -> {ok, Value} | undefined
 
 Ищет значения для ключа и возвращает {ok, Value}, если с ключём связано
 значение; в противном случае возвращает undefined.
@@ -169,44 +169,44 @@ proxy - посредник
 словаря процесса:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/kvs.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/kvs.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/kvs.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/kvs.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/kvs.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/kvs.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/kvs.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/kvs.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/kvs.erl"kvsHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/kvs.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/kvs.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/kvs.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/kvs.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/kvs.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/kvs.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/kvs.erl"kvsHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/kvs.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/kvs.erl"erl
 
 -module(kvs).
 
 -export([start/0, store/2, lookup/1]).
 
-start() -\> register(kvs, spawn(fun() -\> loop() end)).
+start() -> register(kvs, spawn(fun() -> loop() end)).
 
-store(Key, Value) -\> rpc({store, Key, Value}).
+store(Key, Value) -> rpc({store, Key, Value}).
 
-lookup(Key) -\> rpc({lookup, Key}).
+lookup(Key) -> rpc({lookup, Key}).
 
-rpc(Q) -\>
+rpc(Q) ->
 
 kvs ! {self(), Q},
 
 receive
 
-{kvs, Reply} -\>
+{kvs, Reply} ->
 
 Reply
 
 end.
 
-loop() -\>
+loop() ->
 
 receive
 
-{From, {store, Key, Value}} -\>
+{From, {store, Key, Value}} ->
 
 put(Key, {ok, Value}),
 
@@ -214,7 +214,7 @@ From ! {kvs, true},
 
 loop();
 
-{From, {lookup, Key}} -\>
+{From, {lookup, Key}} ->
 
 From ! {kvs, get(Key)},
 
@@ -225,27 +225,27 @@ end.
 Мы начнём с локального тестирования сервера, чтобы посмотреть — работает
 ли он корректно:
 
-1\> kvs:start().
+1> kvs:start().
 
 true
 
-2\> kvs:store({location, joe}, "Stockholm").
+2> kvs:store({location, joe}, "Stockholm").
 
 true
 
-3\> kvs:store(weather, raining).
+3> kvs:store(weather, raining).
 
 true
 
-4\> kvs:lookup(weather).
+4> kvs:lookup(weather).
 
 {ok,raining}
 
-5\> kvs:lookup({location, joe}).
+5> kvs:lookup({location, joe}).
 
 {ok,"Stockholm"}
 
-6\> kvs:lookup({location, jane}).
+6> kvs:lookup({location, jane}).
 
 undefined
 
@@ -263,7 +263,7 @@ undefined
 
 $ erl -sname gandalf
 
-(gandalf@localhost) 1\> kvs:start().
+(gandalf@localhost) 1> kvs:start().
 
 true
 
@@ -284,13 +284,13 @@ gandalf на локальной машине». Заметьте, как обо�
 
 $ erl -sname bilbo
 
-(bilbo@localhost) 1\> rpc:call(gandalf@localhost,
+(bilbo@localhost) 1> rpc:call(gandalf@localhost,
 
 kvs,store, [weather, fine]).
 
 true
 
-(bilbo@localhost) 2\> rpc:call(gandalf@localhost,
+(bilbo@localhost) 2> rpc:call(gandalf@localhost,
 
 kvs,lookup,[weather]).
 
@@ -303,7 +303,7 @@ kvs,lookup,[weather]).
 Вызов для установки переменной weather был сделан на узле bilbo. Мы
 можем вернуться обратно на узел gandalf и проверить значение weather:
 
-(gandalf@localhost)2\> kvs:lookup(weather).
+(gandalf@localhost)2> kvs:lookup(weather).
 
 {ok,fine}
 
@@ -330,7 +330,7 @@ george.myerl.example.com. Перед тем, как сделать это, мы 
 
 doris $ erl -name gandalf -setcookie abc
 
-(gandalf@doris.myerl.example.com) 1\> kvs:start().
+(gandalf@doris.myerl.example.com) 1> kvs:start().
 
 true
 
@@ -339,33 +339,11 @@ true
 
 george $ erl -name bilbo -setcookie abc
 
-(bilbo@george.myerl.example.com) 1\> rpc:call( HYPERLINK
-"mailto:gandalf@doris.myerl.example.com"gandalfHYPERLINK
-"mailto:gandalf@doris.myerl.example.com"@HYPERLINK
-"mailto:gandalf@doris.myerl.example.com"dorisHYPERLINK
-"mailto:gandalf@doris.myerl.example.com".HYPERLINK
-"mailto:gandalf@doris.myerl.example.com"myerlHYPERLINK
-"mailto:gandalf@doris.myerl.example.com".HYPERLINK
-"mailto:gandalf@doris.myerl.example.com"exampleHYPERLINK
-"mailto:gandalf@doris.myerl.example.com".HYPERLINK
-"mailto:gandalf@doris.myerl.example.com"com,
-
-kvs, store, [weather,cold]).
+(bilbo@george.myerl.example.com) 1> rpc:call("mailto:gandalf@doris.myerl.example.com", kvs, store, [weather,cold]).
 
 true
 
-(bilbo@george.myerl.example.com) 2\> rpc:call( HYPERLINK
-"mailto:gandalf@doris.myerl.example.com"gandalfHYPERLINK
-"mailto:gandalf@doris.myerl.example.com"@HYPERLINK
-"mailto:gandalf@doris.myerl.example.com"dorisHYPERLINK
-"mailto:gandalf@doris.myerl.example.com".HYPERLINK
-"mailto:gandalf@doris.myerl.example.com"myerlHYPERLINK
-"mailto:gandalf@doris.myerl.example.com".HYPERLINK
-"mailto:gandalf@doris.myerl.example.com"exampleHYPERLINK
-"mailto:gandalf@doris.myerl.example.com".HYPERLINK
-"mailto:gandalf@doris.myerl.example.com"com,
-
-kvs, lookup, [weather]).
+(bilbo@george.myerl.example.com) 2> rpc:call("mailto:gandalf@doris.myerl.example.com", kvs, lookup, [weather]).
 
 {ok,cold}
 
@@ -397,25 +375,25 @@ kvs, lookup, [weather]).
 хотим выполнить. В нашем случае одинаковые версии кода для kvs должны
 быть доступны на обеих системах. Есть несколько способов достичь этого:
 
-\a) Дома у меня есть два физически раздельных компьютера без совместно
+* Дома у меня есть два физически раздельных компьютера без совместно
 используемых файлов. Здесь я физически копирую kvs.erl на обе машины
 перед запуском.
 
-\b) На моём рабочем компьютере у меня рабочая станция с разделяемым по
+* На моём рабочем компьютере у меня рабочая станция с разделяемым по
 NFS диском. Здесь я просто запускаю Эрланг в разделяемом каталоге с двух
 различных рабочих станций.
 
-\c) Сконфигурировать сервер кода делать это. Я не буду объяснять здесь —
-как это делать. Гляньте на руководство к модулю erl\_prim\_loader.
+* Сконфигурировать сервер кода делать это. Я не буду объяснять здесь —
+как это делать. Гляньте на руководство к модулю erl_prim_loader.
 
-\d) Использовать команду шелла nl(Mod). Она загружает модуль Mod на всех
+* Использовать команду шелла nl(Mod). Она загружает модуль Mod на всех
 подсоединённых узлах.
 
 *Замечание*: чтобы это работало, надо чтобы все узлы были подсоединены.
 Узлы соединяются, когда они пытаются получить доступ друг к другу. Это
 происходит, когда вы впервые вычисляете выражение, включающее удалённый
-узел. Простейший способ сделать это — выполнить net\_adm:ping(Node) (см.
-руководство по net\_adm за дальнейшими деталями).
+узел. Простейший способ сделать это — выполнить net_adm:ping(Node) (см.
+руководство по net_adm за дальнейшими деталями).
 
 **Шаг 4: Клиент и сервер на разных машинах в Интернете**
 
@@ -444,9 +422,9 @@ NFS диском. Здесь я просто запускаю Эрланг в р
 (используйте Min=Max, если хотите использовать только один порт), то
 запускайте Эрланг следующей командой:
 
-$ erl -name ... -setcookie ... -kernel inet\_dist\_listen\_min Min \
+$ erl -name ... -setcookie ... -kernel inet_dist_listen_min Min \
 
-inet\_dist\_listen\_max Max
+inet_dist_listen_max Max
 
 **10.2 Примитивы распределения**
 
@@ -460,7 +438,7 @@ inet\_dist\_listen\_max Max
 всех узлов, с которыми наш узел собирается общаться. Чтобы обеспечить
 это, все узлы в распределённой эрланговой системе должны быть запущены с
 одинаковыми куками или должны установить свои куки в одинаковое значение
-вызовом erlang:set\_cookie.
+вызовом erlang:set_cookie.
 
 Набор соединённых узлов, имеющих одинаковые куки, образует эрланговый
 кластер.
@@ -468,14 +446,14 @@ inet\_dist\_listen\_max Max
 Следующие встроенные функции (BIF) используются для написания
 распределённых программ7 :
 
-@spec spawn(Node, Fun) -\> Pid
+@spec spawn(Node, Fun) -> Pid
 
 Работает в точности, как spawn(Fun), только новый процесс порождается на
 узле Node.
 
 
 
-@spec spawn(Node, Mod, Func, ArgList) -\> Pid
+@spec spawn(Node, Mod, Func, ArgList) -> Pid
 
 Работает в точности, как spawn(Mod, Func, ArgList), только новый процесс
 порождается на узле Node. spawn(Mod, Func, Args) создаёт новый процесс,
@@ -488,27 +466,27 @@ spawn(Node, Fun) может сломаться, если на распредел
 
 
 
-@spec spawn\_link(Node, Fun) -\> Pid
+@spec spawn_link(Node, Fun) -> Pid
 
-Работает в точности, как spawn\_link(Fun), только новый процесс
+Работает в точности, как spawn_link(Fun), только новый процесс
 порождается на узле Node.
 
 
 
-@spec spawn\_link(Node, Mod, Func, ArgList) -\> Pid
+@spec spawn_link(Node, Mod, Func, ArgList) -> Pid
 
 Работает в точности, как spawn(Node, Mod, Func, ArgList), только новый
 процесс связывается с текущим процессом.
 
 
 
-@spec disconnect\_node(Node) -\> bool() | ignored
+@spec disconnect_node(Node) -> bool() | ignored
 
 Принудительно отсоединяет узел.
 
 
 
-@spec monitor\_node(Node, Flag) -\> true
+@spec monitor_node(Node, Flag) -> true
 
 Если Flag имеет значение true, то включается мониторинг. Если Flag имеет
 значение false, то мониторинг выключается. При включенном мониторинге
@@ -516,27 +494,27 @@ spawn(Node, Fun) может сломаться, если на распредел
 Node} и {nodedown, Node} в случае, когда узел Node присоединяется или
 покидает набор подключенных узлов Эрланга.
 
-@spec node() -\> Node
+@spec node() -> Node
 
 Возвращает имя локального узла. Если узел не является распределённым, то
 возвращается nonode@nohost.
 
 
 
-@spec node(Arg) -\> Node
+@spec node(Arg) -> Node
 
 Возвращает узел, где находится Arg. Arg может быть PID, ссылка или порт.
 Если узел не является распределённым, то возвращается nonode@nohost.
 
 
 
-@spec nodes() -\> [Node]
+@spec nodes() -> [Node]
 
 Возвращает список всех других узлов в сети, с которыми мы соединены.
 
 
 
-@spec is\_alive() -\> bool()
+@spec is_alive() -> bool()
 
 Возвращает true, если локальный узел жив и может быть частью
 распределённой системы. В противном случае возвращает false.
@@ -556,40 +534,40 @@ RegName.
 удалённом узле. Начнём со следующей программы:
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/dist\_demo.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/dist\_demo.erl"
+"http://media.pragprog.com/titles/jaerlang/code/dist_demo.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/dist_demo.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/dist\_demo.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/dist\_demo.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/dist\_demo.erl"demoHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/dist\_demo.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/dist\_demo.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/dist_demo.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/dist_demo.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/dist_demo.erl"demoHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/dist_demo.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/dist_demo.erl"erl
 
--module(dist\_demo).
+-module(dist_demo).
 
 -export([rpc/4, start/1]).
 
-start(Node) -\>
+start(Node) ->
 
-spawn(Node, fun() -\> loop() end).
+spawn(Node, fun() -> loop() end).
 
-rpc(Pid, M, F, A) -\>
+rpc(Pid, M, F, A) ->
 
 Pid ! {rpc, self(), M, F, A},
 
 receive
 
-{Pid, Response} -\>
+{Pid, Response} ->
 
 Response
 
 end.
 
-loop() -\>
+loop() ->
 
 receive
 
-{rpc, Pid, M, F, A} -\>
+{rpc, Pid, M, F, A} ->
 
 Pid ! {self(), (catch apply(M, F, A))},
 
@@ -610,28 +588,28 @@ end.
 
 doris $ erl -name gandalf -setcookie abc
 
-(gandalf@doris.myerl.example.com) 1\>
+(gandalf@doris.myerl.example.com) 1>
 
 А на машине george мы запускаем узел под названием bilbo, помня об
 использовании тех же кук:
 
 george $ erl -name bilbo -setcookie abc
 
-(bilbo@george.myerl.example.com) 1\>
+(bilbo@george.myerl.example.com) 1>
 
 Теперь (на bilbo) мы можем породить процесс на удалённом узле (gandalf):
 
-(bilbo@george.myerl.example.com) 1\> Pid =
+(bilbo@george.myerl.example.com) 1> Pid =
 
-dist\_demo:start('gandalf@doris.myerl.example.com').
+dist_demo:start('gandalf@doris.myerl.example.com').
 
-<5094.40.0\>
+<5094.40.0>
 
 Pid — это идентификатор процесса на *удалённом узле* и теперь мы можем
-вызвать dist\_demo:rpc/4 для выполнения удалённого вызова процедур на
+вызвать dist_demo:rpc/4 для выполнения удалённого вызова процедур на
 удалённом узле:
 
-(bilbo@george.myerl.example.com)2\> dist\_demo:rpc(Pid, erlang, node,
+(bilbo@george.myerl.example.com)2> dist_demo:rpc(Pid, erlang, node,
 []).
 
 'gandalf@doris.myerl.example.com'
@@ -649,9 +627,9 @@ Pid — это идентификатор процесса на *удалённ�
 
 Два модуля из стандартной поставки покрывают большинство нужд:
 
-●▪ rpc обеспечивает ряд сервисов удалённого вызова процедур;
+* rpc обеспечивает ряд сервисов удалённого вызова процедур;
 
-●▪ в global есть функции для регистрации имён и блокировок в
+* в global есть функции для регистрации имён и блокировок в
 распределённой системе и для поддержки полностью соединённой сети.
 
 **Читайте руководство по RPC**
@@ -660,7 +638,7 @@ Pid — это идентификатор процесса на *удалённ�
 
 Одна наиболее полезная функция из модуля rpc — следующая:
 
-call(Node, Mod, Function, Args) -\> Result | {badrpc, Reason}
+call(Node, Mod, Function, Args) -> Result | {badrpc, Reason}
 
 Она выполняет apply(Mod, Function, Args) на узле Node и возвращает
 результат Result или {badrpc, Reason}, в случае неуспеха.
@@ -671,7 +649,7 @@ call(Node, Mod, Function, Args) -\> Result | {badrpc, Reason}
 собой, им надо иметь одинаковые *куки* (*magic cookie*). Мы можем
 установить куки тремя способами:
 
-●▪ *Способ 1*: сохранить одинаковые куки в файле $HOME/.erlang.cookie.
+* *Способ 1*: сохранить одинаковые куки в файле $HOME/.erlang.cookie.
 Этот файл содержит строку случайных данных и создаётся автоматически,
 когда Эрланг запускается на вашей машине в первый раз.
 
@@ -681,7 +659,7 @@ call(Node, Mod, Function, Args) -\> Result | {badrpc, Reason}
 
 $ cd
 
-$ cat \> .erlang.cookie
+$ cat > .erlang.cookie
 
 AFRTY12ESS3412735ASDF12378
 
@@ -690,13 +668,13 @@ $ chmod 400 .erlang.cookie
 Команда chmod делает файл .erlang.cookie доступным только владельцу
 файла.
 
-●▪ *Способ 2*: когда запускается Эрланг мы можем использовать параметр
+* *Способ 2*: когда запускается Эрланг мы можем использовать параметр
 командной строки -setcookie C, чтобы установить значение куки в C.
 Пример:
 
 $ erl -setcookie AFRTY12ESS3412735ASDF12378 ...
 
-●▪ *Способ 3*: встроенная функция erlang:set\_cookie(node(), C)
+* *Способ 3*: встроенная функция erlang:set_cookie(node(), C)
 устанавливает куку на локальном узле в атом C.
 
 *Замечание*: если ваше окружение небезопасно, то способы 1 и 3
@@ -733,19 +711,19 @@ rpc:multicall(nodes(), os, cmd, ["cd /; rm -rf \*" ])
 порождения, когда у владелеца определённой машины есть контроль над тем,
 что запускается на его машине.
 
-**lib\_chan**
+**lib_chan**
 
-lib\_chan — это модуль, который позволяет пользователю явно управлять
-тем, какие процессы порождаются на его машине. Реализация lib\_chan
+lib_chan — это модуль, который позволяет пользователю явно управлять
+тем, какие процессы порождаются на его машине. Реализация lib_chan
 достаточно сложна, так что я не буду излагать её здесь. Вы можете найти
-её в Приложении D на стр. \_\_\_\_. Интерфейс у неё следующий:
+её в Приложении D на стр. ____. Интерфейс у неё следующий:
 
-@spec start\_server() -\> true
+@spec start_server() -> true
 
 Запускает сервер на локальной машине. Поведение сервера определяется
-содержимым файла $HOME/.erlang/lib\_chan.conf.
+содержимым файла $HOME/.erlang/lib_chan.conf.
 
-@spec start\_server(Conf) -\> true
+@spec start_server(Conf) -> true
 
 Запускает сервер на локальной машине. Поведение сервера определяется
 содержимым файла Conf.
@@ -766,7 +744,7 @@ SomeMod:SomeFunc(MM, ArgsC, SomeArgsS). Здесь MM — это PID
 клиенту, а параметр ArgC приходит из клиентского вызова на подключение
 (к серверу).
 
-@spec connect(Host, Port, S, P, ArgsC) -\> {ok, Pid} | {error, Why}
+@spec connect(Host, Port, S, P, ArgsC) -> {ok, Pid} | {error, Why}
 
 Пытается открыть порт Port на машине Host и затем пытается активировать
 сервис S, который защищён паролем P. Если пароль верный, то возвращается
@@ -782,7 +760,7 @@ connect/5, создаются два процесса-посредника: од
 Это объяснение может показаться сложным, но оно окажется гораздо более
 простым, когда мы начнём его использовать.
 
-Далее идёт полный пример использования lib\_chan совместно с описанным
+Далее идёт полный пример использования lib_chan совместно с описанным
 ранее сервисом kvs.
 
 **Код сервера**
@@ -793,7 +771,7 @@ connect/5, создаются два процесса-посредника: од
 
 {service, nameServer, password, "ABXy45" ,
 
-mfa, mod\_name\_server, start\_me\_up, notUsed}.
+mfa, mod_name_server, start_me_up, notUsed}.
 
 Это означает, что мы собираемся предлагать сервис, называемый nameServer
 на порту 1234 нашей машины. Сервис защищается паролем ABXy45.
@@ -802,99 +780,99 @@ mfa, mod\_name\_server, start\_me\_up, notUsed}.
 
 connect(Host, 1234, nameServer, "ABXy45", nil)
 
-сервер порождает mod\_name\_server:startmeUp(MM, nil, notUsed) (так в
+сервер порождает mod_name_server:startmeUp(MM, nil, notUsed) (так в
 pdf-оригинале), где MM — это PID процесса-посредника, который
 используется для общения с клиентом.
 
 *Важно*: сейчас вы должны глазеть на предыдущую строку кода и пытаться
 понять — откуда же взялись аргументы для этого вызова:
 
-●▪ mod\_name\_server, start\_me\_up и notUsed взяты из файла
+* mod_name_server, start_me_up и notUsed взяты из файла
 конфигурации
 
-●▪ nil — это последний аргумент в вызове connect.
+* nil — это последний аргумент в вызове connect.
 
-Модуль mod\_name\_server выглядит так:
+Модуль mod_name_server выглядит так:
 
 
 
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_name\_server.erl"DownloadHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_name\_server.erl"
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_name_server.erl"DownloadHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_name_server.erl"
 HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_name\_server.erl"socketHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_name\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_name\_server.erl"distHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_name\_server.erl"/HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_name\_server.erl"modHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_name\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_name\_server.erl"nameHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_name\_server.erl"\_HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_name\_server.erl"serverHYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_name\_server.erl".HYPERLINK
-"http://media.pragprog.com/titles/jaerlang/code/socket\_dist/mod\_name\_server.erl"erl
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_name_server.erl"socketHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_name_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_name_server.erl"distHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_name_server.erl"/HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_name_server.erl"modHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_name_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_name_server.erl"nameHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_name_server.erl"_HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_name_server.erl"serverHYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_name_server.erl".HYPERLINK
+"http://media.pragprog.com/titles/jaerlang/code/socket_dist/mod_name_server.erl"erl
 
--module(mod\_name\_server).
+-module(mod_name_server).
 
--export([start\_me\_up/3]).
+-export([start_me_up/3]).
 
-start\_me\_up(MM, \_ArgsC, \_ArgS) -\>
+start_me_up(MM, _ArgsC, _ArgS) ->
 
 loop(MM).
 
-loop(MM) -\>
+loop(MM) ->
 
 receive
 
-{chan, MM, {store, K, V}} -\>
+{chan, MM, {store, K, V}} ->
 
 kvs:store(K, V),
 
 loop(MM);
 
-{chan, MM, {lookup, K}} -\>
+{chan, MM, {lookup, K}} ->
 
 MM ! {send, kvs:lookup(K)},
 
 loop(MM);
 
-{chan\_closed, MM} -\>
+{chan_closed, MM} ->
 
 true
 
 end.
 
-mod\_name\_server работает по следующему протоколу:
+mod_name_server работает по следующему протоколу:
 
-●▪ если клиент посылает серверу сообщение {send, X}, то оно появится в
-mod\_name\_server как сообщение вида {chan, MM, X} (MM — это PID
+* если клиент посылает серверу сообщение {send, X}, то оно появится в
+mod_name_server как сообщение вида {chan, MM, X} (MM — это PID
 серверного процесса-посредника).
 
-●▪ если клиент завершается или сокет, используемый для связи,
+* если клиент завершается или сокет, используемый для связи,
 закрывается по какой-либо причине, то сервер получает сообщение вида
-{chan\_closed, MM}.
+{chan_closed, MM}.
 
-●▪ если сервер хочет послать сообщение X клиенту, он делает это
+* если сервер хочет послать сообщение X клиенту, он делает это
 посредством вызова MM ! {send, X}.
 
-●▪ если сервер хочет закрыть соединение явно, он делает это, выполняя MM
+* если сервер хочет закрыть соединение явно, он делает это, выполняя MM
 ! close.
 
 Этот протокол — протокол посредника, которому подчиняются как
 клиентский, так и серверный код. Код сокета для посредника объясняется
-более подробно в части D.2, *lib\_chan\_mm: Посредник*, на стр.
-\_\_\_\_.
+более подробно в части D.2, *lib_chan_mm: Посредник*, на стр.
+____.
 
 Чтобы протестировать этот код, мы сначала убедимся, что он работает
 правильно на одной машине.
 
 Запускаем сервер имён (и модуль kvs):
 
-1\> kvs:start().
+1> kvs:start().
 
 true
 
-2\> lib\_chan:start\_server().
+2> lib_chan:start_server().
 
 Starting a port server on 1234...
 
@@ -903,21 +881,21 @@ true
 После этого мы можем запустить второй сеанс Эрланга и протестировать всё
 это со стороны клиента:
 
-1\> {ok, Pid} = lib\_chan:connect("localhost", 1234, nameServer,
+1> {ok, Pid} = lib_chan:connect("localhost", 1234, nameServer,
 
 "ABXy45", "").
 
-{ok, <0.43.0\>}
+{ok, <0.43.0>}
 
-2\> lib\_chan:cast(Pid, {store, joe, "writing a book"}).
+2> lib_chan:cast(Pid, {store, joe, "writing a book"}).
 
 {send,{store,joe,"writing a book"}}
 
-3\> lib\_chan:rpc(Pid, {lookup, joe}).
+3> lib_chan:rpc(Pid, {lookup, joe}).
 
 {ok,"writing a book"}
 
-4\> lib\_chan:rpc(Pid, {lookup, jim}).
+4> lib_chan:rpc(Pid, {lookup, jim}).
 
 undefined
 

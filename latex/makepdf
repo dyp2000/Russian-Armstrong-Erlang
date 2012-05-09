@@ -102,11 +102,13 @@ def post_pandoc(string, config)
     end
 
     # Ensure monospaced stuff is in a smaller font
-    s /(\\verb(\W).*?\2)/, '{\footnotesize\1}'
-    s /(\\begin\{verbatim\}.*?\\end\{verbatim\})/m, '{\footnotesize\1}'
+    #s /(\\verb(\W).*?\2)/, '{\footnotesize\1}'
+    #s /(\\begin\{verbatim\}.*?\\end\{verbatim\})/m, '{\footnotesize\1}'
 
     # Shaded verbatim block
-    s /(\\begin\{verbatim\}.*?\\end\{verbatim\})/m, '\begin{shaded}\1\end{shaded}'
+    s /(\\begin\{verbatim\})/m, '\begin{minted}[xleftmargin=25pt]{erlang}'
+    s /(\\end\{verbatim\})/m, '\end{minted}'
+    #s /(\\begin\{verbatim\}.*?\\end\{verbatim\})/m, '\begin{shaded}\1\end{shaded}'
   end
 end
 
@@ -156,7 +158,7 @@ figures do
     cd($root)
     3.times do |i|
       print "\t\tPass #{i + 1}... "
-      IO.popen("xelatex -output-directory=\"#{dir}\" \"#{dir}/main.tex\" 2>&1") do |pipe|
+      IO.popen("cd #{dir} && pdflatex -shell-escape \"#{dir}/main.tex\" 2>&1") do |pipe|
         unless $DEBUG
           if ~/^!\s/
             puts "failed with:\n\t\t\t#{$_.strip}"

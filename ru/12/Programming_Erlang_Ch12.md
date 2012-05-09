@@ -58,7 +58,7 @@
 
 
 
-Port = open\_port(PortName, PortSettings)
+Port = open_port(PortName, PortSettings)
 
 
 
@@ -82,7 +82,7 @@ Port!{PidC,close} – закрывает даный порт.
 
 **receive**
 
-{Port, {data, Data} →
+{Port, {data, Data} ->
 
 ...обработка данных, полученных от внешней программы...
 
@@ -186,27 +186,27 @@ example1.erl
 
 example1.c – он будет содержать функции, которые мы хотим вызывать.
 
-example1\_driver.c – здесь будет реализован байтовый протокол и
+example1_driver.c – здесь будет реализован байтовый протокол и
 вызываться нужные функции из example1.c .
 
-erl\_comm.c – здесь будут реализованы нужные процедуры чтения и записи
+erl_comm.c – здесь будут реализованы нужные процедуры чтения и записи
 буферов памяти.
 
-**example1\_driver.c**
+**example1_driver.c**
 
-/файл ports/example1\_driver.c /
+/файл ports/example1_driver.c /
 
 
 
-\#include <stdio.h\>
+\#include <stdio.h>
 
 typedef unsigned char byte;
 
 
 
-int read\_cmd(byte \*buff);
+int read_cmd(byte \*buff);
 
-int write\_cmd(byte \*buff, int len);
+int write_cmd(byte \*buff, int len);
 
 
 
@@ -218,7 +218,7 @@ byte buff[100];
 
 
 
-while (read\_cmd(buff) \> 0) {
+while (read_cmd(buff) > 0) {
 
 fn = buff[0];
 
@@ -244,7 +244,7 @@ result = sum(arg1, arg2);
 
 buff[0] = result;
 
-write\_cmd(buff, 1);
+write_cmd(buff, 1);
 
 }
 
@@ -260,11 +260,11 @@ write\_cmd(buff, 1);
 
 
 
-**erl\_comm.c**
+**erl_comm.c**
 
-/\* erl\_comm.c \*/
+/\* erl_comm.c \*/
 
-\#include <unistd.h\>
+\#include <unistd.h>
 
 
 
@@ -272,31 +272,31 @@ typedef unsigned char byte;
 
 
 
-int read\_cmd(byte \*buf);
+int read_cmd(byte \*buf);
 
-int write\_cmd(byte \*buf, int len);
+int write_cmd(byte \*buf, int len);
 
-int read\_exact(byte \*buf, int len);
+int read_exact(byte \*buf, int len);
 
-int write\_exact(byte \*buf, int len);
+int write_exact(byte \*buf, int len);
 
-int read\_cmd(byte \*buf)
+int read_cmd(byte \*buf)
 
 {
 
 int len;
 
-if (read\_exact(buf, 2) != 2)
+if (read_exact(buf, 2) != 2)
 
 return(-1);
 
 len = (buf[0] << 8) | buf[1];
 
-return read\_exact(buf, len);
+return read_exact(buf, len);
 
 }
 
-int write\_cmd(byte \*buf, int len)
+int write_cmd(byte \*buf, int len)
 
 {
 
@@ -304,23 +304,23 @@ byte li;
 
 
 
-li = (len \>\> 8) & 0xff;
+li = (len >> 8) & 0xff;
 
-write\_exact(&li, 1);
+write_exact(&li, 1);
 
 
 
 li = len & 0xff;
 
-write\_exact(&li, 1);
+write_exact(&li, 1);
 
 
 
-return write\_exact(buf, len);
+return write_exact(buf, len);
 
 }
 
-int read\_exact(byte \*buf, int len)
+int read_exact(byte \*buf, int len)
 
 {
 
@@ -344,7 +344,7 @@ return(len);
 
 }
 
-int write\_exact(byte \*buf, int len)
+int write_exact(byte \*buf, int len)
 
 {
 
@@ -386,51 +386,51 @@ return (len);
 
 -export([twice/1, sum/2]).
 
-start() -\>
+start() ->
 
-spawn(fun() -\>
+spawn(fun() ->
 
 register(example1, self()),
 
-process\_flag(trap\_exit, true),
+process_flag(trap_exit, true),
 
-Port = open\_port({spawn, "./example1" }, [{packet, 2}]),
+Port = open_port({spawn, "./example1" }, [{packet, 2}]),
 
 loop(Port)
 
 end).
 
-stop() -\>
+stop() ->
 
 example1 ! Stop.
 
-twice(X) -\> call\_port({twice, X}).
+twice(X) -> call_port({twice, X}).
 
-sum(X,Y) -\> call\_port({sum, X, Y}).
+sum(X,Y) -> call_port({sum, X, Y}).
 
-call\_port(Msg) -\>
+call_port(Msg) ->
 
 example1 ! {call, self(), Msg},
 
 receive
 
-{example1, Result} -\>
+{example1, Result} ->
 
 Result
 
 end.
 
-loop(Port) -\>
+loop(Port) ->
 
 receive
 
-{call, Caller, Msg} -\>
+{call, Caller, Msg} ->
 
 Port ! {self(), {command, encode(Msg)}},
 
 receive
 
-{Port, {data, Data}} -\>
+{Port, {data, Data}} ->
 
 Caller ! {example1, decode(Data)}
 
@@ -438,35 +438,35 @@ end,
 
 loop(Port);
 
-stop -\>
+stop ->
 
 Port ! {self(), close},
 
 receive
 
-{Port, closed} -\>
+{Port, closed} ->
 
 exit(normal)
 
 end;
 
-{'EXIT', Port, Reason} -\>
+{'EXIT', Port, Reason} ->
 
-exit({port\_terminated,Reason})
+exit({port_terminated,Reason})
 
 end.
 
-encode({twice, X}) -\> [1, X];
+encode({twice, X}) -> [1, X];
 
-encode({sum, X, Y}) -\> [2, X, Y].
+encode({sum, X, Y}) -> [2, X, Y].
 
-decode([Int]) -\> Int.
+decode([Int]) -> Int.
 
 Порт открывается следующей командой:
 
 
 
-Port = open\_port({spawn, "./example1"}, [{packet, 2}])
+Port = open_port({spawn, "./example1"}, [{packet, 2}])
 
 Опция {packet,2} говорит системе автоматически добавлять к пакетам,
 адресованным удаленной программе, 2-х байтовый заголовок длинны этого
@@ -481,7 +481,7 @@ Port = open\_port({spawn, "./example1"}, [{packet, 2}])
 Давайте соберем наши программы. Мы используем для этого следующий
 make-файл для их построения. Команда make example1 собирает внешнюю
 программу, которая (ее имя) используется как аргумент в Эрланговской
-функции open\_port . Заметьте, что данный make-файл также включает в
+функции open_port . Заметьте, что данный make-файл также включает в
 себя код для построения прилинкованного драйвера, который будет
 рассмотрен далее в этой главе.
 
@@ -499,35 +499,35 @@ make-файл для их построения. Команда make example1 с�
 
 erlc -W $<
 
-MODS = example1 example1\_lid
+MODS = example1 example1_lid
 
-all: ${MODS:%=%.beam} example1 example1\_drv.so
+all: ${MODS:%=%.beam} example1 example1_drv.so
 
-example1: example1.c erl\_comm.c example1\_driver.c
+example1: example1.c erl_comm.c example1_driver.c
 
-gcc -o example1 example1.c erl\_comm.c example1\_driver.c
+gcc -o example1 example1.c erl_comm.c example1_driver.c
 
-example1\_drv.so: example1\_lid.c example1.c
+example1_drv.so: example1_lid.c example1.c
 
-gcc -o example1\_drv.so -fpic -shared example1.c example1\_lid.c
+gcc -o example1_drv.so -fpic -shared example1.c example1_lid.c
 
 clean:
 
-rm example1 example1\_drv.so \*.beam
+rm example1 example1_drv.so \*.beam
 
 **Запуск программы**
 
 Теперь мы можем запустить нашу программу:
 
-1\> **example1:start().**
+1> **example1:start().**
 
-<0.32.0\>
+<0.32.0>
 
-2\> **example1:sum(45, 32).**
+2> **example1:sum(45, 32).**
 
 77
 
-4\> **example1:twice(10).**
+4> **example1:twice(10).**
 
 20
 
@@ -558,20 +558,20 @@ rm example1 example1\_drv.so \*.beam
 система стартует и останавливается. Мы рассмотрим эти вопросы позже в
 разделе 18.7 Приложения (Эрланга).
 
-**2.3 open\_port**
+**2.3 open_port**
 
-В предыдущем разделе мы использовали функцию open\_port без подробного
+В предыдущем разделе мы использовали функцию open_port без подробного
 рассказа каковы бывают ее аргументы и что они, при этом, делают. Мы
-видели только использование open\_port с аргументом {packet,2}, который
+видели только использование open_port с аргументом {packet,2}, который
 добавляет и убирает 2-х байтовый заголовок — длинну пакета для данных,
 пересылаемых между Эрлангом и внешней программой. На самом деле у
-open\_port может быть довольно много других аргументов.
+open_port может быть довольно много других аргументов.
 
 Некоторые, из наиболее используемых, из них приведены далее:
 
 
 
-@spec open\_port(PortName, [Opt]) → Port
+@spec open_port(PortName, [Opt]) -> Port
 
 
 
@@ -646,7 +646,7 @@ stream
 из пар вида {VarName, Value} ({ИмяПеременной, ЕеЗначение}), где VarName
 и Value — это строки.
 
-Это не полный список аргументов для функции open\_port . Их полное
+Это не полный список аргументов для функции open_port . Их полное
 описание можно найти в документации для модуля erlang .
 
 **12.4 Подключаемые драйверы**
@@ -672,171 +672,171 @@ stream
 
 
 
-example1\_lid.erl – это Эрланг сервер.
+example1_lid.erl – это Эрланг сервер.
 
 example1.c – содержит С-функции, которые мы хотим использовать. Ничем не
 отличается от использованного нами ранее.
 
-example1\_lid.c – это С-программа, которая вызывает С-функции из
+example1_lid.c – это С-программа, которая вызывает С-функции из
 example1.c
 
 Код Эрланга, поддерживающий такой интерфейс приведен далее:
 
 
 
-/файл ports/example1\_lid.erl /
+/файл ports/example1_lid.erl /
 
 
 
--module(example1\_lid).
+-module(example1_lid).
 
 -export([start/0, stop/0]).
 
 -export([twice/1, sum/2]).
 
-start() -\>
+start() ->
 
-start("example1\_drv" ).
+start("example1_drv" ).
 
-start(SharedLib) -\>
+start(SharedLib) ->
 
-case erl\_ddll:load\_driver("." , SharedLib) of
+case erl_ddll:load_driver("." , SharedLib) of
 
-ok -\> ok;
+ok -> ok;
 
-{error, already\_loaded} -\> ok;
+{error, already_loaded} -> ok;
 
-\_ -\> exit({error, could\_not\_load\_driver})
+_ -> exit({error, could_not_load_driver})
 
 end,
 
-spawn(fun() -\> init(SharedLib) end).
+spawn(fun() -> init(SharedLib) end).
 
-init(SharedLib) -\>
+init(SharedLib) ->
 
-register(example1\_lid, self()),
+register(example1_lid, self()),
 
-Port = open\_port({spawn, SharedLib}, []),
+Port = open_port({spawn, SharedLib}, []),
 
 loop(Port).
 
-stop() -\>
+stop() ->
 
-example1\_lid ! stop.
+example1_lid ! stop.
 
-twice(X) -\> call\_port({twice, X}).
+twice(X) -> call_port({twice, X}).
 
-sum(X,Y) -\> call\_port({sum, X, Y}).
+sum(X,Y) -> call_port({sum, X, Y}).
 
-call\_port(Msg) -\>
+call_port(Msg) ->
 
-example1\_lid ! {call, self(), Msg},
+example1_lid ! {call, self(), Msg},
 
 receive
 
-{example1\_lid, Result} -\>
+{example1_lid, Result} ->
 
 Result
 
 end.
 
-loop(Port) -\>
+loop(Port) ->
 
 receive
 
-{call, Caller, Msg} -\>
+{call, Caller, Msg} ->
 
 Port ! {self(), {command, encode(Msg)}},
 
 receive
 
-{Port, {data, Data}} -\>
+{Port, {data, Data}} ->
 
-Caller ! {example1\_lid, decode(Data)}
+Caller ! {example1_lid, decode(Data)}
 
 end,
 
 loop(Port);
 
-stop -\>
+stop ->
 
 Port ! {self(), close},
 
 receive
 
-{Port, closed} -\>
+{Port, closed} ->
 
 exit(normal)
 
 end;
 
-{'EXIT', Port, Reason} -\>
+{'EXIT', Port, Reason} ->
 
 io:format("\~p \~n" , [Reason]),
 
-exit(port\_terminated)
+exit(port_terminated)
 
 end.
 
-encode({twice, X}) -\> [1, X];
+encode({twice, X}) -> [1, X];
 
-encode({sum, X, Y}) -\> [2, X, Y].
+encode({sum, X, Y}) -> [2, X, Y].
 
-decode([Int]) -\> Int.
+decode([Int]) -> Int.
 
 Если мы сравним эту программу с ее предыдущей версией для интерфейса
 порта, мы увидим, что они практически идентичны.
 
 Программа подключаемого драйвера состоит большей частью из кода
 работающего с элементами его структуры driver . Команда make
-example1\_drv.so для make-файла, приведенного нами ранее, позволяет
+example1_drv.so для make-файла, приведенного нами ранее, позволяет
 построить нужну. разделяемую библиотеку данного драйвера.
 
 
 
-/файл ports/example1\_lid.c /
+/файл ports/example1_lid.c /
 
 
 
-/\* example1\_lid.c \*/
+/\* example1_lid.c \*/
 
-\#include <stdio.h\>
+\#include <stdio.h>
 
-\#include "erl\_driver.h"
+\#include "erl_driver.h"
 
 typedef struct {
 
 ErlDrvPort port;
 
-} example\_data;
+} example_data;
 
-static ErlDrvData example\_drv\_start(ErlDrvPort port, char \*buff)
+static ErlDrvData example_drv_start(ErlDrvPort port, char \*buff)
 
 {
 
-example\_data\* d =
-(example\_data\*)driver\_alloc(sizeof(example\_data));
+example_data\* d =
+(example_data\*)driver_alloc(sizeof(example_data));
 
-d-\>port = port;
+d->port = port;
 
 return (ErlDrvData)d;
 
 }
 
-static void example\_drv\_stop(ErlDrvData handle)
+static void example_drv_stop(ErlDrvData handle)
 
 {
 
-driver\_free((char\*)handle);
+driver_free((char\*)handle);
 
 }
 
-static void example\_drv\_output(ErlDrvData handle, char \*buff, int
+static void example_drv_output(ErlDrvData handle, char \*buff, int
 bufflen)
 
 {
 
-example\_data\* d = (example\_data\*)handle;
+example_data\* d = (example_data\*)handle;
 
 char fn = buff[0], arg = buff[1], res;
 
@@ -850,48 +850,48 @@ res = sum(buff[1], buff[2]);
 
 }
 
-driver\_output(d-\>port, &res, 1);
+driver_output(d->port, &res, 1);
 
 }
 
-ErlDrvEntry example\_driver\_entry = {
+ErlDrvEntry example_driver_entry = {
 
-NULL, /\* F\_PTR init, N/A \*/
+NULL, /\* F_PTR init, N/A \*/
 
-example\_drv\_start, /\* L\_PTR start, called when port is opened \*/
+example_drv_start, /\* L_PTR start, called when port is opened \*/
 
-example\_drv\_stop, /\* F\_PTR stop, called when port is closed \*/
+example_drv_stop, /\* F_PTR stop, called when port is closed \*/
 
-example\_drv\_output, /\* F\_PTR output, called when erlang has sent
+example_drv_output, /\* F_PTR output, called when erlang has sent
 
 data to the port \*/
 
-NULL, /\* F\_PTR ready\_input,
+NULL, /\* F_PTR ready_input,
 
 called when input descriptor ready to read\*/
 
-NULL, /\* F\_PTR ready\_output,
+NULL, /\* F_PTR ready_output,
 
 called when output descriptor ready to write \*/
 
-"example1\_drv" , /\* char \*driver\_name, the argument to open\_port
+"example1_drv" , /\* char \*driver_name, the argument to open_port
 \*/
 
-NULL, /\* F\_PTR finish, called when unloaded \*/
+NULL, /\* F_PTR finish, called when unloaded \*/
 
-NULL, /\* F\_PTR control, port\_command callback \*/
+NULL, /\* F_PTR control, port_command callback \*/
 
-NULL, /\* F\_PTR timeout, reserved \*/
+NULL, /\* F_PTR timeout, reserved \*/
 
-NULL /\* F\_PTR outputv, reserved \*/
+NULL /\* F_PTR outputv, reserved \*/
 
 };
 
-DRIVER\_INIT(example\_drv) /\* must match name in driver\_entry \*/
+DRIVER_INIT(example_drv) /\* must match name in driver_entry \*/
 
 {
 
-return &example\_driver\_entry;
+return &example_driver_entry;
 
 }
 
@@ -899,19 +899,19 @@ return &example\_driver\_entry;
 
 
 
-1\> **c(example1\_lid).**
+1> **c(example1_lid).**
 
-{ok,example1\_lid}
+{ok,example1_lid}
 
-2\> **example1\_lid:start().**
+2> **example1_lid:start().**
 
-<0.41.0\>
+<0.41.0>
 
-3\> **example1\_lid:twice(50).**
+3> **example1_lid:twice(50).**
 
 100
 
-4\> **example1\_lid:sum(10, 20).**
+4> **example1_lid:sum(10, 20).**
 
 30
 
@@ -941,16 +941,16 @@ return &example\_driver\_entry;
 
 
 
-http://www.erlang.org/doc/pdf/erl\_interface.pdf
+http://www.erlang.org/doc/pdf/erl_interface.pdf
 
 Интерфейс Erl (ei) – это набор С-функций и макросов для кодирования и
 декодирования Эрланговских форматов. На стороне Эрланга используется
-функция term\_to\_binary для представления Эрланговского терма (обьекта)
+функция term_to_binary для представления Эрланговского терма (обьекта)
 в виде байтовой последовательности. А на стороне С-прграммы, указанные
 функции из ei могут быть использованы для распаковки этих бинарных
 данных. Кроме того, ei можно использовать и для создания бинарных
 данных, которые на стороне Эрланга распаковываются с помощью
-binary\_to\_term .
+binary_to_term .
 
 
 

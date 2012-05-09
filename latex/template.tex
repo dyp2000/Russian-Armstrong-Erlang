@@ -1,4 +1,8 @@
 \documentclass[a4paper]{book}
+\usepackage{minted}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{cmap}
 \usepackage[
 	%urlbordercolor = {1 1 1},
 	%linkbordercolor = {1 1 1},
@@ -8,7 +12,7 @@
 	citecolor = black,
 	linkcolor = black]{hyperref}
 \usepackage{graphicx}
-\usepackage{xltxtra}
+% \usepackage{xltxtra}
 \usepackage{fancyhdr}
 \usepackage{booktabs}
 \usepackage{indentfirst}
@@ -18,10 +22,9 @@
 
 \definecolor{shadecolor}{gray}{0.90}
 
-\setromanfont[Mapping=tex-text,BoldFont=<%= config['bold'] %>]{<%= config['font'] %>}
-\setmonofont{<%= config['mono'] %>}
+% \setromanfont[Mapping=tex-text,BoldFont=<%= config['bold'] %>]{<%= config['font'] %>}
+% \setmonofont{<%= config['mono'] %>}
 
-\XeTeXlinebreaklocale{<%= lang %>}
 <%= config['langrule'] %>
 
 \settowidth{\parindent}{<%= config['indent'] %>}
@@ -145,8 +148,8 @@
 \fancyhf{}
 \fancyhead[LE]{{\small\leftmark}}
 \fancyhead[RO]{{\small\rightmark}}
-\fancyhead[RE,LO]{{\small\savedauthor\hspace*{1ex}\textbf{\savedtitle}}}
-\fancyfoot[LE,RO]{\small\textbf\thepage}
+\fancyfoot[LE,RO]{{\small\textbf\thepage}}
+\fancyfoot[RE,LO]{{\small\savedauthor\hspace*{1ex}\textbf{\savedtitle}}}
 \pagestyle{fancy}
 
 <%= latex %>

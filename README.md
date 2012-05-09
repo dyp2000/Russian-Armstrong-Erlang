@@ -15,6 +15,7 @@ On Mac OS X:
 
     $ install calibre app
     $ check ruby and rubygems
+    $ easy_install pygments
     $ port install pandoc texlive +full texlive-xetex
     $ gem install rdiscount
 
