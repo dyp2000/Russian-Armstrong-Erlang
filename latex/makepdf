@@ -173,7 +173,7 @@ figures do
 
     unless abort
       print "\tMoving output to erlangbook.#{lang}.pdf... "
-      mkdir("#$root/book")
+      mkdir_p("#$root/book")
       mv("#{dir}/main.pdf", "#$root/book/erlangbook.#{lang}.pdf")
       puts "done"
     end
