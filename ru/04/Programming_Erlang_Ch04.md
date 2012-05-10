@@ -515,13 +515,13 @@ math:sqrt(X) с отрицательным аргументом, то мы ув�
 
 1> **math:sqrt(-1).**
 
-\*\* exited: {badarith,[{math,sqrt,[-1]},
+** exited: {badarith,[{math,sqrt,[-1]},
 
 {erl_eval,do_apply,5},
 
 {shell,exprs,6},
 
-{shell,eval_loop,3}]} \*\*
+{shell,eval_loop,3}]} **
 
 
 
@@ -544,7 +544,7 @@ math:sqrt(X).
 
 2> **lib_misc:sqrt(-1).**
 
-\*\* exited: {{squareRootNegativeArgument,-1},
+** exited: {{squareRootNegativeArgument,-1},
 
 [{lib_misc,sqrt,1},
 
@@ -552,7 +552,7 @@ math:sqrt(X).
 
 {shell,exprs,6},
 
-{shell,eval_loop,3}]} \*\*
+{shell,eval_loop,3}]} **
 
 
 

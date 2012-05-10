@@ -205,7 +205,7 @@ log_the_error(Name, Request, Why),
 
 From ! {Name, crash},
 
-%% loop with the \*original\* state
+%% loop with the *original* state
 
 loop(Name, Mod, OldState)
 
@@ -545,7 +545,7 @@ Something()
 
 fac(0) -> 1;
 
-fac(N) -> N \* fac(N-1).
+fac(N) -> N * fac(N-1).
 
 
 

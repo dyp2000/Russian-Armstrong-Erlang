@@ -576,7 +576,7 @@ ok
 
 4> edemo1:start(false, {die,kill}).
 
-Process a received {'EXIT',<0.56.0>,killed} <-- \*\* замена killed \*\*
+Process a received {'EXIT',<0.56.0>,killed} <-- ** замена killed **
 
 process b (<0.56.0>) is dead
 

@@ -125,9 +125,9 @@ HYPERLINK
 "http://media.pragprog.com/titles/jaerlang/code/geometry.erl".HYPERLINK
 "http://media.pragprog.com/titles/jaerlang/code/geometry.erl"erl
 
-area({rectangle, Width, Ht}) -> Width \* Ht;
+area({rectangle, Width, Ht}) -> Width * Ht;
 
-area({circle, R}) -> 3.14159 \* R \* R.
+area({circle, R}) -> 3.14159 * R * R.
 
 Теперь перепишем эту же функцию как процесс:
 
@@ -151,13 +151,13 @@ receive
 
 {rectangle, Width, Ht} ->
 
-io:format("*Area of rectangle is \~p\~n*" ,[Width \* Ht]),
+io:format("*Area of rectangle is \~p\~n*" ,[Width * Ht]),
 
 loop();
 
 {circle, R} ->
 
-io:format("*Area of circle is \~p\~n*" , [3.14159 \* R \* R]),
+io:format("*Area of circle is \~p\~n*" , [3.14159 * R * R]),
 
 loop();
 
@@ -206,7 +206,7 @@ receive
 
 {rectangle, Width, Ht} ->
 
-io:format("*Area of rectangle is \~p\~n*" ,[Width \* Ht]),
+io:format("*Area of rectangle is \~p\~n*" ,[Width * Ht]),
 
 loop()
 
@@ -269,7 +269,7 @@ receive
 
 {rectangle, Width, Ht} ->
 
-io:format("*Area of rectangle is \~p\~n*" ,[Width \* Ht]),
+io:format("*Area of rectangle is \~p\~n*" ,[Width * Ht]),
 
 loop()
 
@@ -283,7 +283,7 @@ receive
 
 {From, {rectangle, Width, Ht}} ->
 
-From ! Width \* Ht,
+From ! Width * Ht,
 
 loop();
 
@@ -360,13 +360,13 @@ receive
 
 {From, {rectangle, Width, Ht}} ->
 
-From ! Width \* Ht,
+From ! Width * Ht,
 
 loop();
 
 {From, {circle, R}} ->
 
-From ! 3.14159 \* R \* R,
+From ! 3.14159 * R * R,
 
 loop();
 
@@ -471,13 +471,13 @@ receive
 
 {From, {rectangle, Width, Ht}} ->
 
-From ! {self(), Width \* Ht},
+From ! {self(), Width * Ht},
 
 loop();
 
 {From, {circle, R}} ->
 
-From ! {self(), 3.14159 \* R \* R},
+From ! {self(), 3.14159 * R * R},
 
 loop();
 
@@ -544,13 +544,13 @@ receive
 
 {From, {rectangle, Width, Ht}} ->
 
-From ! {self(), Width \* Ht},
+From ! {self(), Width * Ht},
 
 loop();
 
 {From, {circle, R}} ->
 
-From ! {self(), 3.14159 \* R \* R},
+From ! {self(), 3.14159 * R * R},
 
 loop();
 
@@ -622,9 +622,9 @@ L = for(1, N, fun() -> spawn(fun() -> wait() end) end),
 
 lists:foreach(fun(Pid) -> Pid ! die end, L),
 
-U1 = Time1 \* 1000 / N,
+U1 = Time1 * 1000 / N,
 
-U2 = Time2 \* 1000 / N,
+U2 = Time2 * 1000 / N,
 
 io:format("*Process spawn time=\~p (\~p) microseconds\~n*" ,
 
@@ -1167,13 +1167,13 @@ receive
 
 {From, {rectangle, Width, Ht}} ->
 
-From ! {self(), Width \* Ht},
+From ! {self(), Width * Ht},
 
 loop();
 
 {From, {circle, R}} ->
 
-From ! {self(), 3.14159 \* R \* R},
+From ! {self(), 3.14159 * R * R},
 
 loop();
 
@@ -1200,7 +1200,7 @@ Line 1 loop() ->
 
 - {From, {rectangle, Width, Ht}} ->
 
-- From ! {self(), Width \* Ht},
+- From ! {self(), Width * Ht},
 
 - loop(),
 
@@ -1208,7 +1208,7 @@ Line 1 loop() ->
 
 - {From, {circle, R}} ->
 
-- From ! {self(), 3.14159 \* R \* R},
+- From ! {self(), 3.14159 * R * R},
 
 - loop();
 
@@ -1261,7 +1261,7 @@ spawn(Fun). Убедитесь, что ваша программа работа�
 другой потерпит неудачу.
 
 Напишите кольцевой тест. Создайте N процессов в кольце. Отправьте
-сообщение по кольцу M раз так, чтобы было отправлено N \* M сообщений.
+сообщение по кольцу M раз так, чтобы было отправлено N * M сообщений.
 Замерьте время, которое тратится для разных значений N и M.
 
 Напишите подобную программу на каком-нибудь другом языке

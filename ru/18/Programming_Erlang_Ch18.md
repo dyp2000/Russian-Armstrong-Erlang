@@ -999,7 +999,7 @@ handle_info/2, terminate/2]).
 
 init(Args) ->
 
-io:format("\*\*\* my_alarm_handler init:\~p\~n" ,[Args]),
+io:format("*** my_alarm_handler init:\~p\~n" ,[Args]),
 
 {ok, 0}.
 
@@ -1007,20 +1007,20 @@ io:format("\*\*\* my_alarm_handler init:\~p\~n" ,[Args]),
 
 handle_event({set_alarm, tooHot}, N) ->
 
-error_logger:error_msg("\*\*\* Tell the Engineer to turn on the
+error_logger:error_msg("*** Tell the Engineer to turn on the
 fan\~n" ),
 
 {ok, N+1};
 
 handle_event({clear_alarm, tooHot}, N) ->
 
-error_logger:error_msg("\*\*\* Danger over. Turn off the fan\~n" ),
+error_logger:error_msg("*** Danger over. Turn off the fan\~n" ),
 
 {ok, N};
 
 handle_event(Event, N) ->
 
-io:format("\*\*\* unmatched event:\~p\~n" ,[Event]),
+io:format("*** unmatched event:\~p\~n" ,[Event]),
 
 {ok, N}.
 
@@ -1071,7 +1071,7 @@ alarm_handler: {set,tooHot}
 
 {my_alarm_handler, xyz}).
 
-\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[tooHot]}}
+*** my_alarm_handler init:{xyz,{alarm_handler,[tooHot]}}
 
 3> alarm_handler:set_alarm(tooHot).
 
@@ -1079,7 +1079,7 @@ ok
 
 =ERROR REPORT==== 28-Mar-2007::14:22:19 ===
 
-\*\*\* Tell the Engineer to turn on the fan
+*** Tell the Engineer to turn on the fan
 
 4> alarm_handler:clear_alarm(tooHot).
 
@@ -1087,7 +1087,7 @@ ok
 
 =ERROR REPORT==== 28-Mar-2007::14:22:39 ===
 
-\*\*\* Danger over. Turn off the fan
+*** Danger over. Turn off the fan
 
 
 
@@ -1148,7 +1148,7 @@ ERROR REPORT <0.33.0> 2007-03-28 14:22:39
 
 =====================================================
 
-\*\*\* Danger over. Turn off the fan
+*** Danger over. Turn off the fan
 
 ok
 
@@ -1158,7 +1158,7 @@ ERROR REPORT <0.33.0> 2007-03-28 14:22:19
 
 =====================================================
 
-\*\*\* Tell the Engineer to turn on the fan
+*** Tell the Engineer to turn on the fan
 
 
 
@@ -1399,11 +1399,11 @@ code_change(_OldVsn, N, _Extra) -> {ok, N}.
 
 
 
-compute_area({square, X}) -> X\*X;
+compute_area({square, X}) -> X*X;
 
 
 
-compute_area({rectonge, X, Y}) -> X\*Y.
+compute_area({rectonge, X, Y}) -> X*Y.
 
 
 
@@ -1714,7 +1714,7 @@ $ erl -boot start_sasl -config elog3
 
 1> sellaprime_supervisor:start_in_shell_for_testing().
 
-\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[]}}
+*** my_alarm_handler init:{xyz,{alarm_handler,[]}}
 
 area_server starting
 
@@ -1742,9 +1742,9 @@ area_server stopping
 
 =ERROR REPORT==== 28-Mar-2007::15:15:54 ===
 
-\*\* Generic server area_server terminating
+** Generic server area_server terminating
 
-\*\* Last message in was {area,{rectangle,10,20}}
+** Last message in was {area,{rectangle,10,20}}
 
 
 
@@ -1765,11 +1765,11 @@ gen_supervisor и другие поведения Эрланга строили�
 
 
 
-\*\* When Server state == 1
+** When Server state == 1
 
-\*\* Reason for termination ==
+** Reason for termination ==
 
-\*\*
+**
 {function_clause,[{area_server,compute_area,[{rectangle,10,20}]},
 
 {area_server,handle_call,3},
@@ -1780,7 +1780,7 @@ gen_supervisor и другие поведения Эрланга строили�
 
 area_server starting
 
-\*\* exited: {{function_clause,
+** exited: {{function_clause,
 
 [{area_server,compute_area,[{rectangle,10,20}]},
 
@@ -1792,7 +1792,7 @@ area_server starting
 
 {gen_server,call,
 
-[area_server,{area,{rectangle,10,20}}]}} \*\*
+[area_server,{area,{rectangle,10,20}}]}} **
 
 
 
@@ -1836,7 +1836,7 @@ Generating a 120 digit prime
 
 =ERROR REPORT==== 28-Mar-2007::15:22:17 ===
 
-\*\*\* Tell the Engineer to turn on the fan
+*** Tell the Engineer to turn on the fan
 
 ........................................
 
@@ -1844,7 +1844,7 @@ Generating a 120 digit prime
 
 =ERROR REPORT==== 28-Mar-2007::15:22:20 ===
 
-\*\*\* Danger over. Turn off the fan
+*** Danger over. Turn off the fan
 
 765525474077993399589034417231006593110007130279318737419683
 
@@ -2936,7 +2936,7 @@ handle_info/2, terminate/2]).
 
 init(Args) ->
 
-io:format("\*\*\* my_alarm_handler init:\~p\~n" ,[Args]),
+io:format("*** my_alarm_handler init:\~p\~n" ,[Args]),
 
 {ok, 0}.
 
@@ -2944,20 +2944,20 @@ io:format("\*\*\* my_alarm_handler init:\~p\~n" ,[Args]),
 
 handle_event({set_alarm, tooHot}, N) ->
 
-error_logger:error_msg("\*\*\* Tell the Engineer to turn on the
+error_logger:error_msg("*** Tell the Engineer to turn on the
 fan\~n" ),
 
 {ok, N+1};
 
 handle_event({clear_alarm, tooHot}, N) ->
 
-error_logger:error_msg("\*\*\* Danger over. Turn off the fan\~n" ),
+error_logger:error_msg("*** Danger over. Turn off the fan\~n" ),
 
 {ok, N};
 
 handle_event(Event, N) ->
 
-io:format("\*\*\* unmatched event:\~p\~n" ,[Event]),
+io:format("*** unmatched event:\~p\~n" ,[Event]),
 
 {ok, N}.
 
@@ -3008,7 +3008,7 @@ alarm_handler: {set,tooHot}
 
 {my_alarm_handler, xyz}).
 
-\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[tooHot]}}
+*** my_alarm_handler init:{xyz,{alarm_handler,[tooHot]}}
 
 3> alarm_handler:set_alarm(tooHot).
 
@@ -3016,7 +3016,7 @@ ok
 
 =ERROR REPORT==== 28-Mar-2007::14:22:19 ===
 
-\*\*\* Tell the Engineer to turn on the fan
+*** Tell the Engineer to turn on the fan
 
 4> alarm_handler:clear_alarm(tooHot).
 
@@ -3024,7 +3024,7 @@ ok
 
 =ERROR REPORT==== 28-Mar-2007::14:22:39 ===
 
-\*\*\* Danger over. Turn off the fan
+*** Danger over. Turn off the fan
 
 
 
@@ -3085,7 +3085,7 @@ ERROR REPORT <0.33.0> 2007-03-28 14:22:39
 
 =====================================================
 
-\*\*\* Danger over. Turn off the fan
+*** Danger over. Turn off the fan
 
 ok
 
@@ -3095,7 +3095,7 @@ ERROR REPORT <0.33.0> 2007-03-28 14:22:19
 
 =====================================================
 
-\*\*\* Tell the Engineer to turn on the fan
+*** Tell the Engineer to turn on the fan
 
 
 
@@ -3336,11 +3336,11 @@ code_change(_OldVsn, N, _Extra) -> {ok, N}.
 
 
 
-compute_area({square, X}) -> X\*X;
+compute_area({square, X}) -> X*X;
 
 
 
-compute_area({rectonge, X, Y}) -> X\*Y.
+compute_area({rectonge, X, Y}) -> X*Y.
 
 
 
@@ -3649,7 +3649,7 @@ $ erl -boot start_sasl -config elog3
 
 1> sellaprime_supervisor:start_in_shell_for_testing().
 
-\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[]}}
+*** my_alarm_handler init:{xyz,{alarm_handler,[]}}
 
 area_server starting
 
@@ -3677,9 +3677,9 @@ area_server stopping
 
 =ERROR REPORT==== 28-Mar-2007::15:15:54 ===
 
-\*\* Generic server area_server terminating
+** Generic server area_server terminating
 
-\*\* Last message in was {area,{rectangle,10,20}}
+** Last message in was {area,{rectangle,10,20}}
 
 
 
@@ -3700,11 +3700,11 @@ gen_supervisor и другие поведения Эрланга строили�
 
 
 
-\*\* When Server state == 1
+** When Server state == 1
 
-\*\* Reason for termination ==
+** Reason for termination ==
 
-\*\*
+**
 {function_clause,[{area_server,compute_area,[{rectangle,10,20}]},
 
 {area_server,handle_call,3},
@@ -3715,7 +3715,7 @@ gen_supervisor и другие поведения Эрланга строили�
 
 area_server starting
 
-\*\* exited: {{function_clause,
+** exited: {{function_clause,
 
 [{area_server,compute_area,[{rectangle,10,20}]},
 
@@ -3727,7 +3727,7 @@ area_server starting
 
 {gen_server,call,
 
-[area_server,{area,{rectangle,10,20}}]}} \*\*
+[area_server,{area,{rectangle,10,20}}]}} **
 
 
 
@@ -3771,7 +3771,7 @@ Generating a 120 digit prime
 
 =ERROR REPORT==== 28-Mar-2007::15:22:17 ===
 
-\*\*\* Tell the Engineer to turn on the fan
+*** Tell the Engineer to turn on the fan
 
 ........................................
 
@@ -3779,7 +3779,7 @@ Generating a 120 digit prime
 
 =ERROR REPORT==== 28-Mar-2007::15:22:20 ===
 
-\*\*\* Danger over. Turn off the fan
+*** Danger over. Turn off the fan
 
 765525474077993399589034417231006593110007130279318737419683
 
@@ -3933,7 +3933,7 @@ ERROR REPORT <0.33.0> 2007-03-28 15:22:17
 
 ================================================================
 
-\*\*\* Tell the Engineer to turn on the fan
+*** Tell the Engineer to turn on the fan
 
 
 
@@ -3947,7 +3947,7 @@ ERROR REPORT <0.33.0> 2007-03-28 15:22:20
 
 ================================================================
 
-\*\*\* Danger over. Turn off the fan
+*** Danger over. Turn off the fan
 
 
 
@@ -4103,7 +4103,7 @@ ok
 
 4> application:start(sellaprime).
 
-\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[]}}
+*** my_alarm_handler init:{xyz,{alarm_handler,[]}}
 
 area_server starting
 
@@ -4169,7 +4169,7 @@ $ erl -boot start_sasl -config elog3
 
 1> application:start(sellaprime).
 
-\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[]}}
+*** my_alarm_handler init:{xyz,{alarm_handler,[]}}
 
 area_server starting
 
@@ -4605,7 +4605,7 @@ ERROR REPORT <0.33.0> 2007-03-28 15:22:17
 
 ================================================================
 
-\*\*\* Tell the Engineer to turn on the fan
+*** Tell the Engineer to turn on the fan
 
 
 
@@ -4619,7 +4619,7 @@ ERROR REPORT <0.33.0> 2007-03-28 15:22:20
 
 ================================================================
 
-\*\*\* Danger over. Turn off the fan
+*** Danger over. Turn off the fan
 
 
 
@@ -4775,7 +4775,7 @@ ok
 
 4> application:start(sellaprime).
 
-\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[]}}
+*** my_alarm_handler init:{xyz,{alarm_handler,[]}}
 
 area_server starting
 
@@ -4841,7 +4841,7 @@ $ erl -boot start_sasl -config elog3
 
 1> application:start(sellaprime).
 
-\*\*\* my_alarm_handler init:{xyz,{alarm_handler,[]}}
+*** my_alarm_handler init:{xyz,{alarm_handler,[]}}
 
 area_server starting
 

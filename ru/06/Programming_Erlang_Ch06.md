@@ -513,7 +513,7 @@ $
 
 fac(0) -> 1;
 
-fac(N) -> N\*fac(N-1).
+fac(N) -> N*fac(N-1).
 
 Мы можем скомпилировать fac.erl и запустить его в оболочке Эрланга
 следующим образом:
@@ -555,7 +555,7 @@ init:stop().
 
 fac(0) -> 1;
 
-fac(N) -> N\*fac(N-1).
+fac(N) -> N*fac(N-1).
 
 Теперь мы можем ее скомпилировать и запустить:
 
@@ -591,7 +591,7 @@ fac(0) -> 1;
 
 fac(N) ->
 
-N \* fac(N-1).
+N * fac(N-1).
 
 Компиляция здесь не нужна, просто запускаем его:
 
@@ -744,7 +744,7 @@ cd dir2; make
 
 clean:
 
-rm -rf \*.beam erl_crash.dump
+rm -rf *.beam erl_crash.dump
 
 cd dir1; make clean
 
@@ -855,7 +855,7 @@ compile: ${MODS:%=%.beam}
 
 clean:
 
-rm -rf \*.beam erl_crash.dump
+rm -rf *.beam erl_crash.dump
 
 
 
@@ -966,13 +966,13 @@ rm -rf \*.beam erl_crash.dump
 
 1> **glurk:oops(1,23).**
 
-\*\* exited: {undef,[{glurk,oops,[1,23]},
+** exited: {undef,[{glurk,oops,[1,23]},
 
 {erl_eval,do_apply,5},
 
 {shell,exprs,6},
 
-{shell,eval_loop,3}]} \*\*
+{shell,eval_loop,3}]} **
 
 На самом деле, здесь просто не существует модуля с именем glurk, но не
 это важно. Вы должны сконцентрироваться на рассмотрении сообщения об
@@ -1062,7 +1062,7 @@ glurk.erl нет в директории содержащей код. В это�
 
 $ make
 
-make: \*\*\* No rule to make target ‘glurk.beam',
+make: *** No rule to make target ‘glurk.beam',
 
 needed by ‘compile'. Stop.
 
@@ -1160,7 +1160,7 @@ q - quit erlang
 
 --> **j**
 
-1\* {shell,start,[init]}
+1* {shell,start,[init]}
 
 --> **s**
 
@@ -1168,7 +1168,7 @@ q - quit erlang
 
 1 {shell,start,[init]}
 
-2\* {shell,start,[]}
+2* {shell,start,[]}
 
 --> c 2
 
@@ -1293,7 +1293,7 @@ HTML файлов. В ОС Виндовс HTML документация уста
 
 1> **help().**
 
-\*\* shell internal commands \*\*
+** shell internal commands **
 
 b() -- display all variable bindings
 

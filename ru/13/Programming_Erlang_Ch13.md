@@ -573,7 +573,7 @@ MP3 — это бинарный формат, используемый для х
 
 
  dir(Dir) ->
- Files = lib_find:files(Dir, "\*.mp3" , true),
+ Files = lib_find:files(Dir, "*.mp3" , true),
  L1 = map(fun(I) ->
  {I, (catch read_id3_tag(I))}
  end, Files),
@@ -628,7 +628,7 @@ skip_blanks_and_zero([$\\s|T]) -> skip_blanks_and_zero(T);
 
 Основная точка входа нашей программы — это id3_v1:dir(Dir). Первое, что
 мы делаем — это ищем все наши MP3 файлы, вызывая lib_find:find(Dir,
-"\*.mp3", true) (утилита поиска показана далее в части 13.8), которая
+"*.mp3", true) (утилита поиска показана далее в части 13.8), которая
 рекурсивно сканирует директории ниже Dir на предмет файлов MP3. Найдя
 файл, мы разбираем теги, вызывая read_id3_tag. Разбор сильно упрощён,
 потому что мы используем простое битовое сопоставление с образцом. После
@@ -1290,7 +1290,7 @@ fun(File, Acc) -> [File|Acc] end
 
 
 
-lib_find:files(Dir, "\*.erl" , true)
+lib_find:files(Dir, "*.erl" , true)
 
 
 

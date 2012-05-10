@@ -1572,7 +1572,7 @@ catch
 
 _:_ ->
 
-self() ! {insert, "\*\* bad input\*\*\\n\*\* /h for help\\n" }
+self() ! {insert, "** bad input**\\n** /h for help\\n" }
 
 end,
 

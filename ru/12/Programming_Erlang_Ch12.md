@@ -111,7 +111,7 @@ Port!{PidC,close} – закрывает даный порт.
 
 int twice(int x){
 
-return 2\*x;
+return 2*x;
 
 }
 
@@ -204,9 +204,9 @@ typedef unsigned char byte;
 
 
 
-int read_cmd(byte \*buff);
+int read_cmd(byte *buff);
 
-int write_cmd(byte \*buff, int len);
+int write_cmd(byte *buff, int len);
 
 
 
@@ -234,9 +234,9 @@ arg1 = buff[1];
 
 arg2 = buff[2];
 
-/\* debug -- you can print to stderr to debug
+/* debug -- you can print to stderr to debug
 
-fprintf(stderr,"calling sum %i %i\\n",arg1,arg2); \*/
+fprintf(stderr,"calling sum %i %i\\n",arg1,arg2); */
 
 result = sum(arg1, arg2);
 
@@ -262,7 +262,7 @@ write_cmd(buff, 1);
 
 **erl_comm.c**
 
-/\* erl_comm.c \*/
+/* erl_comm.c */
 
 \#include <unistd.h>
 
@@ -272,15 +272,15 @@ typedef unsigned char byte;
 
 
 
-int read_cmd(byte \*buf);
+int read_cmd(byte *buf);
 
-int write_cmd(byte \*buf, int len);
+int write_cmd(byte *buf, int len);
 
-int read_exact(byte \*buf, int len);
+int read_exact(byte *buf, int len);
 
-int write_exact(byte \*buf, int len);
+int write_exact(byte *buf, int len);
 
-int read_cmd(byte \*buf)
+int read_cmd(byte *buf)
 
 {
 
@@ -296,7 +296,7 @@ return read_exact(buf, len);
 
 }
 
-int write_cmd(byte \*buf, int len)
+int write_cmd(byte *buf, int len)
 
 {
 
@@ -320,7 +320,7 @@ return write_exact(buf, len);
 
 }
 
-int read_exact(byte \*buf, int len)
+int read_exact(byte *buf, int len)
 
 {
 
@@ -344,7 +344,7 @@ return(len);
 
 }
 
-int write_exact(byte \*buf, int len)
+int write_exact(byte *buf, int len)
 
 {
 
@@ -513,7 +513,7 @@ gcc -o example1_drv.so -fpic -shared example1.c example1_lid.c
 
 clean:
 
-rm example1 example1_drv.so \*.beam
+rm example1 example1_drv.so *.beam
 
 **Запуск программы**
 
@@ -798,7 +798,7 @@ example1_drv.so для make-файла, приведенного нами ран
 
 
 
-/\* example1_lid.c \*/
+/* example1_lid.c */
 
 \#include <stdio.h>
 
@@ -810,12 +810,12 @@ ErlDrvPort port;
 
 } example_data;
 
-static ErlDrvData example_drv_start(ErlDrvPort port, char \*buff)
+static ErlDrvData example_drv_start(ErlDrvPort port, char *buff)
 
 {
 
-example_data\* d =
-(example_data\*)driver_alloc(sizeof(example_data));
+example_data* d =
+(example_data*)driver_alloc(sizeof(example_data));
 
 d->port = port;
 
@@ -827,16 +827,16 @@ static void example_drv_stop(ErlDrvData handle)
 
 {
 
-driver_free((char\*)handle);
+driver_free((char*)handle);
 
 }
 
-static void example_drv_output(ErlDrvData handle, char \*buff, int
+static void example_drv_output(ErlDrvData handle, char *buff, int
 bufflen)
 
 {
 
-example_data\* d = (example_data\*)handle;
+example_data* d = (example_data*)handle;
 
 char fn = buff[0], arg = buff[1], res;
 
@@ -856,38 +856,38 @@ driver_output(d->port, &res, 1);
 
 ErlDrvEntry example_driver_entry = {
 
-NULL, /\* F_PTR init, N/A \*/
+NULL, /* F_PTR init, N/A */
 
-example_drv_start, /\* L_PTR start, called when port is opened \*/
+example_drv_start, /* L_PTR start, called when port is opened */
 
-example_drv_stop, /\* F_PTR stop, called when port is closed \*/
+example_drv_stop, /* F_PTR stop, called when port is closed */
 
-example_drv_output, /\* F_PTR output, called when erlang has sent
+example_drv_output, /* F_PTR output, called when erlang has sent
 
-data to the port \*/
+data to the port */
 
-NULL, /\* F_PTR ready_input,
+NULL, /* F_PTR ready_input,
 
-called when input descriptor ready to read\*/
+called when input descriptor ready to read*/
 
-NULL, /\* F_PTR ready_output,
+NULL, /* F_PTR ready_output,
 
-called when output descriptor ready to write \*/
+called when output descriptor ready to write */
 
-"example1_drv" , /\* char \*driver_name, the argument to open_port
-\*/
+"example1_drv" , /* char *driver_name, the argument to open_port
+*/
 
-NULL, /\* F_PTR finish, called when unloaded \*/
+NULL, /* F_PTR finish, called when unloaded */
 
-NULL, /\* F_PTR control, port_command callback \*/
+NULL, /* F_PTR control, port_command callback */
 
-NULL, /\* F_PTR timeout, reserved \*/
+NULL, /* F_PTR timeout, reserved */
 
-NULL /\* F_PTR outputv, reserved \*/
+NULL /* F_PTR outputv, reserved */
 
 };
 
-DRIVER_INIT(example_drv) /\* must match name in driver_entry \*/
+DRIVER_INIT(example_drv) /* must match name in driver_entry */
 
 {
 

@@ -148,19 +148,19 @@ proxy - посредник
 Наш сервер имён kvs — это простой сервер вида ключ-значение. У него
 следующий интерфейс:
 
-@spec kvs:start() -> true
+@spec kvs:start() -\> true
 
 Запускает сервер; создаёт сервер с зарегистрированным именем kvs.
 
 
 
-@spec kvs:store(Key, Value) -> true
+@spec kvs:store(Key, Value) -\> true
 
 Связывает ключ и значение.
 
 
 
-@spec kvs:lookup(Key) -> {ok, Value} | undefined
+@spec kvs:lookup(Key) -\> {ok, Value} | undefined
 
 Ищет значения для ключа и возвращает {ok, Value}, если с ключём связано
 значение; в противном случае возвращает undefined.
@@ -184,29 +184,29 @@ HYPERLINK
 
 -export([start/0, store/2, lookup/1]).
 
-start() -> register(kvs, spawn(fun() -> loop() end)).
+start() -\> register(kvs, spawn(fun() -\> loop() end)).
 
-store(Key, Value) -> rpc({store, Key, Value}).
+store(Key, Value) -\> rpc({store, Key, Value}).
 
-lookup(Key) -> rpc({lookup, Key}).
+lookup(Key) -\> rpc({lookup, Key}).
 
-rpc(Q) ->
+rpc(Q) -\>
 
 kvs ! {self(), Q},
 
 receive
 
-{kvs, Reply} ->
+{kvs, Reply} -\>
 
 Reply
 
 end.
 
-loop() ->
+loop() -\>
 
 receive
 
-{From, {store, Key, Value}} ->
+{From, {store, Key, Value}} -\>
 
 put(Key, {ok, Value}),
 
@@ -214,7 +214,7 @@ From ! {kvs, true},
 
 loop();
 
-{From, {lookup, Key}} ->
+{From, {lookup, Key}} -\>
 
 From ! {kvs, get(Key)},
 
@@ -225,27 +225,27 @@ end.
 Мы начнём с локального тестирования сервера, чтобы посмотреть — работает
 ли он корректно:
 
-1> kvs:start().
+1\> kvs:start().
 
 true
 
-2> kvs:store({location, joe}, "Stockholm").
+2\> kvs:store({location, joe}, "Stockholm").
 
 true
 
-3> kvs:store(weather, raining).
+3\> kvs:store(weather, raining).
 
 true
 
-4> kvs:lookup(weather).
+4\> kvs:lookup(weather).
 
 {ok,raining}
 
-5> kvs:lookup({location, joe}).
+5\> kvs:lookup({location, joe}).
 
 {ok,"Stockholm"}
 
-6> kvs:lookup({location, jane}).
+6\> kvs:lookup({location, jane}).
 
 undefined
 
@@ -263,7 +263,7 @@ undefined
 
 $ erl -sname gandalf
 
-(gandalf@localhost) 1> kvs:start().
+(gandalf@localhost) 1\> kvs:start().
 
 true
 
@@ -284,13 +284,13 @@ gandalf на локальной машине». Заметьте, как обо�
 
 $ erl -sname bilbo
 
-(bilbo@localhost) 1> rpc:call(gandalf@localhost,
+(bilbo@localhost) 1\> rpc:call(gandalf@localhost,
 
 kvs,store, [weather, fine]).
 
 true
 
-(bilbo@localhost) 2> rpc:call(gandalf@localhost,
+(bilbo@localhost) 2\> rpc:call(gandalf@localhost,
 
 kvs,lookup,[weather]).
 
@@ -303,7 +303,7 @@ kvs,lookup,[weather]).
 Вызов для установки переменной weather был сделан на узле bilbo. Мы
 можем вернуться обратно на узел gandalf и проверить значение weather:
 
-(gandalf@localhost)2> kvs:lookup(weather).
+(gandalf@localhost)2\> kvs:lookup(weather).
 
 {ok,fine}
 
@@ -330,7 +330,7 @@ george.myerl.example.com. Перед тем, как сделать это, мы 
 
 doris $ erl -name gandalf -setcookie abc
 
-(gandalf@doris.myerl.example.com) 1> kvs:start().
+(gandalf@doris.myerl.example.com) 1\> kvs:start().
 
 true
 
@@ -339,11 +339,11 @@ true
 
 george $ erl -name bilbo -setcookie abc
 
-(bilbo@george.myerl.example.com) 1> rpc:call("mailto:gandalf@doris.myerl.example.com", kvs, store, [weather,cold]).
+(bilbo@george.myerl.example.com) 1\> rpc:call("mailto:gandalf@doris.myerl.example.com", kvs, store, [weather,cold]).
 
 true
 
-(bilbo@george.myerl.example.com) 2> rpc:call("mailto:gandalf@doris.myerl.example.com", kvs, lookup, [weather]).
+(bilbo@george.myerl.example.com) 2\> rpc:call("mailto:gandalf@doris.myerl.example.com", kvs, lookup, [weather]).
 
 {ok,cold}
 
@@ -446,14 +446,14 @@ inet_dist_listen_max Max
 Следующие встроенные функции (BIF) используются для написания
 распределённых программ7 :
 
-@spec spawn(Node, Fun) -> Pid
+@spec spawn(Node, Fun) -\> Pid
 
 Работает в точности, как spawn(Fun), только новый процесс порождается на
 узле Node.
 
 
 
-@spec spawn(Node, Mod, Func, ArgList) -> Pid
+@spec spawn(Node, Mod, Func, ArgList) -\> Pid
 
 Работает в точности, как spawn(Mod, Func, ArgList), только новый процесс
 порождается на узле Node. spawn(Mod, Func, Args) создаёт новый процесс,
@@ -466,27 +466,27 @@ spawn(Node, Fun) может сломаться, если на распредел
 
 
 
-@spec spawn_link(Node, Fun) -> Pid
+@spec spawn_link(Node, Fun) -\> Pid
 
 Работает в точности, как spawn_link(Fun), только новый процесс
 порождается на узле Node.
 
 
 
-@spec spawn_link(Node, Mod, Func, ArgList) -> Pid
+@spec spawn_link(Node, Mod, Func, ArgList) -\> Pid
 
 Работает в точности, как spawn(Node, Mod, Func, ArgList), только новый
 процесс связывается с текущим процессом.
 
 
 
-@spec disconnect_node(Node) -> bool() | ignored
+@spec disconnect_node(Node) -\> bool() | ignored
 
 Принудительно отсоединяет узел.
 
 
 
-@spec monitor_node(Node, Flag) -> true
+@spec monitor_node(Node, Flag) -\> true
 
 Если Flag имеет значение true, то включается мониторинг. Если Flag имеет
 значение false, то мониторинг выключается. При включенном мониторинге
@@ -494,27 +494,27 @@ spawn(Node, Fun) может сломаться, если на распредел
 Node} и {nodedown, Node} в случае, когда узел Node присоединяется или
 покидает набор подключенных узлов Эрланга.
 
-@spec node() -> Node
+@spec node() -\> Node
 
 Возвращает имя локального узла. Если узел не является распределённым, то
 возвращается nonode@nohost.
 
 
 
-@spec node(Arg) -> Node
+@spec node(Arg) -\> Node
 
 Возвращает узел, где находится Arg. Arg может быть PID, ссылка или порт.
 Если узел не является распределённым, то возвращается nonode@nohost.
 
 
 
-@spec nodes() -> [Node]
+@spec nodes() -\> [Node]
 
 Возвращает список всех других узлов в сети, с которыми мы соединены.
 
 
 
-@spec is_alive() -> bool()
+@spec is_alive() -\> bool()
 
 Возвращает true, если локальный узел жив и может быть частью
 распределённой системы. В противном случае возвращает false.
@@ -547,27 +547,27 @@ HYPERLINK
 
 -export([rpc/4, start/1]).
 
-start(Node) ->
+start(Node) -\>
 
-spawn(Node, fun() -> loop() end).
+spawn(Node, fun() -\> loop() end).
 
-rpc(Pid, M, F, A) ->
+rpc(Pid, M, F, A) -\>
 
 Pid ! {rpc, self(), M, F, A},
 
 receive
 
-{Pid, Response} ->
+{Pid, Response} -\>
 
 Response
 
 end.
 
-loop() ->
+loop() -\>
 
 receive
 
-{rpc, Pid, M, F, A} ->
+{rpc, Pid, M, F, A} -\>
 
 Pid ! {self(), (catch apply(M, F, A))},
 
@@ -588,28 +588,28 @@ end.
 
 doris $ erl -name gandalf -setcookie abc
 
-(gandalf@doris.myerl.example.com) 1>
+(gandalf@doris.myerl.example.com) 1\>
 
 А на машине george мы запускаем узел под названием bilbo, помня об
 использовании тех же кук:
 
 george $ erl -name bilbo -setcookie abc
 
-(bilbo@george.myerl.example.com) 1>
+(bilbo@george.myerl.example.com) 1\>
 
 Теперь (на bilbo) мы можем породить процесс на удалённом узле (gandalf):
 
-(bilbo@george.myerl.example.com) 1> Pid =
+(bilbo@george.myerl.example.com) 1\> Pid =
 
 dist_demo:start('gandalf@doris.myerl.example.com').
 
-<5094.40.0>
+<5094.40.0\>
 
 Pid — это идентификатор процесса на *удалённом узле* и теперь мы можем
 вызвать dist_demo:rpc/4 для выполнения удалённого вызова процедур на
 удалённом узле:
 
-(bilbo@george.myerl.example.com)2> dist_demo:rpc(Pid, erlang, node,
+(bilbo@george.myerl.example.com)2\> dist_demo:rpc(Pid, erlang, node,
 []).
 
 'gandalf@doris.myerl.example.com'
@@ -638,7 +638,7 @@ Pid — это идентификатор процесса на *удалённ�
 
 Одна наиболее полезная функция из модуля rpc — следующая:
 
-call(Node, Mod, Function, Args) -> Result | {badrpc, Reason}
+call(Node, Mod, Function, Args) -\> Result | {badrpc, Reason}
 
 Она выполняет apply(Mod, Function, Args) на узле Node и возвращает
 результат Result или {badrpc, Reason}, в случае неуспеха.
@@ -659,7 +659,7 @@ call(Node, Mod, Function, Args) -> Result | {badrpc, Reason}
 
 $ cd
 
-$ cat > .erlang.cookie
+$ cat \> .erlang.cookie
 
 AFRTY12ESS3412735ASDF12378
 
@@ -718,12 +718,12 @@ lib_chan — это модуль, который позволяет пользо
 достаточно сложна, так что я не буду излагать её здесь. Вы можете найти
 её в Приложении D на стр. ____. Интерфейс у неё следующий:
 
-@spec start_server() -> true
+@spec start_server() -\> true
 
 Запускает сервер на локальной машине. Поведение сервера определяется
 содержимым файла $HOME/.erlang/lib_chan.conf.
 
-@spec start_server(Conf) -> true
+@spec start_server(Conf) -\> true
 
 Запускает сервер на локальной машине. Поведение сервера определяется
 содержимым файла Conf.
@@ -744,7 +744,7 @@ SomeMod:SomeFunc(MM, ArgsC, SomeArgsS). Здесь MM — это PID
 клиенту, а параметр ArgC приходит из клиентского вызова на подключение
 (к серверу).
 
-@spec connect(Host, Port, S, P, ArgsC) -> {ok, Pid} | {error, Why}
+@spec connect(Host, Port, S, P, ArgsC) -\> {ok, Pid} | {error, Why}
 
 Пытается открыть порт Port на машине Host и затем пытается активировать
 сервис S, который защищён паролем P. Если пароль верный, то возвращается
@@ -816,27 +816,27 @@ HYPERLINK
 
 -export([start_me_up/3]).
 
-start_me_up(MM, _ArgsC, _ArgS) ->
+start_me_up(MM, _ArgsC, _ArgS) -\>
 
 loop(MM).
 
-loop(MM) ->
+loop(MM) -\>
 
 receive
 
-{chan, MM, {store, K, V}} ->
+{chan, MM, {store, K, V}} -\>
 
 kvs:store(K, V),
 
 loop(MM);
 
-{chan, MM, {lookup, K}} ->
+{chan, MM, {lookup, K}} -\>
 
 MM ! {send, kvs:lookup(K)},
 
 loop(MM);
 
-{chan_closed, MM} ->
+{chan_closed, MM} -\>
 
 true
 
@@ -868,11 +868,11 @@ ____.
 
 Запускаем сервер имён (и модуль kvs):
 
-1> kvs:start().
+1\> kvs:start().
 
 true
 
-2> lib_chan:start_server().
+2\> lib_chan:start_server().
 
 Starting a port server on 1234...
 
@@ -881,21 +881,21 @@ true
 После этого мы можем запустить второй сеанс Эрланга и протестировать всё
 это со стороны клиента:
 
-1> {ok, Pid} = lib_chan:connect("localhost", 1234, nameServer,
+1\> {ok, Pid} = lib_chan:connect("localhost", 1234, nameServer,
 
 "ABXy45", "").
 
-{ok, <0.43.0>}
+{ok, <0.43.0\>}
 
-2> lib_chan:cast(Pid, {store, joe, "writing a book"}).
+2\> lib_chan:cast(Pid, {store, joe, "writing a book"}).
 
 {send,{store,joe,"writing a book"}}
 
-3> lib_chan:rpc(Pid, {lookup, joe}).
+3\> lib_chan:rpc(Pid, {lookup, joe}).
 
 {ok,"writing a book"}
 
-4> lib_chan:rpc(Pid, {lookup, jim}).
+4\> lib_chan:rpc(Pid, {lookup, jim}).
 
 undefined
 
