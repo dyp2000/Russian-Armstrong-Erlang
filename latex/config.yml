@@ -1,0 +1,23 @@
+default:
+  font: Liberation Serif
+  bold: "{* Bold}"
+  mono: Liberation Mono
+  prechap: "Chapter "
+  postchap: ""
+  presect: "Section "
+  postsect: ""
+  dql: "“"
+  dqr: "”"
+  con: "Contents"
+  fig: "Figure "
+  tab: "Table "
+  indent: "\\qquad"
+  thanks: "This is the PDF file for the Programming Erlang: Software for a Concurrent World book contents. I hope you enjoy it, I hope it helps you learn Erlang, and I hope you'll support me by purchasing a print copy of the book: \\url{http://pragprog.com/book/jaerlang/programming-erlang}"
+ru:
+  prechap: "Глава "
+  presect: "Раздел "
+  con: "Содержание"
+  fig: "Рисунок "
+  tab: "Таблица "
+  dql: "«"
+  dqr: "»"
