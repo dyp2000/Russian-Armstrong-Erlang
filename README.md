@@ -8,7 +8,7 @@ On yum like linux you can run something like this:
 
 On deb like linux you can run something like this:
 
-    $ apt-get install ruby calibre rubygems ruby-devel rubygem-ruby-debug
+    $ apt-get install ruby calibre rubygems ruby-dev rake pandoc texlive-xetex libmaruku-ruby 
     $ gem install rdiscount
 
 On Mac OS X:
@@ -24,15 +24,15 @@ Usage
 
 Build e-book for amazon kindle for russian languages
 
- 	$ makeebooks ru
+ 	$ ./makeebooks ru
 or
 
- 	$ FORMAT=mobi makeebooks ru
+ 	$ FORMAT=mobi ./makeebooks ru
 
 Build e-book in 'epub' format for russian only
 
- 	$ FORMAT=epub makeebooks ru
+ 	$ FORMAT=epub ./makeebooks ru
 
 Build pdf for russian only
 
-    $  makepdfs ru
+    $  ./makepdfs ru
