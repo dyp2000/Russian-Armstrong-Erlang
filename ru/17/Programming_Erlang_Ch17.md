@@ -101,7 +101,7 @@
 
 Чтобы представить эти таблицы в подходящем для Mnesia виде, мы должны создать определения записей, которые бы описывали колонки в таблицах. Определения эти таковы:
 
-[загрузить test_mnesia.erl][http://media.pragprog.com/titles/jaerlang/code/test_mnesia.erl]
+<http://media.pragprog.com/titles/jaerlang/code/test_mnesia.erl> (загрузить test_mnesia.erl])
 
 	-record(shop, {item, quantity, cost}).
 	-record(cost, {name, price}).
@@ -123,7 +123,7 @@
 
 Вот так выглядит код для выборки всех данных из таблицы shop (для тех, кто знаком с SQL, каждый фрагмент кода начинается с комментария, где показан соответствующий задаче оператор SQL).
 
-[загрузить test_mnesia.erl][http://media.pragprog.com/titles/jaerlang/code/test_mnesia.erl]
+(загрузить test_mnesia.erl) <http://media.pragprog.com/titles/jaerlang/code/test_mnesia.erl>
 
 	%% SQL equivalent
 	%% SELECT * FROM shop;
