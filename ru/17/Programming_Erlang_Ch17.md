@@ -390,30 +390,30 @@ N апельсинов, фермер даёт нам 2*N яблок.
 
 Вот так выглядит функция, которая обновляет БД, когда фермер покупает апельсины:
 
-farmer(Nwant) ->
-%% Nwant = Number of oranges the farmer wants to buy
-F = fun() ->
-%% find the number of apples
-[Apple] = mnesia:read({shop,apple}),
-Napples = Apple#shop.quantity,
-Apple1 = Apple#shop{quantity = Napples + 2*Nwant},
-%% update the database
-mnesia:write(Apple1),
-%% find the number of oranges
-[Orange] = mnesia:read({shop,orange}),
-NOranges = Orange#shop.quantity,
-if
-NOranges >= Nwant ->
-N1 = NOranges - Nwant,
-Orange1 = Orange#shop{quantity=N1},
-%% update the database
-mnesia:write(Orange1);
-true ->
-%% Oops -- not enough oranges
-mnesia:abort(oranges)
-end
-end,
-mnesia:transaction(F).
+	farmer(Nwant) ->
+	%% Nwant = Number of oranges the farmer wants to buy
+	F = fun() ->
+		%% find the number of apples
+		[Apple] = mnesia:read({shop,apple}),
+		Napples = Apple#shop.quantity,
+		Apple1 = Apple#shop{quantity = Napples + 2*Nwant},
+		%% update the database
+		mnesia:write(Apple1),
+		%% find the number of oranges
+		[Orange] = mnesia:read({shop,orange}),
+		NOranges = Orange#shop.quantity,
+		if
+			NOranges >= Nwant ->
+				N1 = NOranges - Nwant,
+				Orange1 = Orange#shop{quantity=N1},
+				%% update the database
+				mnesia:write(Orange1);
+			true ->
+				%% Oops -- not enough oranges
+				mnesia:abort(oranges)
+			end
+		end,
+	mnesia:transaction(F).
 
 Этот код, честно говоря, глуповат, но я так написал специально,
 чтобы продемонстрировать работу транзакций. 
