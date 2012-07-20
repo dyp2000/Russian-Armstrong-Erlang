@@ -424,42 +424,40 @@ N апельсинов, фермер даёт нам 2*N яблок.
 пока не убедился бы в наличии достаточного количества апельсинов.
 Посмотрим на этот код в действии. Утром фермер приходит и покупает 50 апельсинов.
 
-1> test_mnesia:start().
-ok
-2> test_mnesia:reset_tables().
-{atomic, ok}
-%% List the shop table
-3> test_mnesia:demo(select_shop).
-[{shop,orange,100,3.80000},
-{shop,pear,200,3.60000},
-{shop,banana,420,4.50000},
-{shop,potato,2456,1.20000},
-{shop,apple,20,2.30000}]
-%% The farmer buys 50 oranges
-%% paying with 100 apples
-4> test_mnesia:farmer(50).
-{atomic,ok}
-%% Print the shop table again
-5> test_mnesia:demo(select_shop).
-[{shop,orange,50,3.80000},
-{shop,pear,200,3.60000},
-{shop,banana,420,4.50000},
-{shop,potato,2456,1.20000},
-{shop,apple,120,2.30000}]
-In the afternoon the farmer wants to buy 100 more oranges (boy, does
-this guy love oranges):
+	1> test_mnesia:start().
+	ok
+	2> test_mnesia:reset_tables().
+	{atomic, ok}
+	%% List the shop table
+	3> test_mnesia:demo(select_shop).
+	[{shop,orange,100,3.80000},
+	 {shop,pear,200,3.60000},
+	 {shop,banana,420,4.50000},
+	 {shop,potato,2456,1.20000},
+	 {shop,apple,20,2.30000}]
+	%% The farmer buys 50 oranges
+	%% paying with 100 apples
+	4> test_mnesia:farmer(50).
+	{atomic,ok}
+	%% Print the shop table again
+	5> test_mnesia:demo(select_shop).
+	[{shop,orange,50,3.80000},
+	 {shop,pear,200,3.60000},
+	 {shop,banana,420,4.50000},
+	 {shop,potato,2456,1.20000},
+	 {shop,apple,120,2.30000}]
 
 После обеда он приходит снова и хочет купить ещё 100 апельсинов
 (ничего себе, как же он любит апельсины!)
 
-6> test_mnesia:farmer(100).
-{aborted,oranges}
-7> test_mnesia:demo(select_shop).
-[{shop,orange,50,3.80000},
-{shop,pear,200,3.60000},
-{shop,banana,420,4.50000},
-{shop,potato,2456,1.20000},
-{shop,apple,120,2.30000}]
+	6> test_mnesia:farmer(100).
+	{aborted,oranges}
+	7> test_mnesia:demo(select_shop).
+	[{shop,orange,50,3.80000},
+	 {shop,pear,200,3.60000},
+	 {shop,banana,420,4.50000},
+	 {shop,potato,2456,1.20000},
+	 {shop,apple,120,2.30000}]
 
 ### Врезка ###
 
@@ -483,39 +481,31 @@ this guy love oranges):
 следом идет содержимое строки, в том же порядке, в котором поля были
 описаны при определении Эрланг-записи.
 
-example_tables() ->
-[%% The shop table
-{shop, apple,
-20,
-{shop, orange, 100,
-{shop, pear,
-200,
-{shop, banana, 420,
-{shop, potato, 2456,
-%% The cost table
-{cost, apple,
-1.5},
-{cost, orange, 2.4},
-{cost, pear,
-2.2},
-{cost, banana, 1.5},
-{cost, potato, 0.6}
-].
-2.3},
-3.8},
-3.6},
-4.5},
-1.2},
+	example_tables() ->
+	[%% The shop table
+		{shop, apple,20,2.3},
+		{shop, orange, 100,3.8},
+		{shop, pear, 200,3.6},
+		{shop, banana, 420,4.5},
+		{shop, potato, 2456,1.2},
+	%% The cost table
+		{cost, apple, 1.5},
+		{cost, orange, 2.4},
+		{cost, pear, 2.2},
+		{cost, banana, 1.5},
+		{cost, potato, 0.6}
+	].
+
 
 Следующий код вставляет данные в Mnesia из таблиц примера.
 
-reset_tables() ->
-mnesia:clear_table(shop),
-mnesia:clear_table(cost),
-F = fun() ->
-foreach(fun mnesia:write/1, example_tables())
-end,
-mnesia:transaction(F).
+	reset_tables() ->
+		mnesia:clear_table(shop),
+		mnesia:clear_table(cost),
+		F = fun() ->
+			foreach(fun mnesia:write/1, example_tables())
+			end,
+		mnesia:transaction(F).
 
 Он всего лишь вызывает mnesia:write для каждого кортежа из списка,
 который возвращает example_tables/1
@@ -524,10 +514,10 @@ mnesia:transaction(F).
 
 Функция do, которую вызывает demo/1, чуть сложнее:
 
-do(Q) ->
-F = fun() -> qlc:e(Q) end,
-{atomic, Val} = mnesia:transaction(F),
-Val.
+	do(Q) ->
+		F = fun() -> qlc:e(Q) end,
+	{atomic, Val} = mnesia:transaction(F),
+	Val.
 
 Она вызывает qlc:e(Q) в рамках транзакции Mnesia. Q - это скомпилированный запрос QLC, а qlc:e(Q) выполняет запрос и возвращает все ответы на запрос в виде списка. Возвращаемое значение {atomic, Val} означает, что транзакция завершилась успешно со значением Val. Val - это значение, возвращаемое анонимной функцией транзакции.
 
@@ -537,64 +527,54 @@ Val.
 
 Mnesia разработана так, чтобы хранить структуры данных Эрланг. На самом деле, вы можете сохранять в таблице Mnesia любую структуру данных, которую можно создать в Эрланг. Чтобы проиллюстрировать это, предположим, что некоторое количество архитекторов хотят сохранять в Mnesia свои чертежи. Для начала мы должны определить запись (record), которая будет представлять собой чертёж.
 
--record(design, {id, plan}).
+	-record(design, {id, plan}).
 
 Затем мы пишем функцию, которая добавляет несколько чертежей в БД:
 
-Download test_mnesia.erl
-add_plans() ->
-D1 = #design{id
-plan
-D2 = #design{id
-plan
-=
-=
-=
-=
-{joe,1},
-{circle,10}},
-fred,
-{rectangle,10,5}},
-D3 = #design{id
-= {jane,{house,23}},
-plan = {house,
-[{floor,1,
-[{doors,3},
-{windows,12},
-{rooms,5}]},
-{floor,2,
-[{doors,2},
-{rooms,4},
-{windows,15}]}]}},
-F = fun() ->
-mnesia:write(D1),
-mnesia:write(D2),
-mnesia:write(D3)
-end,
-mnesia:transaction(F).
+	add_plans() ->
+		D1 = #design{id = {joe,1},
+			plan={circle,10}},
+		D2 = #design{id = fred,
+			plan={rectangle,10,5}},
+		D3 = #design{id = {jane,{house,23}},
+			plan = {house,
+				[{floor,1,
+					[{doors,3},
+					 {windows,12},
+					 {rooms,5}]},
+				 {floor,2,
+					[{doors,2},
+					 {rooms,4},
+					 {windows,15}]}]}},
+		F = fun() ->
+			mnesia:write(D1),
+			mnesia:write(D2),
+			mnesia:write(D3)
+		end,
+		mnesia:transaction(F).
 
 Теперь мы можем добавить несколько чертежей в БД
 
-1> test_mnesia:start().
-ok
-2> test_mnesia:add_plans().
-{atomic,ok}
+	1> test_mnesia:start().
+	ok
+	2> test_mnesia:add_plans().
+	{atomic,ok}
 
 Теперь мы имеем несколько чертежей, сохраненных в БД. Мы можем извлекать их оттуда при помощи следующей функции:
 
-get_plan(PlanId) ->
-F = fun() -> mnesia:read({design, PlanId}) end,
-mnesia:transaction(F).
-3> test_mnesia:get_plan(fred).
-{atomic,[{design,fred,{rectangle,10,5}}]}
-4> test_mnesia:get_plan({jane, {house,23}}).
-{atomic,[{design,{jane,{house,23}},
-{house,[{floor,1,[{doors,3},
-{windows,12},
-{rooms,5}]},
-{floor,2,[{doors,2},
-{rooms,4},
-{windows,15}]}]}}]}
+	get_plan(PlanId) ->
+		F = fun() -> mnesia:read({design, PlanId}) end,
+	mnesia:transaction(F).
+	3> test_mnesia:get_plan(fred).
+	{atomic,[{design,fred,{rectangle,10,5}}]}
+	4> test_mnesia:get_plan({jane, {house,23}}).
+	{atomic,[{design,{jane,{house,23}},
+	{house,[{floor,1,[{doors,3},
+	{windows,12},
+	{rooms,5}]},
+	{floor,2,[{doors,2},
+	{rooms,4},
+	{windows,15}]}]}}]}
 
 Как вы можете видеть, и ключ, и извлекаемое значение могут быть произвольными термами Эрланг.
 
