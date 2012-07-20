@@ -69,7 +69,7 @@
 
  </tr>
 
-  <th>apple</td><td>1.5</td>
+  <td>apple</td><td>1.5</td>
 
  </tr>
 
@@ -101,19 +101,21 @@
 
 Чтобы представить эти таблицы в подходящем для Mnesia виде, мы должны создать определения записей, которые бы описывали колонки в таблицах. Определения эти таковы:
 
--record(shop, {item, quantity, cost}).
--record(cost, {name, price}).
+[загрузить test_mnesia.erl][http://media.pragprog.com/titles/jaerlang/code/test_mnesia.erl]
 
-Теперь немного чёрной магии. Я собираюсь показать, как работают запросы, и зочу, чтобы вы могли повторить это все у себя дома. Но для этого я сначала должен создать и заполнить для вас базу данных. Так что пока поверьте мне на слово - в файле test_mnesia.erl я подготовил код, который производит инициализацию, и вы можете просто запустить его из оболочки erl.
+	-record(shop, {item, quantity, cost}).
+	-record(cost, {name, price}).
 
-1> c(test_mnesia).
-{ok,test_mnesia}
-2> test_mnesia:do_this_once().
-=INFO REPORT==== 29-Mar-2007::20:33:12 ===
-application: mnesia
-exited: stopped
-type: temporary
-stopped
+Теперь немного чёрной магии. Я собираюсь показать, как работают запросы, и хочу, чтобы вы могли повторить это все у себя дома. Но для этого сначала кто-то должен создать и заполнить для вас базу данных. Так что пока поверьте мне на слово - в файле test_mnesia.erl я подготовил код, который производит инициализацию, и вы можете просто запустить его из оболочки erl.
+
+	1> c(test_mnesia).
+	{ok,test_mnesia}
+	2> test_mnesia:do_this_once().
+	=INFO REPORT==== 29-Mar-2007::20:33:12 ===
+		application: mnesia
+		exited: stopped
+		type: temporary
+	stopped
 
 Теперь мы можем приступить к нашим примерам.
 
@@ -121,10 +123,12 @@ stopped
 
 Вот так выглядит код для выборки всех данных из таблицы shop (для тех, кто знаком с SQL, каждый фрагмент кода начинается с комментария, где показан соответствующий задаче оператор SQL).
 
-%% SQL equivalent
-%% SELECT * FROM shop;
-demo(select_shop) ->
-do(qlc:q([X || X <- mnesia:table(shop)]));
+[загрузить test_mnesia.erl][http://media.pragprog.com/titles/jaerlang/code/test_mnesia.erl]
+
+	%% SQL equivalent
+	%% SELECT * FROM shop;
+	demo(select_shop) ->
+		do(qlc:q([X || X <- mnesia:table(shop)]));
 
 Самая суть примера заключена в вызове функции qlc:q, которая компилирует запрос (её параметр) во внутреннее представление, которое уже используется для непосредственного выполнения запроса.
 
