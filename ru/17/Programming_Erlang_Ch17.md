@@ -139,21 +139,22 @@
 
 Мы можем вызвать её таким образом:
 
-1> test_mnesia:start().
-ok
-2> test_mnesia:reset_tables().
-{atomic, ok}
-3> test_mnesia:demo(select_shop).
-[{shop,orange,100,3.80000},
-{shop,pear,200,3.60000},
-{shop,banana,420,4.50000},
-{shop,potato,2456,1.20000},
-{shop,apple,20,2.30000}]
+	1> test_mnesia:start().
+	ok
+	2> test_mnesia:reset_tables().
+	{atomic, ok}
+	3> test_mnesia:demo(select_shop).
+	[{shop,orange,100,3.80000},
+	{shop,pear,200,3.60000},
+	{shop,banana,420,4.50000},
+	{shop,potato,2456,1.20000},
+	{shop,apple,20,2.30000}]
 
-(Примечание: строки в таблице могут оказаться в другом порядке).
+> Примечание: строки в таблице могут оказаться в другом порядке.
 
 Строка, которая задает запрос, в этом примере выглядит так:
-qlc:q([X || X <- mnesia:table(shop)])
+
+	qlc:q([X || X <- mnesia:table(shop)])
 
 Это очень похоже на (list comprehension?) (см. раздел 3.6, 
 List Comprehensions, на странице 61?).
@@ -164,24 +165,24 @@ List Comprehensions, на странице 61?).
 “список X, таких, что X берется из таблицы Mnesia с названием "shop"”.
 Значения X - это Эрланг-записи типа "shop".
 
-Важно: аргумент функции qlc:q/1 должен быть правильным
+> Важно: аргумент функции qlc:q/1 должен быть правильным
 литералом list comprehension (?), а не что-либо, что вычисляется
 в такое выражение. Таким образом, например, вот такой код 
 не будет эквивалентным тому, что написано в примере:
 
-Var = [X || X <- mnesia:table(shop)],
-qlc:q(Var)
+	Var = [X || X <- mnesia:table(shop)],
+	qlc:q(Var)
 
 ### Выборка определенных колонок из таблицы (проекция) ###
 
 Следующий запрос выбирает колонки item и quantity из таблицы shop.
 
-%% SQL equivalent
-%% SELECT item, quantity FROM shop;
-demo(select_some) ->
-do(qlc:q([{X#shop.item, X#shop.quantity} || X <- mnesia:table(shop)]));
-4> test_mnesia:demo(select_some).
-[{orange,100},{pear,200},{banana,420},{potato,2456},{apple,20}]
+	%% SQL equivalent
+	%% SELECT item, quantity FROM shop;
+	demo(select_some) ->
+		do(qlc:q([{X#shop.item, X#shop.quantity} || X <- mnesia:table(shop)]));
+	4> test_mnesia:demo(select_some).
+	[{orange,100},{pear,200},{banana,420},{potato,2456},{apple,20}]
 
 В предыдущем примере значения X были записями типа shop. 
 Если вы вспомните синтаксис выражений с записями из раздела
@@ -197,17 +198,15 @@ do(qlc:q([{X#shop.item, X#shop.quantity} || X <- mnesia:table(shop)]));
 Например, мы могли бы использовать этот вопрос, чтобы решить,
 какие товары нам надо дозаказать.
 
-%% SQL equivalent
-%%
-SELECT shop.item FROM shop
-%%
-WHERE shop.quantity < 250;
-demo(reorder) ->
-do(qlc:q([X#shop.item || X <- mnesia:table(shop),
-X#shop.quantity < 250
-]));
-5> test_mnesia:demo(reorder).
-[orange,pear,apple]
+	%% SQL equivalent
+	%% SELECT shop.item FROM shop
+	%% WHERE shop.quantity < 250;
+	demo(reorder) ->
+		do(qlc:q([X#shop.item || X <- mnesia:table(shop),
+		X#shop.quantity < 250
+		]));
+	5> test_mnesia:demo(reorder).
+	[orange,pear,apple]
 
 Обратите внимание, как наше условие естественно вписалось в list comprehension.
 
@@ -218,25 +217,26 @@ X#shop.quantity < 250
 Чтобы это сделать, нам придётся обратиться сразу к двум таблицам.
 Вот так выглядит нужный запрос:
 
-%% SQL equivalent
-%% SELECT shop.item, shop.quantity, cost.name, cost.price
-%% FROM shop, cost
-%% WHERE shop.item = cost.name
-%% AND cost.price < 2
-%% AND shop.quantity < 250
-
-demo(join) ->
-do(qlc:q([X#shop.item || X <- mnesia:table(shop),
-X#shop.quantity < 250,
-Y <- mnesia:table(cost),
-X#shop.item =:= Y#cost.name,
-Y#cost.price < 2
-])).
-6> test_mnesia:demo(join).
-[apple]
+	%% SQL equivalent
+	%% SELECT shop.item, shop.quantity, cost.name, cost.price
+	%% FROM shop, cost
+	%% WHERE shop.item = cost.name
+	%% AND cost.price < 2
+	%% AND shop.quantity < 250
+	
+	demo(join) ->
+		do(qlc:q([X#shop.item || X <- mnesia:table(shop),
+		X#shop.quantity < 250,
+		Y <- mnesia:table(cost),
+		X#shop.item =:= Y#cost.name,
+		Y#cost.price < 2
+	])).
+	6> test_mnesia:demo(join).
+	[apple]
 
 Здесь важным фрагментом является соединение между наименованием товара в таблице shop и наименованием товара в таблице cost:
-X#shop.item =:= Y#cost.name
+
+	X#shop.item =:= Y#cost.name
 
 ## 17.2 Вставка и удаление данных в/из БД. ##
 
@@ -246,38 +246,38 @@ X#shop.item =:= Y#cost.name
 ### Вставка строки ###
 Мы можем добавить строку в таблицу shop следующим образом:
 
-add_shop_item(Name, Quantity, Cost) ->
-Row = #shop{item=Name, quantity=Quantity, cost=Cost},
-F = fun() ->
-mnesia:write(Row)
-end,
-mnesia:transaction(F).
+	add_shop_item(Name, Quantity, Cost) ->
+	Row = #shop{item=Name, quantity=Quantity, cost=Cost},
+	F = fun() ->
+		mnesia:write(Row)
+		end,
+	mnesia:transaction(F).
 
 Эта функция создаёт запись типа shop и вставляет её в таблицу.:
 
-1> test_mnesia:start().
-ok
-2> test_mnesia:reset_tables().
-{atomic, ok}
-%% list the shop table
-3> test_mnesia:demo(select_shop).
-[{shop,orange,100,3.80000},
-{shop,pear,200,3.60000},
-{shop,banana,420,4.50000},
-{shop,potato,2456,1.20000},
-{shop,apple,20,2.30000}]
-%% add a new row
-4> test_mnesia:add_shop_item(orange, 236, 2.8).
-{atomic,ok}
-%% list the shop table again so we can see the change
-5> test_mnesia:demo(select_shop).
-[{shop,orange,236,2.80000},
-{shop,pear,200,3.60000},
-{shop,banana,420,4.50000},
-{shop,potato,2456,1.20000},
-{shop,apple,20,2.30000}]
+	1> test_mnesia:start().
+	ok
+	2> test_mnesia:reset_tables().
+	{atomic, ok}
+	%% list the shop table
+	3> test_mnesia:demo(select_shop).
+	[{shop,orange,100,3.80000},
+	{shop,pear,200,3.60000},
+	{shop,banana,420,4.50000},
+	{shop,potato,2456,1.20000},
+	{shop,apple,20,2.30000}]
+	%% add a new row
+	4> test_mnesia:add_shop_item(orange, 236, 2.8).
+	{atomic,ok}
+	%% list the shop table again so we can see the change
+	5> test_mnesia:demo(select_shop).
+	[{shop,orange,236,2.80000},
+	{shop,pear,200,3.60000},
+	{shop,banana,420,4.50000},
+	{shop,potato,2456,1.20000},
+	{shop,apple,20,2.30000}]
 
-Примечание: первичным ключом в таблице shop является первая
+> Примечание: первичным ключом в таблице shop является первая
 колонка таблицы, то есть, наименование товара (item) в записи shop.
 Таблица создана с типом "set" (см. обсуждение типов "set" и "bag" 
 в разделе 15.2, Types of Table, стр. 275).
@@ -286,41 +286,43 @@ ok
 в противном случае в БД добавится новая строка.
 
 ### Удаление строки ###
+
 Чтобы удалить строку, нам нужно знать ID объекта (OID) для этой строки.
 OID составляется из имени таблицы и значения первичного ключа:
 
-remove_shop_item(Item) ->
-Oid = {shop, Item},
-F = fun() ->
-mnesia:delete(Oid)
-end,
-mnesia:transaction(F).
-6> test_mnesia:remove_shop_item(pear).
-{atomic,ok}
-%% list the table -- the pear has gone
-7> test_mnesia:demo(select_shop).
-[{shop,orange,236,2.80000},
-{shop,banana,420,4.50000},
-{shop,potato,2456,1.20000},
-{shop,apple,20,2.30000}]
-[{shop,orange,236,2.80000},
-8> mnesia:stop().
-ok
+	remove_shop_item(Item) ->
+		Oid = {shop, Item},
+		F = fun() ->
+		mnesia:delete(Oid)
+		end,
+	mnesia:transaction(F).
+	6> test_mnesia:remove_shop_item(pear).
+	{atomic,ok}
+	%% list the table -- the pear has gone
+	7> test_mnesia:demo(select_shop).
+	[{shop,orange,236,2.80000},
+	{shop,banana,420,4.50000},
+	{shop,potato,2456,1.20000},
+	{shop,apple,20,2.30000}]
+	[{shop,orange,236,2.80000},
+	8> mnesia:stop().
+	ok
 
 ## 17.3 Транзакции в Mnesia ##
+
 Когда ранее мы добавляли или удаляли строки в/из БД,
 или выполняли запрос к БД, мы писали что-то вроде такого:
 
-do_something(...) ->
-F = fun() ->
-% ...
-mnesia:write(Row)
-% ... or ...
-mnesia:delete(Oid)
-% ... or ...
-qlc:e(Q)
-end,
-mnesia:transaction(F)
+	do_something(...) ->
+	F = fun() ->
+	% ...
+	mnesia:write(Row)
+	% ... or ...
+	mnesia:delete(Oid)
+	% ... or ...
+	qlc:e(Q)
+	end,
+	mnesia:transaction(F)
 
 F - это анонимная функция без аргументов. 
 
@@ -361,19 +363,19 @@ deadlock-у (?), он немедленно отменяет транзакцию
 ничего такого, что приводит к побочным эффектам.
 Например, если бы мы написали что-то такое:
 
-F = fun() ->
-...
-io:format("reading ..." ), %% don't do this
-...
-end,
-mnesia:transaction(F),
+	F = fun() ->
+	...
+	io:format("reading ..." ), %% don't do this
+	...
+	end,
+	mnesia:transaction(F),
 
 мы могли бы получить на выводе кучу текста,
 просто потому что функция была перезапущена много раз.
 
-Примечание 1: функции mnesia:write/1 и mnesia:delete/1 должны вызываться только в анонимной функции, которую выполняет mnesia:transaction/1.
+> Примечание 1: функции mnesia:write/1 и mnesia:delete/1 должны вызываться только в анонимной функции, которую выполняет mnesia:transaction/1.
 
-Примечание 2: Никогда не пишите код, который явно перехватывает исключения 
+> Примечание 2: Никогда не пишите код, который явно перехватывает исключения 
 от функций доступа Mnesia (mnesia:write/1, mnesia:delete/1, и т.п.),
 поскольку механизм транзакций Mnesia сам основан на том, что эти функции 
 выбрасывают исключения при неудаче. Если вы будете перехватывать исключения
