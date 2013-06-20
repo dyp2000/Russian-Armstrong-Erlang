@@ -242,19 +242,20 @@ end
 /файл try_test.erl/
 
     demo1() ->
-    [catcher(I) || I <- [1,2,3,4,5]].
+        [catcher(I) || I <- [1,2,3,4,5]].
+
     catcher(N) ->
-    try generate_exception(N) of
-    Val -> {N, normal, Val}
-    catch
-    throw:X -> {N, caught, thrown, X};
-    exit:X -> {N, caught, exited, X};
-    error:X -> {N, caught, error, X}
-    end.
+        try generate_exception(N) of
+            Val -> {N, normal, Val}
+        catch
+            throw:X -> {N, caught, thrown, X};
+            exit:X -> {N, caught, exited, X};
+            error:X -> {N, caught, error, X}
+        end.
 
 Запустив ее мы увидим следующее:
 
-    > try_test:demo1().
+    1> try_test:demo1().
     [{1,normal,a},
     {2,caught,thrown,a},
     {3,caught,exited,a},
@@ -272,7 +273,7 @@ catch. Когда вы так перехватываете исключение,
 это, мы можем вызвать generate_exception внутри catch выражения:
 
     demo2() ->
-    [{I, (catch generate_exception(I))} || I <- [1,2,3,4,5]].
+        [{I, (catch generate_exception(I))} || I <- [1,2,3,4,5]].
 
 Запустив эту функцию, мы получим следующее:
 
@@ -308,9 +309,10 @@ math:sqrt(X) с отрицательным аргументом, то мы ув�
 ошибке:
 
     sqrt(X) when X < 0 ->
-    erlang:error({squareRootNegativeArgument, X});
+        erlang:error({squareRootNegativeArgument, X});
     sqrt(X) ->
-    math:sqrt(X).
+        math:sqrt(X).
+
     2> lib_misc:sqrt(-1).
     exited: {{squareRootNegativeArgument,-1},
     [{lib_misc,sqrt,1},
@@ -333,10 +335,10 @@ Reason}, но помните, что это заставит всех вызыв
 
     ...
     case f(X) of
-    {ok, Val} ->
-    do_some_thing_with(Val);
-    {error, Why} ->
-    %% ... do something with the error ...
+        {ok, Val} ->
+            do_some_thing_with(Val);
+        {error, Why} ->
+            %% ... do something with the error ...
     end,
     ...
 
