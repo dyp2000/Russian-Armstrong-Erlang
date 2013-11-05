@@ -637,29 +637,29 @@ UDP пакеты могут быть доставлены дважды(что у
 
 1. Вначале клиент(который может быть чем-то вроде XMMS, Winamp или iTunes) посылает HTTP запрос SHOUTcast серверу. Вот запрос, который XMMS генерирует, когда я запускаю мой SHOUTcast сервер дома: 
 
-	GET / HTTP/1.1 
-	Host: localhost 
-	User-Agent: xmms/1.2.10 
-	Icy-MetaData:1 
+		GET / HTTP/1.1 
+		Host: localhost 
+		User-Agent: xmms/1.2.10 
+		Icy-MetaData:1 
 
 2. Мой SHOUTcast сервер отвечает вот так: 
 
-	ICY 200 OK 
-	icy-notice1: <BR>This stream requires 
-	<a href=http://www.winamp.com/>;Winamp</a><BR> 
-	icy-notice2: Erlang Shoutcast server<BR> 
-	icy-name: Erlang mix 
-	icy-genre: Pop Top 40 Dance Rock 
-	icy-url: http://localhost:3000 
-	content-type: audio/mpeg 
-	icy-pub: 1 
-	icy-metaint: 24576 
-	icy-br: 96 
-	... data ... 
+		ICY 200 OK 
+		icy-notice1: <BR>This stream requires 
+		<a href=http://www.winamp.com/>;Winamp</a><BR> 
+		icy-notice2: Erlang Shoutcast server<BR> 
+		icy-name: Erlang mix 
+		icy-genre: Pop Top 40 Dance Rock 
+		icy-url: http://localhost:3000 
+		content-type: audio/mpeg 
+		icy-pub: 1 
+		icy-metaint: 24576 
+		icy-br: 96 
+		... data ... 
 
 3. Теперь SHOUTcast сервер посылает непрерывный поток данных. данные имеют следующую структуру: 
 	
-	H0 F H F H F H ...(7)
+		H0 F H F H F H ...(7)
 	
 F — это блок MP3 аудио данных, который должен быть ровно 24 576 байов(число получено из icy-metaint параметра). 
 
