@@ -7,4 +7,4 @@ done
 
 cat $list > book/erlangbook.ru.md
 
-pandoc book/erlangbook.ru.md -o book/erlangbook.ru.epub
+pandoc book/erlangbook.ru.md -o book/erlangbook.ru.epub -t epub
