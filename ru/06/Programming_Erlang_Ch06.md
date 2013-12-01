@@ -356,9 +356,9 @@ erl -eval 'io:format("Memory: ~p~n" , [erlang:memory(total)]).'\
 
 [Скачать hello.sh](http://media.pragprog.com/titles/jaerlang/code/hello.sh)
 ```
-#!/bin/sh
-erl -noshell -pa /home/joe/2006/book/JAERANG/Book/code\
-             -s hello start -s init stop
+    #!/bin/sh
+    erl -noshell -pa /home/joe/2006/book/JAERANG/Book/code\
+                 -s hello start -s init stop
 ```
 *Примечание:* Этот скрипт нуждается в абсолютном пути до директории, где
 находится файл *hello.beam* . Так что, хотя он и работает на моей машине,
@@ -404,9 +404,9 @@ $
 
 [Скачать hello](http://media.pragprog.com/titles/jaerlang/code/hello)
 ```
-#!/usr/bin/env escript
-main(_) ->
-io:format("Hello world ~n" ).
+    #!/usr/bin/env escript
+    main(_) ->
+    io:format("Hello world ~n" ).
 ```
 
 
@@ -515,17 +515,17 @@ factorial 25 = 15511210043330985984000000
 [Скачать factorial](http://media.pragprog.com/titles/jaerlang/code/factorial)
 
 ```
-#!/usr/bin/env escript
+    #!/usr/bin/env escript
 
-main([A]) ->
-  I = list_to_integer(A),
-  F = fac(I),
-  io:format("factorial ~w = ~w ~n" ,[I, F]).
+    main([A]) ->
+      I = list_to_integer(A),
+      F = fac(I),
+      io:format("factorial ~w = ~w ~n" ,[I, F]).
 
-fac(0) -> 1;
+    fac(0) -> 1;
 
-fac(N) ->
-  N * fac(N-1).
+    fac(N) ->
+      N * fac(N-1).
 ```
 Компиляция здесь не нужна, просто запускаем его:
 ```
@@ -579,60 +579,60 @@ make-файлов чрезвычайно просты и у меня есть д
 
 [Скачать Makefile.template](http://media.pragprog.com/titles/jaerlang/code/Makefile.template)
 ```
-# leave these lines alone
-.SUFFIXES: .erl .beam .yrl
+    # leave these lines alone
+    .SUFFIXES: .erl .beam .yrl
 
-.erl.beam:
-  erlc -W $<
+    .erl.beam:
+      erlc -W $<
 
-.yrl.erl:
-  erlc -W $<
+    .yrl.erl:
+      erlc -W $<
 
-ERL = erl -boot start_clean
+    ERL = erl -boot start_clean
 
-# Here's a list of the erlang modules you want compiling
-# If the modules don't fit onto one line add a \\ character
-# to the end of the line and continue on the next line
+    # Here's a list of the erlang modules you want compiling
+    # If the modules don't fit onto one line add a \\ character
+    # to the end of the line and continue on the next line
 
-# Edit the lines below
+    # Edit the lines below
 
-MODS = module1 module2 \
-  module3 ... special1 ...\
-  ...
-  moduleN
+    MODS = module1 module2 \
+      module3 ... special1 ...\
+      ...
+      moduleN
 
-# The first target in any makefile is the default target.
-# If you just type "make" then "make all" is assumed (because
-# "all" is the first target in this makefile)
+    # The first target in any makefile is the default target.
+    # If you just type "make" then "make all" is assumed (because
+    # "all" is the first target in this makefile)
 
-all: compile
+    all: compile
 
-compile: ${MODS:%=%.beam} subdirs
+    compile: ${MODS:%=%.beam} subdirs
 
-## special compilation requirements are added here
+    ## special compilation requirements are added here
 
-special1.beam: special1.erl
-  ${ERL} -Dflag1 -W0 special1.erl
+    special1.beam: special1.erl
+      ${ERL} -Dflag1 -W0 special1.erl
 
-## run an application from the makefile
+    ## run an application from the makefile
 
-application1: compile
-  ${ERL} -pa Dir1 -s application1 start Arg1 Arg2
+    application1: compile
+      ${ERL} -pa Dir1 -s application1 start Arg1 Arg2
 
-# the subdirs target compiles any code in
-# sub-directories
+    # the subdirs target compiles any code in
+    # sub-directories
 
-subdirs:
-  cd dir1; make
-  cd dir2; make
-  ...
+    subdirs:
+      cd dir1; make
+      cd dir2; make
+      ...
 
-# remove all the code
+    # remove all the code
 
-clean:
-  rm -rf *.beam erl_crash.dump
-  cd dir1; make clean
-  cd dir2; make clean
+    clean:
+      rm -rf *.beam erl_crash.dump
+      cd dir1; make clean
+      cd dir2; make clean
 ```
 Данный маке-файл начинается с правил компиляции модулей Эрланга и файлов
 с расширением *.yrl* (эти файлы содержат определения для программы Эрланг
