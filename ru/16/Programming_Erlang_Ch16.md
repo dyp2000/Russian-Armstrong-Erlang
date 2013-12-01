@@ -1055,5 +1055,3 @@ EPL является производной лицензии Mozilla Public (MPL
 
 [^6]: Доступно на <http://www.erlang.org/doc/pdf/design_principles.pdf>.
 
-
-

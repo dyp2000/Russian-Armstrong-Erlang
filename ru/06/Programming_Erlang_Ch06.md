@@ -1128,7 +1128,3 @@ Or http://127.0.0.1:8888/
 Смотри руководство по нему в Интернете по адресу:
 <http://www.erlang.org/contrib/parser_tutorial-1.0.tgz>.
 
-
-
-
-

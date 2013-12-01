@@ -1368,5 +1368,3 @@ find_files([File|T], Dir, Reg, Recursive, Fun, Acc0) ->
  error
  end.
 
-
-
