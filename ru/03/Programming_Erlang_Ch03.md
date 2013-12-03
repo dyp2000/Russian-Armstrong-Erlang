@@ -1522,12 +1522,11 @@ Pattern2 и так далее, до первого успешного сопос
 конструкцию case следующим образом:
 
     filter(P, [H|T]) ->
-    case P(H) of
-    true -> [H|filter(P, T)];
-    false -> filter(P, T)
-    end;
-    filter(P, []) ->
-    [].
+      case P(H) of
+       true -> [H|filter(P, T)];
+        false -> filter(P, T)
+      end;
+    filter(P, []) -> [].
 
 ### Выражение if
 
