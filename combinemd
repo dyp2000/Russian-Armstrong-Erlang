@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ -f ./ru/fullbook.md ]
+then
+	rm ./ru/fullbook.md
+fi
+
+for i in 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18
+do
+	cat ./ru/$i/*.md >> ./ru/fullbook.md
+done
