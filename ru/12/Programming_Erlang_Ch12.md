@@ -479,13 +479,13 @@
 
 Вот результаты работы этих программ:
 
-	1> **c(example1_lid).**
+	1> **c(example1_lid).
 	{ok,example1_lid}
-	2> **example1_lid:start().**
+	2> **example1_lid:start().
 	<0.41.0>
-	3> **example1_lid:twice(50).**
+	3> **example1_lid:twice(50).
 	100
-	4> **example1_lid:sum(10, 20).**
+	4> **example1_lid:sum(10, 20).
 	30
 
 ##12.5 Примечания
