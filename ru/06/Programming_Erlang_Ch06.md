@@ -126,7 +126,7 @@
 
 Вот наша простейшая программа, сохраненная в файле hello.erl. Она печатает строку "Hello World" с последующим переходом на новую строку (символ `~n` интерпретируется как новая строка в модулях Эрланга `io` и `io_lib`).
 
-[Скачать hello.erl](http://media.pragprog.com/titles/jaerlang/code/hello.erl)
+Скачать [hello.erl](http://media.pragprog.com/titles/jaerlang/code/hello.erl)
 
     -module(hello).
     -export([start/0]).
@@ -191,7 +191,7 @@
 
 Вот пример запуска `hello.erl`
 
-[Скачать hello.sh](http://media.pragprog.com/titles/jaerlang/code/hello.sh)
+Скачать [hello.sh](http://media.pragprog.com/titles/jaerlang/code/hello.sh)
 
     #!/bin/sh
     erl -noshell -pa /home/joe/2006/book/JAERANG/Book/code\
@@ -210,7 +210,7 @@
 
 Типичный скрипт-файл для Microsoft Windows может выглядеть приблизительно так:
 
-[Скачать hello.bat](http://media.pragprog.com/titles/jaerlang/code/hello.bat)
+Скачать [hello.bat](http://media.pragprog.com/titles/jaerlang/code/hello.bat)
 
     "C:\Program Files\erl5.5.3\bin\erl.exe" -noshell -s hello start -s init stop
 
@@ -222,7 +222,7 @@
 
 Для запуска `hello` как скрипта, мы создадим следующий файл: 
 
-[Скачать hello](http://media.pragprog.com/titles/jaerlang/code/hello)
+Скачать [hello](http://media.pragprog.com/titles/jaerlang/code/hello)
 
     #!/usr/bin/env escript
     main(_) ->
@@ -248,9 +248,9 @@
 
 "Hello world" не имеет никаких аргументов. Давайте повторим наше упражнение для программы, которая вычисляет факториалы. Ей потребуется один аргумент.
 
-Во-первых, вот ее код 
+Во-первых, вот ее код
 
-[Скачать fac.erl](http://media.pragprog.com/titles/jaerlang/code/fac.erl)
+Скачать [fac.erl](http://media.pragprog.com/titles/jaerlang/code/fac.erl)
 
     -module(fac).
     -export([fac/1]).
@@ -271,7 +271,7 @@
 
 Если же мы хотим запускать эту программу из командной строки, то нам надо ее модифицировать, чтобы она воспринимала оттуда параметр :
 
-[Скачать fac1.erl](http://media.pragprog.com/titles/jaerlang/code/fac1.erl)
+Скачать [fac1.erl](http://media.pragprog.com/titles/jaerlang/code/fac1.erl)
 
 	-module(fac1).
 	-export([main/1]).
@@ -330,7 +330,7 @@
 
 Вот шаблон, на основе которого я создаю большинство своих make-файлов
 
-[Скачать Makefile.template](http://media.pragprog.com/titles/jaerlang/code/Makefile.template)
+Скачать [Makefile.template](http://media.pragprog.com/titles/jaerlang/code/Makefile.template)
 
     # Эти строки не меняйте
     .SUFFIXES: .erl .beam .yrl
@@ -600,7 +600,7 @@
 
 Если вы хотите определить для оболочки свои собственные команды, просто создайте модуль с именем `user_default`. Например: 
 
-[Скачать user_default.erl](http://media.pragprog.com/titles/jaerlang/code/user_default.erl)
+Скачать [user_default.erl](http://media.pragprog.com/titles/jaerlang/code/user_default.erl)
 
     -module(user_default).
     -compile(export_all).
