@@ -254,7 +254,9 @@ UDP позволяет приложениям посыласть друг дру
 
 	start_seq_server() -> 
 		{ok, Listen} = gen_tcp:listen(...), 
-		seq_loop(Listen). seq_loop(Listen) -> 
+		seq_loop(Listen). 
+	
+	seq_loop(Listen) -> 
 		{ok, Socket} = gen_tcp:accept(Listen), 
 		loop(Socket), 
 		seq_loop(Listen). 
