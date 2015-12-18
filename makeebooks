@@ -60,6 +60,10 @@ ARGV.each do |lang|
   end
   if $ebook_convert_cmd.empty?
     mac_osx_path = '/Applications/calibre.app/Contents/MacOS/ebook-convert'
+    unless File.exists?(mac_osx_path)
+      puts 'ERROR: install calibri app'
+      exit 1
+    end    
     $ebook_convert_cmd = mac_osx_path
   end
 
