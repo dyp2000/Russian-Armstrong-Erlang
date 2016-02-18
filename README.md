@@ -1,5 +1,7 @@
 Что нового?
 ===========
+`2016-02-18` Книгу в GitBook [здесь](https://www.gitbook.com/book/dyp2000/russian-armstrong-erlang/details)
+
 `2014-01-13` Книга одним файлом PDF [здесь](https://github.com/dyp2000/Russian-Armstrong-Erlang/raw/master/pdf/fullbook.pdf).
 
 `2013-12-30` Форматирование глав с 1 по 11. Объединение книги в один файл MD и PDF
