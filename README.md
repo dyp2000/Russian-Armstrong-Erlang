@@ -19,7 +19,7 @@ Dependencies
 
 On yum like linux you can run something like this:
 
-    $ yum install ruby calibre rubygems ruby-devel rubygem-ruby-debug
+    $ yum install ruby calibre rubygems ruby-devel rubygem-ruby-debug redhat-rpm-config
     $ gem install rdiscount
 
 On deb like linux you can run something like this:
