@@ -542,7 +542,7 @@ MP3 — это бинарный формат, используемый для х
 	file_size_and_type(File) ->
 		case file:read_file_info(File) of
 			{ok, Facts} ->
-				{Facts\#file_info.type, Facts\#file_info.size};
+				{Facts#file_info.type, Facts#file_info.size};
 			_ ->
 				error
 		end.
@@ -630,7 +630,7 @@ MP3 — это бинарный формат, используемый для х
 	-include_lib("kernel/include/file.hrl" ).
 	
 	files(Dir, Re, Flag) ->
-		Re1 = regexp:sh_to_awk(Re),
+		Re1 = re:sh_to_awk(Re),
 		reverse(files(Dir, Re1, Flag, fun(File, Acc) ->[File|Acc] end, [])).
 	
 	files(Dir, Reg, Recursive, Fun, Acc) ->
@@ -643,7 +643,7 @@ MP3 — это бинарный формат, используемый для х
 		FullName = filename:join([Dir,File]),
 		case file_type(FullName) of
 			regular ->
-				case regexp:match(FullName, Reg) of
+				case re:match(FullName, Reg) of
 					{match, _, _} ->
 						Acc = Fun(FullName, Acc0),
 						find_files(T, Dir, Reg, Recursive, Fun, Acc);
@@ -667,7 +667,7 @@ MP3 — это бинарный формат, используемый для х
 	file_type(File) ->
 		case file:read_file_info(File) of
 			{ok, Facts} ->
-				case Facts\#file_info.type of
+				case Facts#file_info.type of
 					regular -> regular;
 					directory -> directory;
 					_ -> error
