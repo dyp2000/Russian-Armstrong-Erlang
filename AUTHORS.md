@@ -6,4 +6,4 @@ Thanks for the Russian translation:
 * [sVIKs](https://github.com/sVIKs)
 * [ymn](https://github.com/ymn)
 * [grsmv](https://github.com/grsmv)
-* Максим Дзабраев
+* [dzabraev](https://github.com/dzabraev)
