@@ -1,6 +1,6 @@
 Что нового?
 ===========
-`2016-02-18` Книга в GitBook [здесь](https://www.gitbook.com/book/dyp2000/russian-armstrong-erlang/details)
+`2016-02-18` Книга в GitBook [здесь](https://dyp2000.gitbooks.io/russian-armstrong-erlang/content/)
 
 `2014-01-13` Книга одним файлом PDF [здесь](https://github.com/dyp2000/Russian-Armstrong-Erlang/raw/master/pdf/fullbook.pdf).
 
