@@ -43,7 +43,7 @@ ARGV.each do |lang|
   dir = File.expand_path(File.join(File.dirname(__FILE__), lang))
   Dir[File.join(dir, '**', '*.md')].sort.each do |input|
     puts "processing #{input}"
-    content = File.read(input)
+    content = File.read(input, encoding: 'utf-8')
     content.gsub!(/Insert\s+(.*)(\.png)\s*\n?\s*#{figure_title}\s+(.*)/, '![\3](figures/\1-tn\2 "\3")')
     book_content << RDiscount.new(content).to_html
   end
